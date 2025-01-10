@@ -4,7 +4,7 @@
 # outside the model.  In the case of PALNI/PALCI there will be a Shibboleth/SAML authentication that
 # indicates we should create a WorkAuthorization entry for a group of works.
 #
-# @see https://github.com/scientist-softserv/palni-palci/issues/633
+# @see https://github.com/notch8/palni-palci/issues/633
 class WorkAuthorization < ActiveRecord::Base # rubocop:disable ApplicationRecord
   class WorkNotFoundError < StandardError
     def initialize(user:, work:)

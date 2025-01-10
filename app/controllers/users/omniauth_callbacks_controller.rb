@@ -11,7 +11,7 @@ module Users
       @user = User.from_omniauth(request.env['omniauth.auth'])
 
       if @user.persisted?
-        # https://github.com/scientist-softserv/palni-palci/issues/633
+        # https://github.com/notch8/palni-palci/issues/633
         WorkAuthorization.handle_signin_for!(user: @user, scope: params[:scope])
 
         # By default the sign_in_and_redirect method will look for a stored_location_for.  However,

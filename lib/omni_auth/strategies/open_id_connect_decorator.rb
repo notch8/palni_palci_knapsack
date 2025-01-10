@@ -4,7 +4,7 @@ module OmniAuth
     ##
     # OVERRIDE to provide openid {#scope} based on the current session.
     #
-    # @see https://github.com/scientist-softserv/palni-palci/issues/633
+    # @see https://github.com/notch8/palni-palci/issues/633
     module OpenIDConnectDecorator
       ##
       # override callback phase to fix issue where state is not required.
