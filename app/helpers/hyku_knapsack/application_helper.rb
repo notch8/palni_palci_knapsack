@@ -24,7 +24,7 @@ module HykuKnapsack
     # @return [String] the URL to use for searching across all tenants.
     #
     # @see .cross_tenant_search_host
-    # @see https://github.com/scientist-softserv/palni-palci/issues/947
+    # @see https://github.com/notch8/palni-palci/issues/947
     def self.cross_tenant_search_url
       # Do not include the scheme (e.g. http or https) but instead let the browser apply the correct
       # scheme.
