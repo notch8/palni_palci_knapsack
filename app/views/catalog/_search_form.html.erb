@@ -25,22 +25,16 @@
             <span aria-hidden="true"><%= t("hyrax.search.form.option.all.label_short") %></span>
             <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu pull-right">
-            <li>
-              <%= link_to t("hyrax.search.form.option.all.label_long", application_name: application_name), "#",
-                  data: { "search-option" => main_app.search_catalog_path, "search-label" => t("hyrax.search.form.option.all.label_short") } %>
-            </li>
-            <li>
-              <%= link_to t("hyrax.search.form.option.my_works.label_long"), "#",
-                  data: { "search-option" => hyrax.my_works_path, "search-label" => t("hyrax.search.form.option.my_works.label_short") } %>
-            </li>
-            <li>
-              <%= link_to t("hyrax.search.form.option.my_collections.label_long"), "#",
-                  data: { "search-option" => hyrax.my_collections_path, "search-label" => t("hyrax.search.form.option.my_collections.label_short") } %>
-            </li>
+          <div class="dropdown-menu dropdown-menu-right">
+            <%= link_to t("hyrax.search.form.option.all.label_long", application_name: application_name), "#", class: 'dropdown-item',
+                data: { "search-option" => main_app.search_catalog_path, "search-label" => t("hyrax.search.form.option.all.label_short") } %>
+            <%= link_to t("hyrax.search.form.option.my_works.label_long"), "#", class: 'dropdown-item',
+                data: { "search-option" => hyrax.my_works_path, "search-label" => t("hyrax.search.form.option.my_works.label_short") }, class: 'dropdown-item' %>
+            <%= link_to t("hyrax.search.form.option.my_collections.label_long"), "#", class: 'dropdown-item',
+                data: { "search-option" => hyrax.my_collections_path, "search-label" => t("hyrax.search.form.option.my_collections.label_short") }, class: 'dropdown-item' %>
           <% end %>
 
-        </ul>
+        </div>
       </div><!-- /.input-group-btn -->
     </div><!-- /.input-group -->
 
