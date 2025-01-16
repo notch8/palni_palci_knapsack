@@ -1,0 +1,6 @@
+<%# OVERRIDE Hyrax 5.0.1 to enable markdown in the work description, and remove autolink to search in description on show page %>
+
+<% presenter.description.each do |description| %>
+  <%# TODO: not sure why we have to wrap #simple_format, but it doesn't break lines without it while in Hyku it does %>
+  <p class="work_description"><%= simple_format((markdown(description))) %></p>
+<% end %>

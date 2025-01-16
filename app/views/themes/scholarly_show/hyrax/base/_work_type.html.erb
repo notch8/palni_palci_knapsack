@@ -1,0 +1,8 @@
+<%#
+  This is here because base work_type partial is overridden and scholarly_show should still display the work_type icon
+%>
+
+<div class="work-type-tag">
+  <span class="<%= Hyrax::ModelIcon.css_class_for(presenter.model) %>" aria-hidden="true"></span>
+  <%= presenter.human_readable_type %>
+</div>
