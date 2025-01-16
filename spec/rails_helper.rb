@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
+require 'logger'
+require 'active_support'
 require "spec_helper"
 require File.expand_path("hyku_specs/rails_helper.rb", __dir__)
 
