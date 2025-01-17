@@ -38,20 +38,5 @@ module Hyrax
       state.add_facet_params("#{facet.keys.first}_sim",
                              facet.values.first)
     end
-
-    def truncate_and_iconify_auto_link(field, show_link = true)
-      if field.is_a? Hash
-        options = field[:config].separator_options || {}
-        text = field[:value].to_sentence(options)
-      else
-        text = field
-      end
-      # this block is only executed when a link is inserted;
-      # if we pass text containing no links, it just returns text.
-      auto_link(html_escape(text)) do |value|
-        "<span class='fa fa-external-link'></span>#{('&nbsp;' + value) if show_link}"
-      end
-      text.truncate(230, separator: ' ')
-    end
   end
 end
