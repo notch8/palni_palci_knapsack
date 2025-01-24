@@ -14,3 +14,20 @@ Account.superadmin_settings = %i[
 # TODO: Does redeclaring this work?  We'll want to write a test for this.
 Account.setting :contact_email, type: 'string', default: 'consortial-ir@palci.org'
 Account.setting :contact_email_to, type: 'string', default: 'consortial-ir@palci.org'
+
+# Temporarily disable Google Analytics jobs
+# because they are buggy and distruptive
+def find_or_schedule_jobs
+  account = Site.account
+  AccountElevator.switch!(self)
+  [
+    EmbargoAutoExpiryJob,
+    LeaseAutoExpiryJob,
+    # BatchEmailNotificationJob,
+    # DepositorEmailNotificationJob,
+    # UserStatCollectionJob
+  ].each do |klass|
+    klass.perform_later unless find_job(klass)
+  end
+  account ? AccountElevator.switch!(account) : reset!
+end
