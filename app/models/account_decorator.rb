@@ -9,6 +9,7 @@ Account.superadmin_settings = %i[
   oai_prefix
   oai_sample_identifier
   s3_bucket
+  user_analytics
 ].freeze
 
 # TODO: Does redeclaring this work?  We'll want to write a test for this.
