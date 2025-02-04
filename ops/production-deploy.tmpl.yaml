@@ -142,7 +142,7 @@ extraEnvVars: &envVars
   - name: HYKU_ROOT_HOST
     value: pals-knapsack.notch8.cloud
   - name: HYKU_SHOW_BACKTRACE
-    value: "true"
+    value: "false"
   - name: HYKU_USER_DEFAULT_PASSWORD
     value: $HYKU_USER_DEFAULT_PASSWORD
   - name: HYRAX_ACTIVE_JOB_QUEUE
@@ -232,11 +232,10 @@ worker:
   replicaCount: 1
   resources:
     limits:
-      memory: "4Gi"
-      cpu: "300m"
+      memory: "8Gi"
     requests:
-      memory: "2Gi"
-      cpu: "150m"
+      memory: "4Gi"
+      cpu: "250m"
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
   podSecurityContext:
@@ -416,9 +415,9 @@ embargoRelease:
 leaseRelease:
   enabled: false
 
-nameOverride: pals
+nameOverride: palni-palci-knapsack-production
 fcrepo:
-  enabled: true
+  enabled: false
   servicePort: 8080
   postgresql:
     password: $DB_PASSWORD
