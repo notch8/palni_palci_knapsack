@@ -46,11 +46,11 @@ extraVolumeMounts: &volMounts
 ingress:
   enabled: true
   hosts:
-    - host: pals-knapsack.notch8.cloud
+    - host: palni-palci-knapsack-production.notch8.cloud
       paths:
         - path: /
           pathType: ImplementationSpecific
-    - host: "*.pals-knapsack.notch8.cloud"
+    - host: "*.palni-palci-knapsack-production.notch8.cloud"
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -60,9 +60,9 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
   tls:
     - hosts:
-        - pals-knapsack.notch8.cloud
-        - "*.pals-knapsack.notch8.cloud"
-      secretName: pals-knapsack-tls
+        - palni-palci-knapsack-production.notch8.cloud
+        - "*.palni-palci-knapsack-production.notch8.cloud"
+      secretName: palni-palci-knapsack-production-tls
 
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
@@ -118,7 +118,7 @@ extraEnvVars: &envVars
   - name: HYKU_ACTIVE_JOB_QUEUE_URL
     value: sidekiq
   - name: HYKU_ADMIN_HOST
-    value: pals-knapsack.notch8.cloud
+    value: palni-palci-knapsack-production.notch8.cloud
   - name: HYKU_ADMIN_ONLY_TENANT_CREATION
     value: "false"
   - name: HYKU_ALLOW_SIGNUP
@@ -130,9 +130,9 @@ extraEnvVars: &envVars
   - name: HYKU_CONTACT_EMAIL
     value: info@hykucommons.org
   - name: HYKU_CROSS_TENANT_SEARCH_HOST
-    value: search.pals-knapsack.notch8.cloud
+    value: search.palni-palci-knapsack-production.notch8.cloud
   - name: HYKU_DEFAULT_HOST
-    value: "%{tenant}.pals-knapsack.notch8.cloud"
+    value: "%{tenant}.palni-palci-knapsack-production.notch8.cloud"
   - name: HYKU_FILE_ACL
     value: "true"
   - name: HYKU_MULTITENANT
@@ -140,7 +140,7 @@ extraEnvVars: &envVars
   - name: HYKU_RESTRICT_CREATE_AND_DESTROY_PERMISSIONS
     value: "true"
   - name: HYKU_ROOT_HOST
-    value: pals-knapsack.notch8.cloud
+    value: palni-palci-knapsack-production.notch8.cloud
   - name: HYKU_SHOW_BACKTRACE
     value: "false"
   - name: HYKU_USER_DEFAULT_PASSWORD
