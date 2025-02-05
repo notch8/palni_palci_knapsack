@@ -34,7 +34,7 @@ RSpec.describe AccountSettings do
 
       it 'returns all settings except private and disabled settings' do
         expect(account.public_settings(is_superadmin: true).keys.sort).to eq settings_list
-        expect(account.public_settings(is_superadmin: true).size).to eq 27
+        expect(account.public_settings(is_superadmin: true).size).to eq 24
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe AccountSettings do
       it 'returns all settings except private, disabled, and superadmin settings' do
         expect(Account.superadmin_settings.size).to eq 8
         expect(account.public_settings(is_superadmin: false).keys.sort).to eq settings_list
-        expect(account.public_settings(is_superadmin: false).size).to eq 19
+        expect(account.public_settings(is_superadmin: false).size).to eq 17
       end
     end
   end
