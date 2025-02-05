@@ -9,12 +9,10 @@ RSpec.describe AccountSettings do
         %i[allow_downloads
            allow_signup
            analytics_provider
-           batch_email_notifications
            bulkrax_field_mappings
            cache_api
            contact_email
            contact_email_to
-           depositor_email_notifications
            doi_reader
            doi_writer
            email_domain
@@ -31,13 +29,12 @@ RSpec.describe AccountSettings do
            s3_bucket
            smtp_settings
            solr_collection_options
-           ssl_configured
-           user_analytics]
+           ssl_configured]
       end
 
       it 'returns all settings except private and disabled settings' do
         expect(account.public_settings(is_superadmin: true).keys.sort).to eq settings_list
-        expect(account.public_settings(is_superadmin: true).size).to eq 27
+        expect(account.public_settings(is_superadmin: true).size).to eq 24
       end
     end
 
@@ -45,11 +42,9 @@ RSpec.describe AccountSettings do
       let(:settings_list) do
         %i[allow_downloads
            allow_signup
-           batch_email_notifications
            bulkrax_field_mappings
            cache_api
            contact_email_to
-           depositor_email_notifications
            doi_reader
            doi_writer
            email_domain
@@ -67,7 +62,7 @@ RSpec.describe AccountSettings do
       it 'returns all settings except private, disabled, and superadmin settings' do
         expect(Account.superadmin_settings.size).to eq 8
         expect(account.public_settings(is_superadmin: false).keys.sort).to eq settings_list
-        expect(account.public_settings(is_superadmin: false).size).to eq 19
+        expect(account.public_settings(is_superadmin: false).size).to eq 17
       end
     end
   end
