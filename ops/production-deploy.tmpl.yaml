@@ -88,13 +88,13 @@ extraEnvVars: &envVars
   - name: FCREPO_BASE_PATH
     value: /production-palni-palci
   - name: FCREPO_HOST
-    value: palsfcrepo
+    value: palsfcrepo.palni-palci-production
   - name: FCREPO_PORT
     value: "8080"
   - name: FCREPO_REST_PATH
     value: rest
   - name: FCREPO_URL
-    value: http://palsfcrepo:8080/
+    value: http://palsfcrepo.palni-palci-production:8080/
   - name: GOOGLE_ANALYTICS_ID
     value: $GOOGLE_ANALYTICS_ID
   - name: GOOGLE_ANALYTICS_PROPERTY_ID
@@ -174,7 +174,7 @@ extraEnvVars: &envVars
   - name: PASSENGER_APP_ENV
     value: production
   - name: RAILS_CACHE_STORE_URL
-    value: redis://palni-palci-production-redis-master:6379/0
+    value: redis://palni-palci-knapsack-production-redis-master:6379/0
   - name: RAILS_ENV
     value: production
   - name: RAILS_LOG_TO_STDOUT
@@ -184,9 +184,9 @@ extraEnvVars: &envVars
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
-    value: palni-palci-production-redis-master
+    value: palni-palci-knapsack-production-redis-master
   - name: REDIS_URL
-    value: redis://palni-palci-production-redis-master:6379/0
+    value: redis://palni-palci-knapsack-production-redis-master:6379/0
   - name: SENTRY_DSN
     value: $SENTRY_DSN
   - name: SENTRY_ENVIRONMENT
@@ -435,6 +435,7 @@ fcrepo:
     access_key: $AWS_ACCESS_KEY_ID
     secret_key: $AWS_SECRET_ACCESS_KEY
 global:
+  hyraxHostName: palni-palci-knapsack-production
   postgresql:
     auth:
       postgresPassword: $DB_PASSWORD
