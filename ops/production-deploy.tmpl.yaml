@@ -118,7 +118,7 @@ extraEnvVars: &envVars
   - name: HYKU_ACTIVE_JOB_QUEUE_URL
     value: sidekiq
   - name: HYKU_ADMIN_HOST
-    value: palni-palci-knapsack-production.notch8.cloud
+    value: hykucommons.org
   - name: HYKU_ADMIN_ONLY_TENANT_CREATION
     value: "false"
   - name: HYKU_ALLOW_SIGNUP
