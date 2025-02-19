@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
-# OVERRIDE Add SuperAdmin Settings for
+# OVERRIDE HYKU 6.0.0 to Add SuperAdmin Settings
 Account.superadmin_settings = %i[
+  analytics
+  analytics_reporting
   analytics_provider
+  batch_email_notifications
+  bulkrax_field_mappings
   contact_email
+  depositor_email_notifications
   file_acl
   file_size_limit
   oai_prefix
@@ -12,6 +17,11 @@ Account.superadmin_settings = %i[
   user_analytics
 ].freeze
 
-# TODO: Does redeclaring this work?  We'll want to write a test for this.
-Account.setting :contact_email, type: 'string', default: 'consortial-ir@palci.org'
-Account.setting :contact_email_to, type: 'string', default: 'consortial-ir@palci.org'
+# some settings available to superadmin have been disabled in the AccountSettingsDecorator until the completion of GA4
+
+# analytics
+# analytics_reporting
+# batch_email_notifications
+# depositor_email_notifications
+# user_analytics
+
