@@ -8,11 +8,14 @@ RSpec.describe AccountSettings do
       let(:settings_list) do
         %i[allow_downloads
            allow_signup
-           analytics_provider
+           analytics
+           analytics_reporting
+           batch_email_notifications
            bulkrax_field_mappings
            cache_api
            contact_email
            contact_email_to
+           depositor_email_notifications
            doi_reader
            doi_writer
            email_domain
@@ -22,6 +25,7 @@ RSpec.describe AccountSettings do
            file_size_limit
            geonames_username
            google_analytics_id
+           google_analytics_property_id
            gtm_id
            oai_admin_email
            oai_prefix
@@ -29,12 +33,13 @@ RSpec.describe AccountSettings do
            s3_bucket
            smtp_settings
            solr_collection_options
-           ssl_configured]
+           ssl_configured
+           user_analytics]
       end
 
       it 'returns all settings except private and disabled settings' do
         expect(account.public_settings(is_superadmin: true).keys.sort).to eq settings_list
-        expect(account.public_settings(is_superadmin: true).size).to eq 24
+        expect(account.public_settings(is_superadmin: true).size).to eq 29
       end
     end
 
@@ -42,9 +47,13 @@ RSpec.describe AccountSettings do
       let(:settings_list) do
         %i[allow_downloads
            allow_signup
+           analytics
+           analytics_reporting
+           batch_email_notifications
            bulkrax_field_mappings
            cache_api
            contact_email_to
+           depositor_email_notifications
            doi_reader
            doi_writer
            email_domain
@@ -52,6 +61,7 @@ RSpec.describe AccountSettings do
            email_subject_prefix
            geonames_username
            google_analytics_id
+           google_analytics_property_id
            gtm_id
            oai_admin_email
            smtp_settings
@@ -62,7 +72,7 @@ RSpec.describe AccountSettings do
       it 'returns all settings except private, disabled, and superadmin settings' do
         expect(Account.superadmin_settings.size).to eq 8
         expect(account.public_settings(is_superadmin: false).keys.sort).to eq settings_list
-        expect(account.public_settings(is_superadmin: false).size).to eq 17
+        expect(account.public_settings(is_superadmin: false).size).to eq 22
       end
     end
   end
