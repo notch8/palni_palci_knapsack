@@ -2,7 +2,7 @@
 
 # OVERRIDE HYKU 6.0.0 to Disable Some Settings (until ga4 is complete) and to update default contact emails
 module AccountSettingsDecorator
-  def self.prepended(base)
+  def self.prepended(_base)
     # Disable specific settings
     Account.all_settings[:analytics][:disabled] = true
     Account.all_settings[:analytics_reporting][:disabled] = true

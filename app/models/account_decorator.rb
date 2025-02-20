@@ -24,4 +24,3 @@ Account.superadmin_settings = %i[
 # batch_email_notifications
 # depositor_email_notifications
 # user_analytics
-

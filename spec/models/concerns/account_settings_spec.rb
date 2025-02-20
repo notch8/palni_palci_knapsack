@@ -60,7 +60,7 @@ RSpec.describe AccountSettings do
       end
 
       it 'returns all settings except private, disabled, and superadmin settings' do
-        # Removes superadmin-only settings (analytics_provider, file_acl, file_size_limit, 
+        # Removes superadmin-only settings (analytics_provider, file_acl, file_size_limit,
         # oai_prefix, oai_sample_identifier, s3_bucket) and disabled settings
         expect(account.public_settings(is_superadmin: false).keys.sort).to eq settings_list
         expect(account.public_settings(is_superadmin: false).size).to eq settings_list.size
