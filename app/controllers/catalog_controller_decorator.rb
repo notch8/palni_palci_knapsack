@@ -65,23 +65,22 @@ CatalogController.configure_blacklight do |config|
 
   config.show_fields.clear
 
-  config.add_show_field solr_name("title", :stored_searchable)
-  config.add_show_field solr_name("abstract", :stored_searchable)
+  config.add_show_field solr_name("abstract", :stored_searchable), label: 'Abstract'
   config.add_show_field solr_name('admin_note', :stored_searchable), label: "Administrative Notes"
   config.add_show_field solr_name("alternative_title", :stored_searchable), label: "Alternative title"
   config.add_show_field solr_name("creator", :stored_searchable)
   config.add_show_field solr_name("contributor", :stored_searchable)
-  config.add_show_field solr_name("related_url", :stored_searchable)
+  config.add_show_field solr_name("related_url", :stored_searchable), helper_method: :truncate_and_iconify_auto_link
   config.add_show_field solr_name('learning_resource_type', :stored_searchable)
   config.add_show_field solr_name('education_level', :stored_searchable)
   config.add_show_field solr_name('audience', :stored_searchable)
   config.add_show_field solr_name('discipline', :stored_searchable)
   config.add_show_field solr_name("date", :stored_searchable), label: "Date", helper_method: :human_readable_date
-  config.add_show_field solr_name("description", :stored_searchable)
+  config.add_show_field solr_name("description", :stored_searchable), helper_method: :truncate_and_iconify_auto_link
   config.add_show_field solr_name("table_of_contents", :stored_searchable), label: "Table of contents"
   config.add_show_field solr_name("subject", :stored_searchable)
-  config.add_show_field solr_name("rights_statement", :stored_searchable)
-  config.add_show_field solr_name("license", :stored_searchable)
+  config.add_show_field solr_name("rights_statement", :stored_searchable), helper_method: :rights_statement_links
+  config.add_show_field solr_name("license", :stored_searchable), helper_method: :license_links
   config.add_show_field solr_name("rights_holder", :stored_searchable), label: "Rights holder"
   config.add_show_field solr_name("additional_information", :stored_searchable), label: "Additional information"
   config.add_show_field solr_name("language", :stored_searchable)
