@@ -46,11 +46,11 @@ extraVolumeMounts: &volMounts
 ingress:
   enabled: true
   hosts:
-    - host: palni-palci-friends.notch8.cloud
+    - host: palni-palci-knapsack-friends.notch8.cloud
       paths:
         - path: /
           pathType: ImplementationSpecific
-    - host: "*.palni-palci-friends.notch8.cloud"
+    - host: "*.palni-palci-knapsack-friends.notch8.cloud"
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -60,9 +60,9 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
   tls:
     - hosts:
-        - palni-palci-friends.notch8.cloud
-        - "*.palni-palci-friends.notch8.cloud"
-      secretName: palni-palci-friends-tls
+        - palni-palci-knapsack-friends.notch8.cloud
+        - "*.palni-palci-knapsack-friends.notch8.cloud"
+      secretName: palni-palci-knapsack-friends-tls
 
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
@@ -80,7 +80,7 @@ extraEnvVars: &envVars
   - name: DB_HOST
     value: postgresql.postgres.svc.cluster.local
   - name: DB_NAME
-    value: palni-palci-friends
+    value: palni-palci-knapsack-friends
   - name: DB_USER
     value: postgres
   - name: FCREPO_BASE_PATH
@@ -98,7 +98,7 @@ extraEnvVars: &envVars
   - name: GOOGLE_ACCOUNT_JSON
     value: $GOOGLE_ACCOUNT_JSON
   - name: HYKU_ADMIN_HOST
-    value: palni-palci-friends.notch8.cloud
+    value: palni-palci-knapsack-friends.notch8.cloud
   - name: HYKU_ADMIN_ONLY_TENANT_CREATION
     value: "false"
   - name: HYKU_ALLOW_SIGNUP
@@ -110,13 +110,13 @@ extraEnvVars: &envVars
   - name: HYKU_CONTACT_EMAIL
     value: support@notch8.com
   - name: HYKU_DEFAULT_HOST
-    value: "%{tenant}.palni-palci-friends.notch8.cloud"
+    value: "%{tenant}.palni-palci-knapsack-friends.notch8.cloud"
   - name: HYKU_FILE_ACL
     value: "false"
   - name: HYKU_MULTITENANT
     value: "true"
   - name: HYKU_ROOT_HOST
-    value: palni-palci-friends.notch8.cloud
+    value: palni-palci-knapsack-friends.notch8.cloud
   - name: HYKU_SHOW_BACKTRACE
     value: "true"
   - name: HYRAX_ACTIVE_JOB_QUEUE
@@ -178,7 +178,7 @@ extraEnvVars: &envVars
   - name: SOLR_ADMIN_USER
     value: admin
   - name: SOLR_COLLECTION_NAME
-    value: palni-palci-friends
+    value: palni-palci-knapsack-friends
   - name: SOLR_CONFIGSET_NAME
     value: production-palni-palci
   - name: SOLR_HOST
@@ -420,12 +420,12 @@ fits:
 externalPostgresql:
   host: postgresql.postgres.svc.cluster.local
   username: postgres
-  database: palni-palci-friends
+  database: palni-palci-knapsack-friends
   password: $DB_PASSWORD
 
 externalSolrHost: solr.solr.svc.cluster.local
 externalSolrUser: admin
-externalSolrCollection: "palni-palci-friends"
+externalSolrCollection: "palni-palci-knapsack-friends"
 externalSolrPassword: $SOLR_ADMIN_PASSWORD
 
 nginx:
