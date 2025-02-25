@@ -88,5 +88,6 @@ end
 
 ApplicationController.before_action :set_sentry_context
 ApplicationController.before_action :global_request_logging
-
+ApplicationController.class_attribute :http_basic_auth_username, default: 'pals'
+ApplicationController.class_attribute :http_basic_auth_password, default: 'pals'
 ApplicationController.prepend(ApplicationControllerDecorator)

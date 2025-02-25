@@ -9,3 +9,4 @@
 ensure_gem "sentry-ruby"
 ensure_gem "sentry-rails"
 ensure_gem "sentry-sidekiq"
+ensure_gem "cancancan", "~> 3.0" # cancancan is bundling to v1.17.0 but we need at least 3.0

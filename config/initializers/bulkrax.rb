@@ -18,7 +18,7 @@ Rails.application.config.after_initialize do
 
     # WorkType to use as the default if none is specified in the import
     # Default is the first returned by Hyrax.config.curation_concerns
-    # config.default_work_type = MyWork
+    config.default_work_type = GenericWorkResource
 
     # Path to store pending imports
     # config.import_path = 'tmp/imports'
