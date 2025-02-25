@@ -380,13 +380,16 @@ fcrepo:
   enabled: true
   servicePort: 8080
   postgresql:
-    password: $DB_PASSWORD
-    auth:
-      password: $DB_PASSWORD
     enabled: true
     image:
       repository: bitnami/postgresql
       tag: 12.17.0-debian-11-r28
+    auth:
+      username: fcrepo
+      password: $DB_PASSWORD
+      database: palni-palci-staging-fcrepo
+    containerPorts:
+      postgresql: 5432
   s3:
     enabled: true
     bucket: besties-fcrepo-clone
