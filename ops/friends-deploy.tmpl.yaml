@@ -387,7 +387,7 @@ fcrepo:
     auth:
       username: fcrepo
       password: $DB_PASSWORD
-      database: palni-palci-staging-fcrepo
+      database: fcrepo
     containerPorts:
       postgresql: 5432
   s3:
@@ -401,6 +401,10 @@ global:
       postgresPassword: $DB_PASSWORD
 postgresql:
   enabled: false
+  auth:
+    database: fcrepo
+    password: $DB_PASSWORD
+    username: fcrepo
 redis:
   enabled: true
   architecture: standalone
