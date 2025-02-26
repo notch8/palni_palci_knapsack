@@ -78,7 +78,7 @@ extraEnvVars: &envVars
   - name: DB_ADAPTER
     value: postgresql
   - name: DB_HOST
-    value: postgresql.postgres.svc.cluster.local
+    value: postgres-postgresql.postgres.svc.cluster.local
   - name: DB_NAME
     value: palni-palci-knapsack-friends
   - name: DB_USER
@@ -385,6 +385,8 @@ fcrepo:
       repository: bitnami/postgresql
       tag: 12.17.0-debian-11-r28
     auth:
+      username: fcrepo
+      password: $DB_PASSWORD
       database: fcrepo
     containerPorts:
       postgresql: 5432
@@ -415,7 +417,7 @@ fits:
   subPath: /fits
 
 externalPostgresql:
-  host: postgresql.postgres.svc.cluster.local
+  host: postgres-postgresql.postgres.svc.cluster.local
   username: postgres
   database: palni-palci-knapsack-friends
   password: $DB_PASSWORD
