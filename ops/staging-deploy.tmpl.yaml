@@ -1,12 +1,5 @@
 replicaCount: 2
 
-resources:
-  limits:
-    memory: "8Gi"
-  requests:
-    memory: "4Gi"
-    cpu: "250m"
-
 livenessProbe:
   enabled: false
 readinessProbe:
