@@ -182,6 +182,7 @@ extraEnvVars: &envVars
   - name: SOLR_COLLECTION_NAME
     value: palni-palci-knapsack-friends
   - name: SOLR_CONFIGSET_NAME
+    # do not change this value
     value: production-palni-palci
   - name: SOLR_HOST
     value: solr.solr
