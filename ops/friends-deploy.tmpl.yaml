@@ -112,7 +112,7 @@ extraEnvVars: &envVars
   - name: HYKU_DEFAULT_HOST
     value: "%{tenant}.palni-palci-knapsack-friends.notch8.cloud"
   - name: HYKU_FILE_ACL
-    value: "false"
+    value: "true"
   - name: HYKU_MULTITENANT
     value: "true"
   - name: HYKU_ROOT_HOST
@@ -125,6 +125,8 @@ extraEnvVars: &envVars
     value: "true"
   - name: HYRAX_ANALYTICS_PROVIDER
     value: 'ga4'
+  - name: HYRAX_ANALYTICS_REPORTING
+    value: 'true'
   - name: HYRAX_FITS_PATH
     value: /app/fits/fits.sh
   - name: HYRAX_VALKYRIE
@@ -142,7 +144,7 @@ extraEnvVars: &envVars
   - name: RAILS_CACHE_STORE_URL
     value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-friends-redis-master:6379/0
   - name: RAILS_ENV
-    value: production
+    value: staging
   - name: RAILS_LOG_TO_STDOUT
     value: "true"
   - name: RAILS_MAX_THREADS
