@@ -9,7 +9,7 @@ on:
         default: 'staging'
         type: choice
         options:
-          - staging
+          - friends
           - production
       debug_enabled:
         type: boolean

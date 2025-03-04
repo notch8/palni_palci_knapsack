@@ -46,11 +46,11 @@ extraVolumeMounts: &volMounts
 ingress:
   enabled: true
   hosts:
-    - host: palni-palci-staging.notch8.cloud
+    - host: palni-palci-knapsack-friends.notch8.cloud
       paths:
         - path: /
           pathType: ImplementationSpecific
-    - host: "*.palni-palci-staging.notch8.cloud"
+    - host: "*.palni-palci-knapsack-friends.notch8.cloud"
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -60,9 +60,9 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
   tls:
     - hosts:
-        - palni-palci-staging.notch8.cloud
-        - "*.palni-palci-staging.notch8.cloud"
-      secretName: palni-palci-staging-tls
+        - palni-palci-knapsack-friends.notch8.cloud
+        - "*.palni-palci-knapsack-friends.notch8.cloud"
+      secretName: palni-palci-knapsack-friends-tls
 
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
@@ -78,15 +78,15 @@ extraEnvVars: &envVars
   - name: DB_ADAPTER
     value: postgresql
   - name: DB_HOST
-    value: pg-postgresql.staging-postgres.svc.cluster.local
+    value: postgres-postgresql.postgres.svc.cluster.local
   - name: DB_NAME
-    value: palni-palci-staging
+    value: palni-palci-knapsack-friends
   - name: DB_USER
     value: postgres
   - name: FCREPO_BASE_PATH
-    value: /palni-palci-staging
+    value: /palni-palci-knapsack-friends-hyrax
   - name: FCREPO_HOST
-    value: palni-palci-knapsack-staging-fcrepo
+    value: palni-palci-knapsack-friends-fcrepo
   - name: FCREPO_PORT
     value: "8080"
   - name: FCREPO_REST_PATH
@@ -98,7 +98,7 @@ extraEnvVars: &envVars
   - name: GOOGLE_ACCOUNT_JSON
     value: $GOOGLE_ACCOUNT_JSON
   - name: HYKU_ADMIN_HOST
-    value: palni-palci-staging.notch8.cloud
+    value: palni-palci-knapsack-friends.notch8.cloud
   - name: HYKU_ADMIN_ONLY_TENANT_CREATION
     value: "false"
   - name: HYKU_ALLOW_SIGNUP
@@ -110,13 +110,13 @@ extraEnvVars: &envVars
   - name: HYKU_CONTACT_EMAIL
     value: support@notch8.com
   - name: HYKU_DEFAULT_HOST
-    value: "%{tenant}.palni-palci-staging.notch8.cloud"
+    value: "%{tenant}.palni-palci-knapsack-friends.notch8.cloud"
   - name: HYKU_FILE_ACL
-    value: "false"
+    value: "true"
   - name: HYKU_MULTITENANT
     value: "true"
   - name: HYKU_ROOT_HOST
-    value: palni-palci-staging.notch8.cloud
+    value: palni-palci-knapsack-friends.notch8.cloud
   - name: HYKU_SHOW_BACKTRACE
     value: "true"
   - name: HYRAX_ACTIVE_JOB_QUEUE
@@ -125,6 +125,8 @@ extraEnvVars: &envVars
     value: "true"
   - name: HYRAX_ANALYTICS_PROVIDER
     value: 'ga4'
+  - name: HYRAX_ANALYTICS_REPORTING
+    value: 'true'
   - name: HYRAX_FITS_PATH
     value: /app/fits/fits.sh
   - name: HYRAX_VALKYRIE
@@ -140,7 +142,8 @@ extraEnvVars: &envVars
   - name: NEGATIVE_CAPTCHA_SECRET
     value: $NEGATIVE_CAPTCHA_SECRET
   - name: RAILS_CACHE_STORE_URL
-    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-staging-redis-master:6379/0
+    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-friends-redis-master:6379/0
+  # do not change this value
   - name: RAILS_ENV
     value: production
   - name: RAILS_LOG_TO_STDOUT
@@ -150,9 +153,9 @@ extraEnvVars: &envVars
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
-    value: palni-palci-knapsack-staging-redis-master
+    value: palni-palci-knapsack-friends-redis-master
   - name: REDIS_URL
-    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-staging-redis-master:6379/0
+    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-friends-redis-master:6379/0
   - name: SENTRY_DSN
     value: $SENTRY_DSN
   - name: SENTRY_ENVIRONMENT
@@ -178,8 +181,9 @@ extraEnvVars: &envVars
   - name: SOLR_ADMIN_USER
     value: admin
   - name: SOLR_COLLECTION_NAME
-    value: palni-palci-staging
+    value: palni-palci-knapsack-friends
   - name: SOLR_CONFIGSET_NAME
+    # do not change this value
     value: production-palni-palci
   - name: SOLR_HOST
     value: solr.solr
@@ -380,21 +384,27 @@ fcrepo:
   enabled: true
   servicePort: 8080
   postgresql:
-    password: $DB_PASSWORD
-    auth:
-      password: $DB_PASSWORD
     enabled: true
     image:
       repository: bitnami/postgresql
       tag: 12.17.0-debian-11-r28
+    auth:
+      username: fcrepo
+      password: $DB_PASSWORD
+      database: fcrepo
+    containerPorts:
+      postgresql: 5432
   s3:
     enabled: true
     bucket: besties-fcrepo-clone
     access_key: $AWS_ACCESS_KEY_ID
     secret_key: $AWS_SECRET_ACCESS_KEY
 global:
+  # These global postgresql values are used by the fcrepo chart
   postgresql:
     auth:
+      username: fcrepo
+      password: $DB_PASSWORD
       postgresPassword: $DB_PASSWORD
 postgresql:
   enabled: false
@@ -411,14 +421,14 @@ fits:
   subPath: /fits
 
 externalPostgresql:
-  host: pg-postgresql.staging-postgres.svc.cluster.local
+  host: postgres-postgresql.postgres.svc.cluster.local
   username: postgres
-  database: palni-palci-staging
+  database: palni-palci-knapsack-friends
   password: $DB_PASSWORD
 
 externalSolrHost: solr.solr.svc.cluster.local
 externalSolrUser: admin
-externalSolrCollection: "palni-palci-staging"
+externalSolrCollection: "palni-palci-knapsack-friends"
 externalSolrPassword: $SOLR_ADMIN_PASSWORD
 
 nginx:

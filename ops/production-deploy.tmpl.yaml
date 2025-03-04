@@ -83,6 +83,8 @@ extraEnvVars: &envVars
     value: pals-production-hyku
   - name: DB_USER
     value: main
+  - name: DISABLE_ANALYTICS_FEATURES
+    value: $DISABLE_ANALYTICS_FEATURES
   - name: FCREPO_BASE_PATH
     value: /production-palni-palci
   - name: FCREPO_HOST
