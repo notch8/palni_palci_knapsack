@@ -143,8 +143,9 @@ extraEnvVars: &envVars
     value: $NEGATIVE_CAPTCHA_SECRET
   - name: RAILS_CACHE_STORE_URL
     value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-friends-redis-master:6379/0
+  # do not change this value
   - name: RAILS_ENV
-    value: staging
+    value: production
   - name: RAILS_LOG_TO_STDOUT
     value: "true"
   - name: RAILS_MAX_THREADS
