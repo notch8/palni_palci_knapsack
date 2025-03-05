@@ -83,6 +83,8 @@ extraEnvVars: &envVars
     value: palni-palci-knapsack-friends
   - name: DB_USER
     value: postgres
+  - name: DISABLE_ANALYTICS_FEATURES
+    value: "false"
   - name: FCREPO_BASE_PATH
     value: /palni-palci-knapsack-friends-hyrax
   - name: FCREPO_HOST
