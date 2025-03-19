@@ -53,6 +53,11 @@ services:
       file: hyrax-webapp/docker-compose.yml
       service: fcrepo
 
+  fits: 
+    extends:
+      file: hyrax-webapp/docker-compose.yml
+      service: fits
+
   db:
     extends:
       file: hyrax-webapp/docker-compose.yml
