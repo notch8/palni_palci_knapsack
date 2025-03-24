@@ -1,21 +1,21 @@
-FROM ghcr.io/samvera/hyku/base:20b8c56e AS hyku-knap-base
+FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
 
 # This is specifically NOT $APP_PATH but the parent directory
 COPY --chown=1001:101 . /app/samvera
-RUN ln -s /app/samvera/bundler.d /app/.bundler.d
+COPY --chown=1001:101 bundler.d/ /app/.bundler.d/
 ENV BUNDLE_LOCAL__HYKU_KNAPSACK=/app/samvera
 ENV BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true
+ENV BUNDLE_BUNDLER_INJECT__GEM_PATH=/app/samvera/bundler.d
 
 RUN bundle install --jobs "$(nproc)"
 
-# Ensure root permissions for installing Tesseract data
 USER root
 
 # Install "best" training data for Tesseract
 RUN echo "📚 Installing Tesseract Best (training data)!" && \
-    wget https://github.com/tesseract-ocr/tessdata_best/raw/main/eng.traineddata -O /usr/share/tessdata/eng_best.traineddata
+    wget https://github.com/tesseract-ocr/tessdata_best/raw/main/eng.traineddata -O /usr/share/tessdata/eng_best.traineddata && \
+    git config --global --add safe.directory "/app/samvera"
 
-# Switch back to the non-root user for running the application
 USER app
 
 FROM hyku-knap-base AS hyku-web
