@@ -10,6 +10,7 @@ scratch.md
 
 /coverage
 file_cache/
+/branding
 .byebug_history
 
 # we don't want Gemfile lockfile committed in the knapsack
