@@ -453,6 +453,8 @@ fits:
   servicePort: 8080
   subPath: /fits
 
+externalFcrepoHost: "palsfcrepo.palni-palci-production"
+
 externalPostgresql:
   host: postgres-cluster-alpha-ha.postgres.svc.cluster.local
   username: main
