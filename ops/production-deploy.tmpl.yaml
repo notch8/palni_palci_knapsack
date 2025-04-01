@@ -54,10 +54,11 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
+  annotations: {
+    kubernetes.io/ingress.class: "nginx",
+    nginx.ingress.kubernetes.io/proxy-body-size: "0",
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+  }
   tls:
     - hosts:
         - hykucommons.org
@@ -115,7 +116,7 @@ extraEnvVars: &envVars
     value: $GOOGLE_OAUTH_PRIVATE_KEY_VALUE
   - name: GOOGLE_OAUTH_CLIENT_EMAIL
     value: hyku-analytics@hyku-analytics-362617.iam.gserviceaccount.com
-  - name: HYKU_ACTIVE_JOB_QUEUE_URL
+  - name: HYRAX_ACTIVE_JOB_QUEUE
     value: sidekiq
   - name: HYKU_ADMIN_HOST
     value: hykucommons.org
@@ -138,6 +139,8 @@ extraEnvVars: &envVars
   - name: HYKU_MULTITENANT
     value: "true"
   - name: HYKU_RESTRICT_CREATE_AND_DESTROY_PERMISSIONS
+    value: "true"
+  - name: HYRAX_FLEXIBLE
     value: "true"
   - name: HYKU_ROOT_HOST
     value: hykucommons.org
@@ -187,6 +190,8 @@ extraEnvVars: &envVars
     value: palni-palci-knapsack-production-redis-master
   - name: REDIS_URL
     value: redis://palni-palci-knapsack-production-redis-master:6379/0
+  - name: SECRET_KEY_BASE
+    value: $SECRET_KEY_BASE
   - name: SENTRY_DSN
     value: $SENTRY_DSN
   - name: SENTRY_ENVIRONMENT
@@ -422,13 +427,16 @@ fcrepo:
   enabled: false
   servicePort: 8080
   postgresql:
-    password: $DB_PASSWORD
-    auth:
-      password: $DB_PASSWORD
     enabled: true
     image:
       repository: bitnami/postgresql
       tag: 12.17.0-debian-11-r28
+    auth:
+      username: fcrepo
+      password: $DB_PASSWORD
+      database: fcrepo
+    containerPorts:
+      postgresql: 5432
   s3:
     enabled: true
     bucket: besties-fcrepo-clone
@@ -436,16 +444,18 @@ fcrepo:
     secret_key: $AWS_SECRET_ACCESS_KEY
 global:
   hyraxHostName: palni-palci-knapsack-production
+  # These global postgresql values are used by the fcrepo chart
   postgresql:
     auth:
+      username: fcrepo
+      password: $DB_PASSWORD
       postgresPassword: $DB_PASSWORD
 postgresql:
   enabled: false
 redis:
-  enabled: true
-  architecture: standalone
-  auth:
-    password: $REDIS_PASSWORD
+  cluster:
+    enabled: false
+  password: $REDIS_PASSWORD
 solr:
   enabled: false
 fits:
