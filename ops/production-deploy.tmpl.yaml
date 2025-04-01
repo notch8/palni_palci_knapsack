@@ -426,8 +426,10 @@ nameOverride: palni-palci-knapsack-production
 fcrepo:
   enabled: false
   servicePort: 8080
+  externalPostgresql:
+    host: palsfcrepo-postgresql.palni-palci-production
   postgresql:
-    enabled: true
+    enabled: false
     image:
       repository: bitnami/postgresql
       tag: 12.17.0-debian-11-r28
