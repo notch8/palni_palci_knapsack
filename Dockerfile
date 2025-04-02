@@ -16,6 +16,9 @@ RUN echo "📚 Installing Tesseract Best (training data)!" && \
     wget https://github.com/tesseract-ocr/tessdata_best/raw/main/eng.traineddata -O /usr/share/tessdata/eng_best.traineddata && \
     git config --global --add safe.directory "/app/samvera"
 
+RUN apt-get update && \
+    apt-get install -y ghostscript
+
 USER app
 
 FROM hyku-knap-base AS hyku-web
