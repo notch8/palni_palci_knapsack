@@ -141,7 +141,7 @@ extraEnvVars: &envVars
   - name: HYKU_RESTRICT_CREATE_AND_DESTROY_PERMISSIONS
     value: "true"
   - name: HYRAX_FLEXIBLE
-    value: "true"
+    value: "false"
   - name: HYKU_ROOT_HOST
     value: hykucommons.org
   - name: HYKU_SHOW_BACKTRACE
