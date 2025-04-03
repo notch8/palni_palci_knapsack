@@ -1,4 +1,4 @@
-# When developing, put the branch to main
+# When developing pin the branch to the branch your changes are on
 FROM ghcr.io/samvera/hyku/base:main AS hyku-knap-base
 
 # When on a stable release pin to latest branch
