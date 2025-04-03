@@ -1,5 +1,5 @@
 # When developing pin the branch to the branch your changes are on
-FROM ghcr.io/samvera/hyku/base:main AS hyku-knap-base
+FROM ghcr.io/samvera/hyku/base:db4ff9b AS hyku-knap-base
 
 # When on a stable release pin to latest branch
 # FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
