@@ -1,4 +1,8 @@
-FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
+# When developing, put the branch to main
+FROM ghcr.io/samvera/hyku/base:main AS hyku-knap-base
+
+# When on a stable release pin to latest branch
+# FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
 
 # This is specifically NOT $APP_PATH but the parent directory
 COPY --chown=1001:101 . /app/samvera
