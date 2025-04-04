@@ -63,7 +63,7 @@ services:
       file: hyrax-webapp/docker-compose.yml
       service: db
 
-  hyku-knap-base:
+  base:
     extends:
       file: hyrax-webapp/docker-compose.yml
       service: base
@@ -82,12 +82,10 @@ services:
       - BUNDLE_LOCAL__HYKU_KNAPSACK=/app/samvera
       - BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true
       - VIRTUAL_PORT=3000
-      - VIRTUAL_HOST=.localhost
-      - HYKU_ADMIN_HOST=localhost
-      - HYKU_DEFAULT_HOST=%{tenant}.localhost
-      - HYKU_ROOT_HOST=localhost
-    ports: 
-      - "3000:3000"
+      - VIRTUAL_HOST=.pals.test
+      - HYKU_ADMIN_HOST=pals.test
+      - HYKU_DEFAULT_HOST=%{tenant}.pals.test
+      - HYKU_ROOT_HOST=pals.test
 
   worker:
     <<: *app
