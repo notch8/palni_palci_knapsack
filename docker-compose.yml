@@ -2,7 +2,7 @@ version: '3.8'
 x-app: &app
   build:
     context: .
-    target: hyku-web
+    target: hyku-knap-web
     cache_from:
       - ghcr.io/samvera/hyku/base:latest
       - ghcr.io/samvera-labs/hyku_knapsack:latest
@@ -63,10 +63,14 @@ services:
       file: hyrax-webapp/docker-compose.yml
       service: db
 
-  base:
+  hyku-knap-base:
     extends:
       file: hyrax-webapp/docker-compose.yml
       service: base
+    build:
+      context: ./hyrax-webapp
+      dockerfile: Dockerfile
+      target: hyku-base
     image: ghcr.io/notch8/palni_palci_knapsack/base:${TAG:-latest}
     command: bash -l -c "echo 'base is only used for building base images, which in turn reduces image build times. It does not need to be run'"
 
@@ -82,10 +86,12 @@ services:
       - BUNDLE_LOCAL__HYKU_KNAPSACK=/app/samvera
       - BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true
       - VIRTUAL_PORT=3000
-      - VIRTUAL_HOST=.pals.test
-      - HYKU_ADMIN_HOST=pals.test
-      - HYKU_DEFAULT_HOST=%{tenant}.pals.test
-      - HYKU_ROOT_HOST=pals.test
+      - VIRTUAL_HOST=.localhost
+      - HYKU_ADMIN_HOST=localhost
+      - HYKU_DEFAULT_HOST=%{tenant}.localhost
+      - HYKU_ROOT_HOST=localhost
+    ports: 
+      - "3000:3000"
 
   worker:
     <<: *app
@@ -94,7 +100,7 @@ services:
       service: worker
     build:
       context: .
-      target: hyku-worker
+      target: hyku-knap-worker
       cache_from:
         - ghcr.io/samvera/hyku/base:latest
         - ghcr.io/samvera-labs/hyku_knapsack/worker:latest
