@@ -161,10 +161,11 @@ CatalogController.configure_blacklight do |config|
 
   config.search_fields['all_fields'].clear
   config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false) do |field|
-    all_names = config.show_fields.values.map(&:field).join(" ")
     title_name = 'title_tesim'
+    all_show_names = config.show_fields.values.map(&:field)
+    all_show_names |= [title_name]
     field.solr_parameters = {
-      qf: "#{all_names} file_format_tesim all_text_timv all_text_tsimv",
+      qf: "#{all_show_names.join(" ")} file_format_tesim all_text_timv all_text_tsimv",
       pf: title_name.to_s
     }
   end
