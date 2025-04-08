@@ -165,7 +165,7 @@ CatalogController.configure_blacklight do |config|
     all_show_names = config.show_fields.values.map(&:field)
     all_show_names |= [title_name]
     field.solr_parameters = {
-      qf: "#{all_show_names.join(" ")} file_format_tesim all_text_timv all_text_tsimv",
+      qf: "#{all_show_names.join(' ')} file_format_tesim all_text_timv all_text_tsimv",
       pf: title_name.to_s
     }
   end
