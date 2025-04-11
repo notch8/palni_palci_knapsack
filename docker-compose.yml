@@ -37,6 +37,9 @@ volumes:
 networks:
   internal:
 
+  default:
+    name: stackcar
+
 services:
   zoo:
     extends:
@@ -63,6 +66,11 @@ services:
       file: hyrax-webapp/docker-compose.yml
       service: db
 
+  adminer:
+    extends:
+      file: hyrax-webapp/docker-compose.yml
+      service: adminer
+
   base:
     extends:
       file: hyrax-webapp/docker-compose.yml
@@ -82,10 +90,6 @@ services:
       - BUNDLE_LOCAL__HYKU_KNAPSACK=/app/samvera
       - BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true
       - VIRTUAL_PORT=3000
-      - VIRTUAL_HOST=.pals.test
-      - HYKU_ADMIN_HOST=pals.test
-      - HYKU_DEFAULT_HOST=%{tenant}.pals.test
-      - HYKU_ROOT_HOST=pals.test
 
   worker:
     <<: *app
