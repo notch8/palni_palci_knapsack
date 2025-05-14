@@ -39,7 +39,7 @@
   <td class="date text-center"><%= document.date_modified %></td>
 
   <%# OVERRIDE begin %>
-  <td class='workflow-state text-center'><%= presenter.state_label || "—" %></td>
+  <td class='workflow-state text-center'><%= presenter.workflow&.state_label || "—" %></td>
   <%# OVERRIDE end %>
 
   <td class='text-center'><%= render_visibility_link document %></td>
