@@ -35,6 +35,7 @@ RSpec.describe AccountSettings do
            google_analytics_id
            google_analytics_property_id
            gtm_id
+           hidden_index_fields
            oai_admin_email
            oai_prefix
            oai_sample_identifier
@@ -65,6 +66,7 @@ RSpec.describe AccountSettings do
            google_analytics_id
            google_analytics_property_id
            gtm_id
+           hidden_index_fields
            oai_admin_email
            smtp_settings
            solr_collection_options
