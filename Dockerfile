@@ -1,4 +1,3 @@
-# This is the SHA of the submodule
 FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
 
 # This is specifically NOT $APP_PATH but the parent directory
