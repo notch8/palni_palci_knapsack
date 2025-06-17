@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'sentry-ruby'
-require 'sentry-sidekiq'
 
 Sentry.init do |config|
   config.dsn = ENV['SENTRY_DSN']

@@ -122,7 +122,7 @@ extraEnvVars: &envVars
   - name: HYKU_SHOW_BACKTRACE
     value: "true"
   - name: HYRAX_ACTIVE_JOB_QUEUE
-    value: sidekiq
+    value: good_job
   - name: HYRAX_ANALYTICS
     value: "true"
   - name: HYRAX_ANALYTICS_PROVIDER
