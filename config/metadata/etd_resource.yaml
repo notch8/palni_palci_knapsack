@@ -1,25 +1,5 @@
-# Simple yaml config-driven schema which is used to define model attributes,
-# index key names, and form properties.
-#
-# Attributes must have a type but all other configuration options are optional.
-# Please note: If using Valkyrie's Fedora Metadata Adapter, predicates for attributes
-# must be placed here.
-#
-# attributes:
-#   attribute_name:
-#     type: string
-#     multiple: false
-#     index_keys:
-#       - "attribute_name_sim"
-#     form:
-#       required: true
-#       primary: true
-#       multiple: false
-#
-# @see config/metadata/basic_metadata.yaml for an example configuration
-#
-# Generated via
-#  `rails generate hyrax:work_resource GenericWorkResource`
+# OVERRIDE Hyku temporarily to add date_created as the required field and not date
+#   TODO: Move this change into Hyku and update Pals
 
 attributes:
   creator:
@@ -39,25 +19,88 @@ attributes:
       - "keyword_sim"
       - "keyword_tesim"
     form:
-      required: true
       primary: true
+      required: true
     predicate: http://schema.org/keywords
   rights_statement:
     type: string
     multiple: true
     form:
-      required: false
       primary: true
+      required: true
     index_keys:
       - "rights_statement_sim"
       - "rights_statement_tesim"
     predicate: http://www.europeana.eu/schemas/edm/rights
-  resource_type:
-    type: string
+  date_created:
+    type: date_time
     multiple: true
     form:
       required: true
       primary: true
+      multiple: true
+    index_keys:
+      - "date_created_sim"
+      - "date_created_tesim"
+    predicate: http://purl.org/dc/terms/created
+  date:
+    type: string
+    multiple: true
+    index_keys:
+      - "date_tesim"
+      - "date_sim"
+    form:
+      required: false
+      primary: true
+      multiple: true
+    predicate: https://hykucommons.org/terms/date
+  degree_name:
+    type: string
+    multiple: true
+    index_keys:
+      - "degree_name_tesim"
+    form:
+      required: true
+      primary: true
+      multiple: true
+    predicate: https://hykucommons.org/terms/degree_name
+  degree_level:
+    type: string
+    multiple: true
+    index_keys:
+      - "degree_level_tesim"
+    form:
+      required: true
+      primary: true
+      multiple: true
+    predicate: https://hykucommons.org/terms/degree_level
+  degree_discipline:
+    type: string
+    multiple: true
+    index_keys:
+      - "degree_discipline_tesim"
+    form:
+      required: true
+      primary: true
+      multiple: true
+    predicate: https://hykucommons.org/terms/degree_discipline
+  degree_grantor:
+    type: string
+    multiple: true
+    index_keys:
+      - "degree_grantor_tesim"
+    form:
+      required: true
+      primary: true
+      multiple: true
+    predicate: https://hykucommons.org/terms/degree_grantor
+  resource_type:
+    type: string
+    multiple: true
+    form:
+      primary: true
+      multiple: true
+      required: true
     index_keys:
       - "resource_type_sim"
       - "resource_type_tesim"
@@ -92,21 +135,33 @@ attributes:
   additional_information:
     type: string
     multiple: true
-    form:
-      primary: false
-      multiple: true
     index_keys:
       - "additional_information_tesim"
+    form:
+      required: false
+      primary: false
+      multiple: true
     predicate: http://purl.org/dc/terms/accessRights
   admin_note:
     type: string
     multiple: false
-    form:
-      primary: false
-      multiple: false
     index_keys:
       - "admin_note_tesim"
+    form:
+      required: false
+      primary: false
+      multiple: false
     predicate: http://schema.org/positiveNotes
+  advisor:
+    type: string
+    multiple: true
+    index_keys:
+      - "advisor_tesim"
+    form:
+      required: false
+      primary: false
+      multiple: true
+    predicate: https://hykucommons.org/terms/advisor
   alternative_title:
     type: string
     multiple: true
@@ -116,15 +171,34 @@ attributes:
       - "alternative_title_sim"
       - "alternative_title_tesim"
     predicate: http://purl.org/dc/terms/alternative
+  based_near:
+    type: string
+    multiple: true
+    form:
+      primary: false
+    index_keys:
+      - "based_near_sim"
+      - "based_near_tesim"
+    predicate: http://xmlns.com/foaf/0.1/based_near
   bibliographic_citation:
     type: string
     multiple: true
     form:
       primary: false
-      multiple: true
     index_keys:
+      - "bibliographic_citation_sim"
       - "bibliographic_citation_tesim"
     predicate: http://purl.org/dc/terms/bibliographicCitation
+  committee_member:
+    type: string
+    multiple: true
+    index_keys:
+      - "committee_member_tesim"
+    form:
+      required: false
+      primary: false
+      multiple: true
+    predicate: https://hykucommons.org/terms/committee_member
   contributor:
     type: string
     multiple: true
@@ -134,15 +208,16 @@ attributes:
       - "contributor_tesim"
       - "contributor_sim"
     predicate: http://purl.org/dc/elements/1.1/contributor
-  date_created:
-    type: date_time
+  department:
+    type: string
     multiple: true
-    form:
-      primary: false
     index_keys:
-      - "date_created_sim"
-      - "date_created_tesim"
-    predicate: http://purl.org/dc/terms/created
+      - "department_tesim"
+    form:
+      required: false
+      primary: false
+      multiple: true
+    predicate: https://hykucommons.org/terms/department
   description:
     type: string
     multiple: true
@@ -152,6 +227,16 @@ attributes:
       - "description_sim"
       - "description_tesim"
     predicate: http://purl.org/dc/elements/1.1/description
+  format:
+    type: string
+    multiple: true
+    index_keys:
+      - "format_tesim"
+    form:
+      required: false
+      primary: false
+      multiple: true
+    predicate: http://purl.org/dc/terms/format
   identifier:
     type: string
     multiple: true
@@ -215,22 +300,19 @@ attributes:
     form:
       primary: false
     predicate: http://purl.org/dc/elements/1.1/subject
-  date:
-    type: string
-    multiple: false
-    index_keys:
-      - "date_tesim"
-      - "date_sim"
-    predicate: https://hykucommons.org/terms/date
   arkivo_checksum:
     type: string
     multiple: false
+    # form:
+    #   primary: false
     predicate: http://scholarsphere.psu.edu/ns#arkivoChecksum
   import_url:
     type: string
     predicate: http://scholarsphere.psu.edu/ns#importUrl
   label:
     type: string
+    # form:
+    #   primary: false
     index_keys:
       - "label_sim"
       - "label_tesim"
