@@ -9,3 +9,7 @@
 ensure_gem "sentry-ruby"
 ensure_gem "sentry-rails"
 ensure_gem "cancancan", "~> 3.0" # cancancan is bundling to v1.17.0 but we need at least 3.0
+
+override_gem "hyrax",
+             github: "samvera/hyrax",
+             ref: "d6330a1c048bd498da852325a502f8dba0467c11"
