@@ -10,9 +10,7 @@ module Hyrax
       file_path = @upload.file.path
 
       current_size = 0
-      if file_path && File.exist?(file_path)
-        File.open(file_path, 'r') { |f| current_size = f.size }
-      end
+      File.open(file_path, 'r') { |f| current_size = f.size } if file_path && File.exist?(file_path)
 
       begin_of_chunk = content_range[/\ (.*?)-/, 1].to_i
 
