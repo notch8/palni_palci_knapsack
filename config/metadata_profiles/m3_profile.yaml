@@ -416,6 +416,27 @@ properties:
       - Doe, J. (2024). Example Citation. Journal of Examples, 12(3), 45-67.
     view:
       html_dl: true
+  collection_subtitle:
+    available_on:
+      class:
+        - CollectionResource
+    cardinality:
+      minimum: 0
+      maximum: 1
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Collection Subtitle
+    index_documentation: displayable, searchable
+    indexing:
+      - collection_subtitle_sim
+      - collection_subtitle_tesim
+    form:
+      primary: true
+    range: http://www.w3.org/2001/XMLSchema#string
   contributor:
     available_on:
       class:
