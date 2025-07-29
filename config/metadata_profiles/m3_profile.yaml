@@ -611,7 +611,8 @@ properties:
       - keyword_sim
       - keyword_tesim
     form:
-      primary: false
+      required: true
+      primary: true
     property_uri: http://schema.org/keywords
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -795,7 +796,8 @@ properties:
       - resource_type_sim
       - resource_type_tesim
     form:
-      primary: false
+      primary: true
+      required: true
     property_uri: http://purl.org/dc/terms/type
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1182,7 +1184,7 @@ properties:
     display_label:
       default: Department
     form:
-      primary: true
+      primary: false
     property_uri: http://hyrax-example.com/department
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1471,6 +1473,8 @@ properties:
     indexing:
       - "date_tesim"
       - "date_sim"
+    form:
+      primary: true
     property_uri: https://hykucommons.org/terms/date
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
