@@ -1353,6 +1353,7 @@ properties:
         - OerResource
         - EtdResource
         - CdlResource
+        - GenericWorkResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1382,6 +1383,7 @@ properties:
         - OerResource
         - EtdResource
         - CdlResource
+        - GenericWorkResource
     cardinality:
       minimum: 0
     data_type: array
