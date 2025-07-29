@@ -22,6 +22,8 @@ classes:
     display_label: pcdmcollection
   Hyrax::FileSet:
     display_label: FileSet
+  CdlResource:
+    display_label: CdlResource
 contexts:
   flexible_context:
     display_label: Flexible Metadata Example
@@ -47,6 +49,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -91,6 +94,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -121,6 +125,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -141,6 +146,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -169,6 +175,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -201,6 +208,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -232,6 +240,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -261,6 +270,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -291,6 +301,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -323,6 +334,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -348,6 +360,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -379,6 +392,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -409,6 +423,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -440,6 +455,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -472,6 +488,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -500,6 +517,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -531,6 +549,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -554,6 +573,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -586,6 +606,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -615,6 +636,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -647,6 +669,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -678,6 +701,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -709,6 +733,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -732,6 +757,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -764,6 +790,7 @@ properties:
         - CollectionResource
         - GenericWorkResource
         - ImageResource
+        - CdlResource
         - OerResource
         - EtdResource
     cardinality:
@@ -787,6 +814,238 @@ properties:
       - Creative Commons license.
     view:
       html_dl: true
+  chronology_note:
+    available_on:
+      class:
+        - CdlResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Chronology Note
+    index_documentation: displayable, searchable
+    indexing:
+      - chronology_note_tesim
+      - chronology_note_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/chronology_note
+    range: http://www.w3.org/2001/XMLSchema#string
+  contributing_library:
+    available_on:
+      class:
+        - CdlResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Contributing Library
+    index_documentation: displayable, searchable
+    indexing:
+      - contributing_library_tesim
+      - contributing_library_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/contributing_library
+    range: http://www.w3.org/2001/XMLSchema#string
+  library_catalog_identifier:
+    available_on:
+      class:
+        - CdlResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Library Catalog Identifier
+    index_documentation: displayable, searchable
+    indexing:
+      - library_catalog_identifier_tesim
+      - library_catalog_identifier_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/library_catalog_identifier
+    range: http://www.w3.org/2001/XMLSchema#string
+  # ETD-specific metadata - etd_resource.yaml
+  advisor:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Advisor
+    index_documentation: displayable, searchable
+    indexing:
+      - advisor_tesim
+      - advisor_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/advisor
+    range: http://www.w3.org/2001/XMLSchema#string
+  committee_member:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Committee Member
+    index_documentation: displayable, searchable
+    indexing:
+      - committee_member_tesim
+      - committee_member_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/committee_member
+    range: http://www.w3.org/2001/XMLSchema#string
+  degree_date:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#dateTime
+      sources:
+        - "null"
+    display_label:
+      default: Degree Date
+    index_documentation: displayable, searchable
+    indexing:
+      - degree_date_tesim
+      - degree_date_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/degree_date
+    range: http://www.w3.org/2001/XMLSchema#dateTime
+  degree_discipline:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Degree Discipline
+    index_documentation: displayable, searchable
+    indexing:
+      - degree_discipline_tesim
+      - degree_discipline_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/degree_discipline
+    range: http://www.w3.org/2001/XMLSchema#string
+  degree_grantor:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Degree Grantor
+    index_documentation: displayable, searchable
+    indexing:
+      - degree_grantor_tesim
+      - degree_grantor_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/degree_grantor
+    range: http://www.w3.org/2001/XMLSchema#string
+  degree_level:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Degree Level
+    index_documentation: displayable, searchable
+    indexing:
+      - degree_level_tesim
+      - degree_level_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/degree_level
+    range: http://www.w3.org/2001/XMLSchema#string
+  degree_name:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Degree Name
+    index_documentation: displayable, searchable
+    indexing:
+      - degree_name_tesim
+      - degree_name_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/degree_name
+    range: http://www.w3.org/2001/XMLSchema#string
+  department:
+    available_on:
+      class:
+        - EtdResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: Department
+    index_documentation: displayable, searchable
+    indexing:
+      - department_tesim
+      - department_sim
+    form:
+      primary: false
+    property_uri: https://hykucommons.org/terms/department
+    range: http://www.w3.org/2001/XMLSchema#string
   rights_statement:
     available_on:
       class:
@@ -796,6 +1055,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -828,6 +1088,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -859,6 +1120,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -887,6 +1149,7 @@ properties:
       class:
         - CollectionResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -910,6 +1173,7 @@ properties:
     available_on:
       class:
         - CollectionResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -932,6 +1196,7 @@ properties:
     available_on:
       class:
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -957,6 +1222,7 @@ properties:
     available_on:
       class:
         - ImageResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -983,6 +1249,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1009,6 +1276,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1033,6 +1301,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1060,6 +1329,7 @@ properties:
       class:
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1088,6 +1358,7 @@ properties:
       class:
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1112,6 +1383,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1134,6 +1406,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1163,6 +1436,7 @@ properties:
       class:
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1185,6 +1459,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1212,6 +1487,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1240,6 +1516,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1268,6 +1545,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1290,6 +1568,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1314,6 +1593,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1336,6 +1616,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1358,6 +1639,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1383,6 +1665,7 @@ properties:
     available_on:
       class:
         - OerResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1409,6 +1692,7 @@ properties:
     available_on:
       class:
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1434,6 +1718,7 @@ properties:
     available_on:
       class:
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1459,6 +1744,7 @@ properties:
     available_on:
       class:
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1486,6 +1772,7 @@ properties:
     available_on:
       class:
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1513,6 +1800,7 @@ properties:
     available_on:
       class:
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1540,6 +1828,7 @@ properties:
     available_on:
       class:
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1573,6 +1862,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1604,6 +1894,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1634,6 +1925,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1665,6 +1957,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1696,6 +1989,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1726,6 +2020,7 @@ properties:
         - ImageResource
         - OerResource
         - EtdResource
+        - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
