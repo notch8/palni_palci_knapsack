@@ -10,6 +10,7 @@ class CdlResourceIndexer < Hyrax::ValkyrieWorkIndexer
   include Hyrax::Indexer(:with_video_embed) unless Hyrax.config.flexible?
 
   include HykuIndexing
+  include Hyrax::Indexer('CdlResource') if Hyrax.config.flexible?
 
   # Uncomment this block if you want to add custom indexing behavior:
   #  def to_solr
