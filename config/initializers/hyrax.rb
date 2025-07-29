@@ -3,6 +3,8 @@
 # Use this to override any Hyrax configuration from the Knapsack
 Rails.application.config.before_initialize do
   Hyrax.config do |config|
+    config.flexible = true
+    config.default_m3_profile_path = HykuKnapsack::Engine.root.join('config', 'metadata_profiles', 'm3_profile.yaml')
     # TODO: Valkyrize models and update this initializer
     # # Injected via `rails g hyrax:work Cdl`
     config.register_curation_concern :cdl

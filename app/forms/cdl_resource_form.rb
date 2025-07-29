@@ -11,6 +11,7 @@ class CdlResourceForm < Hyrax::Forms::ResourceForm(CdlResource)
   include Hyrax::FormFields(:with_pdf_viewer) unless Hyrax.config.flexible?
   include Hyrax::FormFields(:with_video_embed) unless Hyrax.config.flexible?
   include Hyrax::FormFields(:bulkrax_metadata) unless Hyrax.config.flexible?
+  include VideoEmbedBehavior::Validation
 
   # Define custom form fields using the Valkyrie::ChangeSet interface
   #

@@ -10,6 +10,9 @@ class CdlResource < Hyrax::Work
   include Hyrax::Schema(:with_video_embed) unless Hyrax.config.flexible?
   include Hyrax::ArResource
   include Hyrax::NestedWorks
+  # include specifically so specs will include it, as flexible? was false in hyrax's code
+  # in the Resource module, resulting in unexpected behavior for the specs.
+  include Hyrax::Flexibility
 
   Hyrax::ValkyrieLazyMigration.migrating(self, from: Cdl)
 
