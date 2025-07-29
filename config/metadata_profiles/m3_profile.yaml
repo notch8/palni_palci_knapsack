@@ -179,7 +179,7 @@ properties:
         - OerResource
         - EtdResource
     cardinality:
-      minimum: 0
+      minimum: 1
     data_type: array
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
@@ -598,7 +598,7 @@ properties:
         - OerResource
         - EtdResource
     cardinality:
-      minimum: 0
+      minimum: 1
     data_type: array
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
@@ -783,7 +783,7 @@ properties:
         - OerResource
         - EtdResource
     cardinality:
-      minimum: 0
+      minimum: 1
     data_type: array
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
@@ -1080,7 +1080,7 @@ properties:
         - EtdResource
         - CdlResource
     cardinality:
-      minimum: 0
+      minimum: 1
     data_type: array
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
