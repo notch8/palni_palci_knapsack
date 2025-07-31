@@ -1,5 +1,5 @@
-FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
-
+ARG BASE_TAG=29ed3c44
+FROM ghcr.io/samvera/hyku/base:${BASE_TAG} AS hyku-knap-base
 # This is specifically NOT $APP_PATH but the parent directory
 COPY --chown=1001:101 . /app/samvera
 RUN ln -s /app/samvera/bundler.d /app/.bundler.d
