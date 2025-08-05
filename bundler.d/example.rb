@@ -12,4 +12,4 @@ ensure_gem "cancancan", "~> 3.0" # cancancan is bundling to v1.17.0 but we need 
 
 override_gem "hyrax",
              github: "samvera/hyrax",
-             ref: "ab4d108114289822b186579cd73a53d68c145a73"
+             ref: "b37c517787a2143ab28e3a07bfc5f58fbfe2b3db"
