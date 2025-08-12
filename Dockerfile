@@ -2,8 +2,8 @@ FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
 
 # This is specifically NOT $APP_PATH but the parent directory
 COPY --chown=1001:101 . /app/samvera
-# Create .bundler.d symlink in hyrax-webapp directory for bundler-inject
-RUN ln -sf /app/samvera/bundler.d /app/samvera/hyrax-webapp/.bundler.d
+# Copy bundler.d to the hyrax-webapp directory where bundle commands run
+RUN cp -r /app/samvera/bundler.d /app/samvera/hyrax-webapp/bundler.d
 ENV BUNDLE_LOCAL__HYKU_KNAPSACK=/app/samvera
 ENV BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true
 
