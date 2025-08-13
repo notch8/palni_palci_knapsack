@@ -1,14 +1,17 @@
-FROM ghcr.io/samvera/hyku/base:latest AS hyku-knap-base
+ARG BASE_TAG=${BASE_TAG:-latest}
+FROM ghcr.io/samvera/hyku/base:${BASE_TAG} AS hyku-knap-base
 
 # This is specifically NOT $APP_PATH but the parent directory
 COPY --chown=1001:101 . /app/samvera
-# Copy bundler.d to the hyrax-webapp directory where bundle commands run
-RUN cp -r /app/samvera/bundler.d /app/samvera/hyrax-webapp/bundler.d
-ENV BUNDLE_LOCAL__HYKU_KNAPSACK=/app/samvera
+
+# point bundler-inject at your canonical inject dir (build + runtime)
+ENV BUNDLE_BUNDLER_INJECT__GEM_PATH=/app/samvera/bundler.d
 ENV BUNDLE_DISABLE_LOCAL_BRANCH_CHECK=true
 
-RUN bundle install --jobs "$(nproc)"
-
+# install gems with a small parallelism cap
+RUN jobs="$(nproc)"; \
+    if [ "$jobs" -gt 2 ]; then jobs=2; fi; \
+    bundle install --jobs "$jobs" --retry 3
 USER root
 
 # Install "best" training data for Tesseract
@@ -25,3 +28,10 @@ CMD ./bin/web
 
 FROM hyku-web AS hyku-worker
 CMD ./bin/worker
+
+FROM solr:8.3 AS hyku-solr
+ENV SOLR_USER="solr" \
+    SOLR_GROUP="solr"
+USER root
+COPY --chown=solr:solr solr/security.json /var/solr/data/security.json
+USER $SOLR_USER
