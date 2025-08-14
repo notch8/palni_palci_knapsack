@@ -10,4 +10,4 @@ gem "sentry-ruby"
 gem "sentry-rails"
 ensure_gem "cancancan", "~> 3.0" # cancancan is bundling to v1.17.0 but we need at least 3.0
 
-ensure_gem "willow_sword", github: "notch8/willow_sword", ref: "909a911e9ec04fa18116cb127d42e1f2545ff997"
+# ensure_gem "willow_sword", github: "notch8/willow_sword", ref: "909a911e9ec04fa18116cb127d42e1f2545ff997"
