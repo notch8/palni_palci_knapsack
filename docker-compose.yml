@@ -123,8 +123,8 @@ services:
     entrypoint: ["sh", "-c"]
     command:
       - >
-        rm -rf /app/samvera/hyrax-webapp/bundler.d;
-        ln -s /app/samvera/bundler.d /app/samvera/hyrax-webapp/bundler.d;
+        rm -rf /app/samvera/hyrax-webapp/bundler.d/*.rb;
+        ln -s /app/samvera/bundler.d/*.rb /app/samvera/hyrax-webapp/bundler.d/;
         solrcloud-upload-configset.sh /app/samvera/hyrax-webapp/solr/conf &&
         solrcloud-assign-configset.sh &&
         SOLR_COLLECTION_NAME=hydra-test solrcloud-assign-configset.sh &&
