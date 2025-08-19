@@ -111,6 +111,13 @@ services:
     extends:
       file: hyrax-webapp/docker-compose.yml
       service: initialize_app
+    command:
+      - >
+        /app/samvera/bin/solrcloud-upload-configset.sh /app/samvera/hyrax-webapp/solr/conf &&
+        /app/samvera/bin/solrcloud-assign-configset.sh &&
+        SOLR_COLLECTION_NAME=hydra-test /app/samvera/bin/solrcloud-assign-configset.sh &&
+        bundle &&
+        /app/samvera/bin/db-migrate-seed.sh
 
   redis:
     extends:
