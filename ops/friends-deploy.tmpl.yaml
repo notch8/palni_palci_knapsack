@@ -388,7 +388,7 @@ fcrepo:
   postgresql:
     enabled: true
     image:
-      repository: bitnami/postgresql
+      repository: bitnamilegacy/postgresql
       tag: 12.17.0-debian-11-r28
     auth:
       username: fcrepo
@@ -411,6 +411,9 @@ global:
 postgresql:
   enabled: false
 redis:
+  image:
+  repository: bitnamilegacy/redis
+  tag: 7.0.2-debian-11-r7
   enabled: true
   architecture: standalone
   auth:
