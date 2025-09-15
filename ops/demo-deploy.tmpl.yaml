@@ -138,6 +138,8 @@ extraEnvVars: &envVars
     value: 'ga4'
   - name: HYRAX_FITS_PATH
     value: /app/fits/fits.sh
+  - name: HYRAX_FLEXIBLE
+    value: "false"
   - name: HYRAX_VALKYRIE
     value: "true"
   - name: INITIAL_ADMIN_EMAIL
