@@ -46,7 +46,7 @@ attributes:
     type: string
     multiple: true
     form:
-      required: true
+      required: false
       primary: true
     index_keys:
       - "resource_type_sim"
@@ -243,4 +243,3 @@ attributes:
   relative_path:
     type: string
     predicate: http://scholarsphere.psu.edu/ns#relativePath
-

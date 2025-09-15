@@ -293,7 +293,7 @@ extraDeploy:
               {{- include "hyrax.workerSelectorLabels" . | nindent 8 }}
           spec:
             initContainers:
-              - name: db-wait
+              - name: service-wait
                 image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}"
                 imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
                 envFrom:
@@ -307,7 +307,7 @@ extraDeploy:
                 command:
                   - sh
                   - -c
-                  - "db-wait.sh {{ include "hyrax.redis.host" . }}:6379"
+                  - "service-wait.sh {{ include "hyrax.redis.host" . }}:6379"
               {{- if .Values.worker.extraInitContainers }}
               {{- toYaml .Values.worker.extraInitContainers | nindent 8 }}
               {{- end }}
@@ -433,8 +433,8 @@ fcrepo:
   postgresql:
     enabled: false
     image:
-      repository: bitnami/postgresql
-      tag: 12.17.0-debian-11-r28
+      repository: bitnamilegacy/postgresql
+      tag: 12.3.0
     auth:
       username: fcrepo
       password: $DB_PASSWORD
@@ -457,6 +457,9 @@ global:
 postgresql:
   enabled: false
 redis:
+  image:
+    repository: bitnamilegacy/redis
+    tag: 7.0.2-debian-11-r7
   enabled: true
   architecture: standalone
   auth:
