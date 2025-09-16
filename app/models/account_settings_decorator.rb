@@ -3,8 +3,6 @@
 # OVERRIDE Add SuperAdmin Settings for
 Account.superadmin_settings = %i[
   analytics
-  analytics_provider
-  analytics_reporting
   batch_email_notifications
   bulkrax_field_mappings
   contact_email
@@ -29,7 +27,6 @@ module AccountSettingsDecorator
 
     return unless disable_features
     Account.all_settings[:analytics][:disabled] = true
-    Account.all_settings[:analytics_reporting][:disabled] = true
     Account.all_settings[:batch_email_notifications][:disabled] = true
     Account.all_settings[:depositor_email_notifications][:disabled] = true
   end
