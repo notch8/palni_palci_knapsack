@@ -2,8 +2,8 @@ m3_version: 1.0.beta2
 profile:
   date_modified: "2024-06-01"
   responsibility: https://samvera.org
-  responsibility_statement: Hyku Initial Profile
-  type: Hyku Initial Profile
+  responsibility_statement: PALS Initial Profile
+  type: PALS Initial Profile
   version: 1
 classes:
   GenericWorkResource:

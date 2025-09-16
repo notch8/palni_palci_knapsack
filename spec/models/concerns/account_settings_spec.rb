@@ -17,7 +17,6 @@ RSpec.describe AccountSettings do
         %i[allow_downloads
            allow_signup
            analytics
-           analytics_reporting
            batch_email_notifications
            bulkrax_field_mappings
            cache_api
@@ -92,7 +91,6 @@ RSpec.describe AccountSettings do
       it 'disables analytics-related settings' do
         public_settings = account.public_settings(is_superadmin: true)
         expect(public_settings[:analytics][:default]).to eq false
-        expect(public_settings[:analytics_reporting][:default]).to eq false
         expect(public_settings[:batch_email_notifications][:default]).to eq false
         expect(public_settings[:depositor_email_notifications][:default]).to eq false
       end
