@@ -224,3 +224,15 @@ attributes:
     form:
       primary: false
     predicate: http://purl.org/dc/elements/1.1/subject
+  hide_from_catalog_search:
+    type: string
+    multiple: false
+    form:
+      display: false
+      required: false
+      primary: false
+      multiple: false
+    predicate: https://hykucommons.org/terms/hide_from_catalog_search
+    index_keys:
+    - hide_from_catalog_search_bsi
+    - hide_from_catalog_search_tesim
