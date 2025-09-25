@@ -46,7 +46,7 @@ attributes:
     type: string
     multiple: true
     form:
-      required: false
+      required: true
       primary: true
     index_keys:
       - "date_created_tesim"
@@ -94,7 +94,7 @@ attributes:
     type: string
     multiple: true
     form:
-      required: false
+      required: true
       primary: true
     index_keys:
       - "rights_statement_sim"
