@@ -11,8 +11,7 @@ module Hyrax
         base.class_eval do
           self.terms = %i[creator contributor
                           keyword license publisher date_created
-                          subject language identifier based_near
-                          related_url]
+                          subject language identifier related_url]
         end
       end
     end
