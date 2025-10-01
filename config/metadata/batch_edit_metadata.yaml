@@ -31,7 +31,7 @@ attributes:
     type: string
     multiple: true
     form:
-      primary: false
+      primary: true
     index_keys:
       - "license_sim"
       - "license_tesim"
