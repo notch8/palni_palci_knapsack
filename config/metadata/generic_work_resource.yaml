@@ -39,7 +39,7 @@ attributes:
       - "keyword_sim"
       - "keyword_tesim"
     form:
-      required: true
+      required: false
       primary: true
     predicate: http://schema.org/keywords
   rights_statement:
