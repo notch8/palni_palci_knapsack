@@ -70,7 +70,7 @@ attributes:
     index_keys:
       - "degree_level_tesim"
     form:
-      required: true
+      required: false
       primary: true
       multiple: true
     predicate: https://hykucommons.org/terms/degree_level
@@ -80,7 +80,7 @@ attributes:
     index_keys:
       - "degree_discipline_tesim"
     form:
-      required: true
+      required: false
       primary: true
       multiple: true
     predicate: https://hykucommons.org/terms/degree_discipline
