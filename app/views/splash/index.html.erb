@@ -19,7 +19,8 @@
 
 <section class="product-features">
   <%# SEARCH BAR FOR HOME PAGE %>
-  <%= render partial: 'splash/search_form' %>
+  <%# Temporarily disabled - see https://github.com/notch8/palni_palci_knapsack/issues/509 %>
+  <%# render partial: 'splash/search_form' %>
   <h2>Browse our partner repositories:</h2>
   <div class="row grid-row accounts-row">
     <% @accounts.each_with_index do |account, i| %>
