@@ -197,7 +197,7 @@ extraEnvVars: &envVars
   - name: SENTRY_ENVIRONMENT
     value: $SENTRY_ENVIRONMENT
   - name: SMTP_ADDRESS
-    value: "email-smtp.us-west-2.amazonaws.com"
+    value: "smtp.sendgrid.net"
   - name: SMTP_DOMAIN
     value: "hykucommons.org"
   - name: SMTP_ENABLED
@@ -205,11 +205,11 @@ extraEnvVars: &envVars
   - name: SMTP_PORT
     value: "587"
   - name: SMTP_TYPE
-    value: "login"
+    value: "plain"
   - name: SMTP_USER_NAME
-    value: "AKIAJUV5DOPWWUKISN3Q"
+    value: "apikey"
   - name: SMTP_STARTTLS
-    value: "false"
+    value: "true"
   - name: SMTP_PASSWORD
     value: $SMTP_PASSWORD
   - name: SOLR_ADMIN_PASSWORD
