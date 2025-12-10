@@ -6,6 +6,8 @@ module Bulkrax
     def import(importer, only_updates_since_last_import)
       super
 
+      return if importer.failed?
+
       importer&.create_memberships unless importer.validate_only
     end
   end
