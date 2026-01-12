@@ -2,12 +2,11 @@ replicaCount: 2
 
 resources:
   limits:
-    memory: "1023Mi"
-    cpu: "466m"
+    memory: "4096Mi"
+    cpu: "1000m"
   requests:
-    memory: "939Mi"
-    cpu: "328m"
-
+    memory: "2048Mi"
+    cpu: "308m"
 
 livenessProbe:
   enabled: false
@@ -209,11 +208,11 @@ extraEnvVars: &envVars
 worker:
   resources:
     limits:
-      memory: "1071Mi"
-      cpu: "250m"
+      memory: "4096Mi"
+      cpu: "1000m"
     requests:
-      memory: "987Mi"
-      cpu: "100m"
+      memory: "2048Mi"
+      cpu: "250m"
   replicaCount: 1
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
@@ -234,11 +233,11 @@ workerAuxiliary:
   replicaCount: 1
   resources:
     limits:
-      memory: "1047Mi"
-      cpu: "250m"
+      memory: "4096Mi"
+      cpu: "1000m"
     requests:
-      memory: "966Mi"
-      cpu: "100m"
+      memory: "2048Mi"
+      cpu: "250m"
   extraEnvVars:
     - name: AUXILIARY_WORKER_THREAD_COUNT
       value: "1"
@@ -396,21 +395,21 @@ leaseRelease:
 fcrepo:
   resources:
     limits:
-      memory: "2502Mi"
-      cpu: "100m"
+      memory: "4096Mi"
+      cpu: "1000m"
     requests:
-      memory: "2310Mi"
-      cpu: "50m"
+      memory: "3072Mi"
+      cpu: "250m"
   enabled: true
   servicePort: 8080
   postgresql:
     resources:
       limits:
-        memory: "128Mi"
-        cpu: "100m"
+        memory: "1024Mi"
+        cpu: "500m"
       requests:
-        memory: "64Mi"
-        cpu: "50m"
+        memory: "512Mi"
+        cpu: "100m"
     enabled: true
     image:
       repository: bitnamilegacy/postgresql
@@ -438,10 +437,10 @@ postgresql:
 redis:
   resources:
     limits:
-      memory: "128Mi"
-      cpu: "100m"
+      memory: "512Mi"
+      cpu: "250m"
     requests:
-      memory: "64Mi"
+      memory: "256Mi"
       cpu: "50m"
   image:
     repository: bitnamilegacy/redis
@@ -458,12 +457,17 @@ fits:
   subPath: /fits
   resources:
     limits:
-      memory: "234Mi"
-      cpu: "100m"
+      memory: "2048Mi"
+      cpu: "1000m"
     requests:
-      memory: "216Mi"
-      cpu: "50m"
-
+      memory: "1024Mi"
+      cpu: "500m"
+  livenessProbe:
+    initialDelaySeconds: 60
+    failureThreshold: 6
+  readinessProbe:
+    initialDelaySeconds: 60
+    failureThreshold: 6
 externalPostgresql:
   host: postgres-postgresql.postgres.svc.cluster.local
   username: postgres
