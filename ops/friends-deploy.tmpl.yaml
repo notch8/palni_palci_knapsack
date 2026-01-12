@@ -2,10 +2,12 @@ replicaCount: 2
 
 resources:
   limits:
-    memory: "8Gi"
+    memory: "1023Mi"
+    cpu: "466m"
   requests:
-    memory: "4Gi"
-    cpu: "250m"
+    memory: "939Mi"
+    cpu: "328m"
+
 
 livenessProbe:
   enabled: false
@@ -205,6 +207,13 @@ extraEnvVars: &envVars
     value: "true"
 
 worker:
+  resources:
+    limits:
+      memory: "1071Mi"
+      cpu: "250m"
+    requests:
+      memory: "987Mi"
+      cpu: "100m"
   replicaCount: 1
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
@@ -225,11 +234,11 @@ workerAuxiliary:
   replicaCount: 1
   resources:
     limits:
-      memory: "12Gi"
-      cpu: "4"
+      memory: "1047Mi"
+      cpu: "250m"
     requests:
-      memory: "4Gi"
-      cpu: "2"
+      memory: "966Mi"
+      cpu: "100m"
   extraEnvVars:
     - name: AUXILIARY_WORKER_THREAD_COUNT
       value: "1"
@@ -385,9 +394,23 @@ leaseRelease:
   enabled: false
 
 fcrepo:
+  resources:
+    limits:
+      memory: "2502Mi"
+      cpu: "100m"
+    requests:
+      memory: "2310Mi"
+      cpu: "50m"
   enabled: true
   servicePort: 8080
   postgresql:
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "100m"
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
     enabled: true
     image:
       repository: bitnamilegacy/postgresql
@@ -413,6 +436,13 @@ global:
 postgresql:
   enabled: false
 redis:
+  resources:
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
   image:
     repository: bitnamilegacy/redis
     tag: 7.0.2-debian-11-r7
@@ -426,6 +456,13 @@ fits:
   enabled: true
   servicePort: 8080
   subPath: /fits
+  resources:
+    limits:
+      memory: "234Mi"
+      cpu: "100m"
+    requests:
+      memory: "216Mi"
+      cpu: "50m"
 
 externalPostgresql:
   host: postgres-postgresql.postgres.svc.cluster.local
