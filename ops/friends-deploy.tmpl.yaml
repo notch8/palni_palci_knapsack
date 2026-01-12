@@ -403,13 +403,14 @@ fcrepo:
   enabled: true
   servicePort: 8080
   postgresql:
-    resources:
-      limits:
-        memory: "1024Mi"
-        cpu: "500m"
-      requests:
-        memory: "512Mi"
-        cpu: "100m"
+    primary:
+      resources:
+        limits:
+          memory: "1024Mi"
+          cpu: "500m"
+        requests:
+          memory: "512Mi"
+          cpu: "100m"
     enabled: true
     image:
       repository: bitnamilegacy/postgresql
@@ -435,13 +436,14 @@ global:
 postgresql:
   enabled: false
 redis:
-  resources:
-    limits:
-      memory: "512Mi"
-      cpu: "250m"
-    requests:
-      memory: "256Mi"
-      cpu: "50m"
+  master:
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "250m"
+      requests:
+        memory: "256Mi"
+        cpu: "50m"
   image:
     repository: bitnamilegacy/redis
     tag: 7.0.2-debian-11-r7
