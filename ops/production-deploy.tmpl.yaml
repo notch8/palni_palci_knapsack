@@ -2,10 +2,11 @@ replicaCount: 3
 
 resources:
   limits:
-    memory: "8Gi"
+    memory: "10Gi"
+    cpu: "1500m"
   requests:
-    memory: "4Gi"
-    cpu: "250m"
+    memory: "10Gi"
+    cpu: "300m"
 
 livenessProbe:
   enabled: false
@@ -239,10 +240,11 @@ worker:
   replicaCount: 1
   resources:
     limits:
-      memory: "8Gi"
+      memory: "10Gi"
+      cpu: "17500m"
     requests:
-      memory: "4Gi"
-      cpu: "250m"
+      memory: "10Gi"
+      cpu: "15250m"
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
   podSecurityContext:
@@ -257,11 +259,11 @@ workerAuxiliary:
   replicaCount: 1
   resources:
     limits:
-      memory: "12Gi"
-      cpu: "4"
+      memory: "14Gi"
+      cpu: "6000m"
     requests:
-      memory: "4Gi"
-      cpu: "2"
+      memory: "12Gi"
+      cpu: "5250m"
   extraEnvVars:
     - name: AUXILIARY_WORKER_THREAD_COUNT
       value: "1"
@@ -455,6 +457,14 @@ global:
 postgresql:
   enabled: false
 redis:
+  master:
+    resources:
+    limits:
+      memory: "3Gi"
+      cpu: "250m"
+    requests:
+      memory: "2Gi"
+      cpu: "50m"
   image:
     repository: bitnamilegacy/redis
     tag: 7.0.2-debian-11-r7
@@ -465,6 +475,13 @@ redis:
 solr:
   enabled: false
 fits:
+  resources:
+    limits:
+      memory: "10Gi"
+      cpu: "1000m"
+    requests:
+      memory: "10Gi"
+      cpu: "500m"
   enabled: true
   servicePort: 8080
   subPath: /fits
@@ -483,6 +500,13 @@ externalSolrCollection: production-palni-palci
 externalSolrPassword: $SOLR_ADMIN_PASSWORD
 
 nginx:
+  resources:
+    limits:
+      memory: "256Mi"
+      cpu: "100m"
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
   enabled: true
   service:
     type: ClusterIP
