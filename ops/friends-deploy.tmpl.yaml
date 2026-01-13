@@ -2,11 +2,11 @@ replicaCount: 2
 
 resources:
   limits:
-    memory: "4096Mi"
+    memory: "4Gi"
     cpu: "1000m"
   requests:
-    memory: "2048Mi"
-    cpu: "308m"
+    memory: "2Gi"
+    cpu: "250m"
 
 livenessProbe:
   enabled: false
@@ -208,10 +208,10 @@ extraEnvVars: &envVars
 worker:
   resources:
     limits:
-      memory: "4096Mi"
+      memory: "4Gi"
       cpu: "1000m"
     requests:
-      memory: "2048Mi"
+      memory: "2Gi"
       cpu: "250m"
   replicaCount: 1
   extraVolumeMounts: *volMounts
@@ -233,10 +233,10 @@ workerAuxiliary:
   replicaCount: 1
   resources:
     limits:
-      memory: "4096Mi"
+      memory: "4Gi"
       cpu: "1000m"
     requests:
-      memory: "2048Mi"
+      memory: "2Gi"
       cpu: "250m"
   extraEnvVars:
     - name: AUXILIARY_WORKER_THREAD_COUNT
@@ -395,10 +395,10 @@ leaseRelease:
 fcrepo:
   resources:
     limits:
-      memory: "4096Mi"
+      memory: "4Gi"
       cpu: "1000m"
     requests:
-      memory: "3072Mi"
+      memory: "3Gi"
       cpu: "250m"
   enabled: true
   servicePort: 8080
@@ -406,7 +406,7 @@ fcrepo:
     primary:
       resources:
         limits:
-          memory: "1024Mi"
+          memory: "1Gi"
           cpu: "500m"
         requests:
           memory: "512Mi"
@@ -459,10 +459,10 @@ fits:
   subPath: /fits
   resources:
     limits:
-      memory: "2048Mi"
+      memory: "2Gi"
       cpu: "1000m"
     requests:
-      memory: "1024Mi"
+      memory: "1Gi"
       cpu: "500m"
   livenessProbe:
     initialDelaySeconds: 60
