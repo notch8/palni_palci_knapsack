@@ -459,12 +459,12 @@ postgresql:
 redis:
   master:
     resources:
-    limits:
-      memory: "3Gi"
-      cpu: "250m"
-    requests:
-      memory: "2Gi"
-      cpu: "50m"
+      limits:
+        memory: "3Gi"
+        cpu: "100m"
+      requests:
+        memory: "2Gi"
+        cpu: "20m"
   image:
     repository: bitnamilegacy/redis
     tag: 7.0.2-debian-11-r7
@@ -481,7 +481,7 @@ fits:
       cpu: "1000m"
     requests:
       memory: "10Gi"
-      cpu: "500m"
+      cpu: "250m"
   enabled: true
   servicePort: 8080
   subPath: /fits
@@ -506,7 +506,7 @@ nginx:
       cpu: "100m"
     requests:
       memory: "128Mi"
-      cpu: "50m"
+      cpu: "20m"
   enabled: true
   service:
     type: ClusterIP
