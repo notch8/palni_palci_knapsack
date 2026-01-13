@@ -2,11 +2,11 @@ replicaCount: 2
 
 resources:
   limits:
-    memory: "4Gi"
+    memory: "2Gi"
     cpu: "1000m"
   requests:
-    memory: "2Gi"
-    cpu: "250m"
+    memory: "1Gi"
+    cpu: "200m"
 
 livenessProbe:
   enabled: false
@@ -208,11 +208,11 @@ extraEnvVars: &envVars
 worker:
   resources:
     limits:
-      memory: "4Gi"
+      memory: "2Gi"
       cpu: "1000m"
     requests:
-      memory: "2Gi"
-      cpu: "250m"
+      memory: "1Gi"
+      cpu: "100m"
   replicaCount: 1
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
@@ -233,11 +233,11 @@ workerAuxiliary:
   replicaCount: 1
   resources:
     limits:
-      memory: "4Gi"
+      memory: "2Gi"
       cpu: "1000m"
     requests:
-      memory: "2Gi"
-      cpu: "250m"
+      memory: "1Gi"
+      cpu: "100m"
   extraEnvVars:
     - name: AUXILIARY_WORKER_THREAD_COUNT
       value: "1"
@@ -395,11 +395,11 @@ leaseRelease:
 fcrepo:
   resources:
     limits:
-      memory: "4Gi"
+      memory: "3Gi"
       cpu: "1000m"
     requests:
-      memory: "3Gi"
-      cpu: "250m"
+      memory: "2Gi"
+      cpu: "100m"
   enabled: true
   servicePort: 8080
   postgresql:
@@ -409,8 +409,8 @@ fcrepo:
           memory: "1Gi"
           cpu: "500m"
         requests:
-          memory: "512Mi"
-          cpu: "100m"
+          memory: "384Mi"
+          cpu: "50m"
     enabled: true
     image:
       repository: bitnamilegacy/postgresql
@@ -439,11 +439,11 @@ redis:
   master:
     resources:
       limits:
-        memory: "512Mi"
-        cpu: "250m"
-      requests:
         memory: "256Mi"
-        cpu: "50m"
+        cpu: "100m"
+      requests:
+        memory: "128Mi"
+        cpu: "20m"
   image:
     repository: bitnamilegacy/redis
     tag: 7.0.2-debian-11-r7
@@ -459,11 +459,11 @@ fits:
   subPath: /fits
   resources:
     limits:
-      memory: "2Gi"
+      memory: "1.5Gi"
       cpu: "1000m"
     requests:
-      memory: "1Gi"
-      cpu: "500m"
+      memory: "512Mi"
+      cpu: "250m"
   livenessProbe:
     initialDelaySeconds: 60
     failureThreshold: 6
