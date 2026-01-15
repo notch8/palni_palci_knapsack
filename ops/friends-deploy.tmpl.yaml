@@ -2,11 +2,11 @@ replicaCount: 2
 
 resources:
   limits:
-    memory: "2Gi"
+    memory: "4Gi"
     cpu: "1000m"
   requests:
-    memory: "1Gi"
-    cpu: "200m"
+    memory: "2Gi"
+    cpu: "300m"
 
 livenessProbe:
   enabled: false
@@ -208,10 +208,10 @@ extraEnvVars: &envVars
 worker:
   resources:
     limits:
-      memory: "2Gi"
+      memory: "4Gi"
       cpu: "1000m"
     requests:
-      memory: "1Gi"
+      memory: "2Gi"
       cpu: "100m"
   replicaCount: 1
   extraVolumeMounts: *volMounts
@@ -233,10 +233,10 @@ workerAuxiliary:
   replicaCount: 1
   resources:
     limits:
-      memory: "2Gi"
+      memory: "4Gi"
       cpu: "1000m"
     requests:
-      memory: "1Gi"
+      memory: "2Gi"
       cpu: "100m"
   extraEnvVars:
     - name: AUXILIARY_WORKER_THREAD_COUNT
@@ -395,10 +395,10 @@ leaseRelease:
 fcrepo:
   resources:
     limits:
-      memory: "3Gi"
+      memory: "4Gi"
       cpu: "1000m"
     requests:
-      memory: "2Gi"
+      memory: "3Gi"
       cpu: "100m"
   enabled: true
   servicePort: 8080
@@ -409,7 +409,7 @@ fcrepo:
           memory: "1Gi"
           cpu: "500m"
         requests:
-          memory: "384Mi"
+          memory: "512Mi"
           cpu: "50m"
     enabled: true
     image:
@@ -439,10 +439,10 @@ redis:
   master:
     resources:
       limits:
-        memory: "256Mi"
+        memory: "512Mi"
         cpu: "100m"
       requests:
-        memory: "128Mi"
+        memory: "256Mi"
         cpu: "20m"
   image:
     repository: bitnamilegacy/redis
@@ -459,10 +459,10 @@ fits:
   subPath: /fits
   resources:
     limits:
-      memory: "1.5Gi"
+      memory: "2Gi"
       cpu: "1000m"
     requests:
-      memory: "512Mi"
+      memory: "1Gi"
       cpu: "250m"
   livenessProbe:
     initialDelaySeconds: 60
