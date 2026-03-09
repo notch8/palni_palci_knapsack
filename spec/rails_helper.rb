@@ -38,14 +38,13 @@ require 'database_cleaner'
 Hyrax.config.admin_set_model = "AdminSetResource"
 Hyrax.config.collection_model = "CollectionResource"
 
-# Required for :hyrax_work factory and Hyrax::Test namespace used by Hyrax shared spec factories.
-require Hyrax::Engine.root.join("lib/hyrax/specs/shared_specs/simple_work.rb").to_s
-
-# Load factories from Hyrax's shared specs, hyrax-webapp, and this engine (align with hykuup_knapsack PR #630).
+# Load only knapsack and webapp factories. We do not load Hyrax's shared spec factories or
+# require SimpleWork (monograph schema)—the knapsack does not run Hyrax's tests. Base factories
+# (:hyrax_work, :hyrax_file_set, :hyrax_file_metadata) are defined in the knapsack so :hyku_work
+# and :cdl_resource work without pulling in Hyrax's test harness.
 FactoryBot.definition_file_paths = [
-  Hyrax::Engine.root.join("lib/hyrax/specs/shared_specs/factories").to_s,
-  File.expand_path("spec/factories", Rails.root),
-  File.expand_path("spec/factories", HykuKnapsack::Engine.root)
+  File.expand_path("spec/factories", HykuKnapsack::Engine.root),
+  File.expand_path("spec/factories", Rails.root)
 ]
 FactoryBot.find_definitions
 
