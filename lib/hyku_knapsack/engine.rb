@@ -47,9 +47,8 @@ module HykuKnapsack
 
       config.i18n.load_path += Dir["#{config.root}/config/locales/**/*.yml"]
 
-      if Hyrax.config.respond_to?(:schema_loader_config_search_paths)
-        Hyrax.config.schema_loader_config_search_paths += [HykuKnapsack::Engine.root]
-      end
+      Hyrax.config.schema_loader_config_search_paths.unshift(HykuKnapsack::Engine.root) \
+        if Hyrax.config.respond_to?(:schema_loader_config_search_paths)
     end
 
     config.to_prepare do
@@ -63,9 +62,12 @@ module HykuKnapsack
     end
 
     config.after_initialize do
-      Hyrax::DerivativeService.services = [
-        IiifPrint::PluggableDerivativeService
-      ]
+      derivative_services = [IiifPrint::PluggableDerivativeService]
+      if Hyrax.config.respond_to?(:derivative_services=)
+        Hyrax.config.derivative_services = derivative_services
+      else
+        Hyrax::DerivativeService.services = derivative_services
+      end
 
       # This is the opposite of what you usually want to do.  Normally app views override engine
       # views but in our case things in the Knapsack override what is in the application.
