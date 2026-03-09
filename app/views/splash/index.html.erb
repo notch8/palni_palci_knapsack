@@ -26,7 +26,7 @@
     <% @accounts.each_with_index do |account, i| %>
       <% if @images[i].present? && !@images[i].match(/placeholder/) %>
         <%= link_to "//#{account.cname}" do %>
-          <%= image_tag @images[i], alt_text: @alt_text[i], class: 'logo-image' %>
+          <%= image_tag @images[i], alt: @alt_text[i], class: 'logo-image' %>
         <% end %>
       <% end %>
     <% end %>

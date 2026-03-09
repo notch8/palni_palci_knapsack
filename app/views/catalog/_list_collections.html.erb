@@ -17,9 +17,9 @@
     <div class="thumbnail-title-wrapper">
       <div class="thumbnail-wrapper">
         <% if (collection_presenter.thumbnail_path == nil) %>
-          <%= image_tag(Site.instance.default_collection_image) %>
+          <%= image_tag(Site.instance.default_collection_image, alt: thumbnail_alt_text_for(collection_presenter, block_name: 'default_collection_image_text')) %>
         <% else %>
-          <%= image_tag(collection_presenter.thumbnail_path) %>
+          <%= image_tag(collection_presenter.thumbnail_path, alt: thumbnail_alt_text_for(collection_presenter, block_name: 'default_collection_image_text')) %>
         <% end %>
       </div>
       <%= link_to collection_presenter.show_path do %>
