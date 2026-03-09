@@ -39,6 +39,10 @@ require 'dry-validation'
 Dir[HykuKnapsack::Engine.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
+  # Run only knapsack specs; exclude Hyku (submodule) specs that depend on QA authorities
+  # and other Hyku-specific setup not present in the knapsack (see hyku_knapsack PR #49).
+  config.exclude_pattern = 'spec/hyku_specs/**/*_spec.rb'
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.file_fixture_path = Rails.root.join('spec', 'fixtures').to_s
 
