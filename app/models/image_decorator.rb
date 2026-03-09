@@ -2,6 +2,10 @@
 
 # Generated via
 #  `rails generate hyrax:work Image`
+# Empty module for Zeitwerk (this file defines Image, not a decorator mixin).
+module ImageDecorator
+end
+
 class Image < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include IiifPrint.model_configuration(

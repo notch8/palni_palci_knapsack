@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 # OVERRIDE IIIF Print v1.0.0 to call CreateGroupAndAddMembersJob
-
+# Define at IiifPrint::CreateRelationshipsJobDecorator for Zeitwerk (path: jobs/iiif_print/create_relationships_job_decorator.rb)
 module IiifPrint
-  module Jobs
-    module CreateRelationshipsJobDecorator
+  module CreateRelationshipsJobDecorator
       # rubocop:disable Metrics/MethodLength
       def perform(parent_id:, parent_model:, child_model:, retries: 0, **)
         @parent_id = parent_id
@@ -46,8 +45,7 @@ module IiifPrint
           reschedule_job
         end
       end
-    end
   end
 end
 
-IiifPrint::Jobs::CreateRelationshipsJob.prepend(IiifPrint::Jobs::CreateRelationshipsJobDecorator)
+IiifPrint::Jobs::CreateRelationshipsJob.prepend(IiifPrint::CreateRelationshipsJobDecorator)

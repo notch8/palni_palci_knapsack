@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # Use this to override any Hyrax configuration from the Knapsack
-HykuKnapsack::DEFAULT_M3_PROFILE_PATH = HykuKnapsack::Engine.root.join('config', 'metadata_profiles', 'm3_profile.yaml')
+HykuKnapsack::DEFAULT_M3_PROFILE_PATH = HykuKnapsack::Engine.root.join('config', 'metadata_profiles', 'm3_profile.yaml') \
+  unless defined?(HykuKnapsack::DEFAULT_M3_PROFILE_PATH)
 
 Rails.application.config.after_initialize do
   Hyrax.config do |config|

@@ -9,7 +9,8 @@
 # Hyku's.  If two are of the same name, then the one in HykuKnapsack should override the
 # one in Hyku.
 
-HykuKnapsack::AUTHORITIES_PATH = File.join(HykuKnapsack::Engine.root, 'config', 'authorities')
+HykuKnapsack::AUTHORITIES_PATH = File.join(HykuKnapsack::Engine.root, 'config', 'authorities') \
+  unless defined?(HykuKnapsack::AUTHORITIES_PATH)
 
 module Qa
   module Authorities
