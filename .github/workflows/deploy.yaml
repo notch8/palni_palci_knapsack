@@ -6,7 +6,7 @@ on:
       environment:
         description: 'Deploy to Environment'
         required: true
-        default: 'staging'
+        default: 'friends'
         type: choice
         options:
           - friends
