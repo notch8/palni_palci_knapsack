@@ -1152,7 +1152,7 @@ properties:
     data_type: array
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
-      sources: &1
+      sources:
       - 'null'
     display_label:
       default: blacklight.search.fields.index.rights_statement_tesim
@@ -2012,7 +2012,8 @@ properties:
     data_type: array
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
-      sources: *1
+      sources:
+      - 'null'
     display_label:
       default: blacklight.search.fields.index.rights_statement_tesim
     index_documentation: displayable, searchable
