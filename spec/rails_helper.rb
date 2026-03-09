@@ -1,56 +1,92 @@
 # frozen_string_literal: true
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 # Set environment variables BEFORE requiring Rails environment
-# so initializers can read the correct values
+# so initializers read the correct values on first load.
 ENV["RAILS_ENV"] ||= "test"
 ENV['HYRAX_FLEXIBLE'] ||= 'false'
+# Mirror the env setup from hyrax-webapp/spec/rails_helper.rb so Rails initializers
+# (especially analytics and routing) behave correctly in test mode.
+ENV['HYKU_ADMIN_HOST'] = 'test.host'
+ENV['HYKU_ROOT_HOST'] = 'test.host'
+ENV['HYKU_ADMIN_ONLY_TENANT_CREATION'] = nil
+ENV['HYKU_DEFAULT_HOST'] = nil
+ENV['HYKU_MULTITENANT'] = 'true'
+ENV['VALKYRIE_TRANSITION'] = 'true'
+ENV['HYRAX_ANALYTICS_REPORTING'] = 'false'
 
 require 'logger'
 require 'active_support'
+
+# Boot Rails FIRST (requires hyrax-webapp submodule to be present, e.g. git submodule update --init).
+# This ensures HYRAX_FLEXIBLE is correctly set when Rails initializers run.
+require File.expand_path("../hyrax-webapp/config/environment", __dir__)
+abort("The Rails environment is running in production mode!") if Rails.env.production?
+
 require "spec_helper"
 
-# require File.expand_path('../config/environment', __dir__)
-require File.expand_path("../hyrax-webapp/config/environment", __dir__)
-# Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
-require "rspec/rails"
-# Add additional requires below this line. Rails is not loaded until this point!
-require "factory_bot_rails"
-FactoryBot.definition_file_paths = [File.expand_path("spec/factories", HykuKnapsack::Engine.root)]
-FactoryBot.find_definitions
+# Valkyrie adapter registration and shared spec helpers (from hyrax-webapp when submodule is present).
+hyrax_spec_dir = File.expand_path("../hyrax-webapp/spec", __dir__)
+require File.join(hyrax_spec_dir, "hyrax_with_valkyrie_helper") if File.exist?(File.join(hyrax_spec_dir, "hyrax_with_valkyrie_helper.rb"))
 
+require "rspec/rails"
+require "factory_bot_rails"
 require 'capybara/rails'
 require 'dry-validation'
-# Requires supporting ruby files with custom matchers and macros, etc, in
-# spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
-# run as spec files by default. This means that files in spec/support that end
-# in _spec.rb will both be required and run as specs, causing the specs to be
-# run twice. It is recommended that you do not name files matching this glob to
-# end with _spec.rb. You can configure this pattern with the --pattern
-# option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
-#
-# The following line is provided for convenience purposes. It has the downside
-# of increasing the boot-up time by auto-requiring all files in the support
-# directory. Alternatively, in the individual `*_spec.rb` files, manually
-# require only the support files necessary.
-#
-# Require supporting ruby files from spec/support/ and subdirectories.  Note: engine, not Rails.root context.
+require 'database_cleaner'
+
+# Configure Hyrax to use Valkyrie-based models in tests.
+Hyrax.config.admin_set_model = "AdminSetResource"
+Hyrax.config.collection_model = "CollectionResource"
+
+# Required for :hyrax_work factory and Hyrax::Test namespace used by Hyrax shared spec factories.
+require Hyrax::Engine.root.join("lib/hyrax/specs/shared_specs/simple_work.rb").to_s
+
+# Load factories from Hyrax's shared specs, hyrax-webapp, and this engine (align with hykuup_knapsack PR #630).
+FactoryBot.definition_file_paths = [
+  Hyrax::Engine.root.join("lib/hyrax/specs/shared_specs/factories").to_s,
+  File.expand_path("spec/factories", Rails.root),
+  File.expand_path("spec/factories", HykuKnapsack::Engine.root)
+]
+FactoryBot.find_definitions
+
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 Dir[HykuKnapsack::Engine.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+
+ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   # Run only knapsack specs; exclude Hyku (submodule) specs that depend on QA authorities
   # and other Hyku-specific setup not present in the knapsack (see hyku_knapsack PR #49).
   config.exclude_pattern = 'spec/hyku_specs/**/*_spec.rb'
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  config.fixture_paths = [Rails.root.join('spec', 'fixtures')]
   config.file_fixture_path = Rails.root.join('spec', 'fixtures').to_s
+  config.use_transactional_fixtures = false
 
-  # They enable url_helpers not to throw error in Rspec system spec and request spec.
-  # config.include Rails.application.routes.url_helpers
-  # TODO is this needed?
   config.include HykuKnapsack::Engine.routes.url_helpers
   config.include Capybara::DSL
   config.include ActionDispatch::TestProcess::FixtureFile
   config.include Fixtures::FixtureFileUpload if defined?(Fixtures::FixtureFileUpload)
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include FactoryBot::Syntax::Methods
+  config.include ApplicationHelper, type: :view if defined?(ApplicationHelper)
+  config.include Warden::Test::Helpers, type: :feature
+  config.include ActiveJob::TestHelper
+
+  config.before do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after do
+    DatabaseCleaner.clean
+  end
+end
+
+# Appeasing the Hyrax user factory interface (Hyku 7 compatibility; see samvera-labs/hyku_knapsack PR #49).
+# In Hyku 7, RoleMapper#add may not exist; define it to delegate to Rolify.
+def RoleMapper.add(user:, groups:)
+  groups.each do |group|
+    user.add_role(group.to_sym, Site.instance)
+  end
 end

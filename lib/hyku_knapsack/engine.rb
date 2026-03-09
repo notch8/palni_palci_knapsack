@@ -47,8 +47,9 @@ module HykuKnapsack
 
       config.i18n.load_path += Dir["#{config.root}/config/locales/**/*.yml"]
 
-      Hyrax.config.schema_loader_config_search_paths.unshift(HykuKnapsack::Engine.root) \
-        if Hyrax.config.respond_to?(:schema_loader_config_search_paths)
+      if Hyrax.config.respond_to?(:schema_loader_config_search_paths)
+        Hyrax.config.schema_loader_config_search_paths = [HykuKnapsack::Engine.root] + Array(Hyrax.config.schema_loader_config_search_paths)
+      end
     end
 
     config.to_prepare do

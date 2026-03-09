@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Hyrax::CdlsController do
+RSpec.describe Hyrax::CdlsController, type: :controller do
   let(:cdl_resource) { FactoryBot.valkyrie_create(:cdl_resource, :with_one_file_set, depositor: 'somebody') }
 
   it "includes Hyrax::IiifAv::ControllerBehavior" do
@@ -23,7 +23,8 @@ RSpec.describe Hyrax::CdlsController do
     end
 
     before do
-      allow(controller).to receive(:search_result_document).and_return(solr_document)
+      allow_any_instance_of(described_class).to receive(:search_result_document).and_return(solr_document)
+      get :show, params: { id: solr_document.id }
     end
 
     it "initializes a presenter" do

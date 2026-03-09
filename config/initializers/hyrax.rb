@@ -8,8 +8,7 @@ Rails.application.config.after_initialize do
   Hyrax.config do |config|
     config.flexible = ActiveModel::Type::Boolean.new.cast(ENV.fetch('HYRAX_FLEXIBLE', false))
 
-    config.schema_loader_config_search_paths.unshift(HykuKnapsack::Engine.root) \
-      if config.respond_to?(:schema_loader_config_search_paths)
+    config.schema_loader_config_search_paths = [HykuKnapsack::Engine.root] + Array(config.schema_loader_config_search_paths) if config.respond_to?(:schema_loader_config_search_paths)
 
     config.default_m3_profile_path = HykuKnapsack::DEFAULT_M3_PROFILE_PATH \
       if config.respond_to?(:default_m3_profile_path=)
