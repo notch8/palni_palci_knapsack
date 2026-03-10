@@ -3,7 +3,7 @@
 # Set environment variables BEFORE requiring Rails environment
 # so initializers read the correct values on first load.
 ENV["RAILS_ENV"] ||= "test"
-ENV['HYRAX_FLEXIBLE'] ||= 'false'
+ENV['HYRAX_FLEXIBLE'] ||= 'true'
 # Mirror the env setup from hyrax-webapp/spec/rails_helper.rb so Rails initializers
 # (especially analytics and routing) behave correctly in test mode.
 ENV['HYKU_ADMIN_HOST'] = 'test.host'
@@ -40,9 +40,9 @@ Hyrax.config.collection_model = "CollectionResource"
 
 # Define a minimal Hyrax::Test::SimpleWork stub so FactoryBot can compile the :hyrax_work
 # factory (which declares class: 'Hyrax::Test::SimpleWork') without loading the full
-# simple_work.rb file. Loading simple_work.rb causes UndefinedSchemaError/RepeatedAttributeError
-# with HYRAX_FLEXIBLE=false because of its Wings/ActiveFedora registrations; this bare subclass
-# avoids those side effects while still satisfying the constantize check during factory compilation.
+# simple_work.rb file. Loading simple_work.rb can cause UndefinedSchemaError/RepeatedAttributeError
+# due to its Wings/ActiveFedora registrations; this bare subclass avoids those side effects
+# while still satisfying the constantize check during factory compilation.
 module Hyrax
   module Test
     class SimpleWork < Hyrax::Work; end unless const_defined?(:SimpleWork)
