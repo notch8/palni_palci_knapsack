@@ -38,11 +38,19 @@ require 'database_cleaner'
 Hyrax.config.admin_set_model = "AdminSetResource"
 Hyrax.config.collection_model = "CollectionResource"
 
+# Define a minimal Hyrax::Test::SimpleWork stub so FactoryBot can compile the :hyrax_work
+# factory (which declares class: 'Hyrax::Test::SimpleWork') without loading the full
+# simple_work.rb file. Loading simple_work.rb causes UndefinedSchemaError/RepeatedAttributeError
+# with HYRAX_FLEXIBLE=false because of its Wings/ActiveFedora registrations; this bare subclass
+# avoids those side effects while still satisfying the constantize check during factory compilation.
+module Hyrax
+  module Test
+    class SimpleWork < Hyrax::Work; end unless const_defined?(:SimpleWork)
+  end
+end
+
 # Load factories from Hyrax's shared specs (defines :generic_work, :hyrax_work, etc.),
 # then hyrax-webapp, then this knapsack engine (which modifies/extends them).
-# We do NOT require simple_work.rb to avoid UndefinedSchemaError/RepeatedAttributeError
-# with HYRAX_FLEXIBLE=false; :hyrax_work will reference SimpleWork at definition time only,
-# and knapsack specs use :generic_work / :cdl_resource (which override the class).
 FactoryBot.definition_file_paths = [
   Hyrax::Engine.root.join("lib/hyrax/specs/shared_specs/factories").to_s,
   File.expand_path("spec/factories", Rails.root),
