@@ -14,20 +14,12 @@ ENV['HYKU_MULTITENANT'] = 'true'
 ENV['VALKYRIE_TRANSITION'] = 'true'
 ENV['HYRAX_ANALYTICS_REPORTING'] = 'false'
 
-require 'logger'
-require 'active_support'
-
 # Boot Rails FIRST (requires hyrax-webapp submodule to be present, e.g. git submodule update --init).
 # This ensures HYRAX_FLEXIBLE is correctly set when Rails initializers run.
 require File.expand_path("../hyrax-webapp/config/environment", __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require "spec_helper"
-
-# Valkyrie adapter registration and shared spec helpers (from hyrax-webapp when submodule is present).
-hyrax_spec_dir = File.expand_path("../hyrax-webapp/spec", __dir__)
-require File.join(hyrax_spec_dir, "hyrax_with_valkyrie_helper") if File.exist?(File.join(hyrax_spec_dir, "hyrax_with_valkyrie_helper.rb"))
-
 require "rspec/rails"
 require "factory_bot_rails"
 require 'capybara/rails'
@@ -40,9 +32,8 @@ Hyrax.config.collection_model = "CollectionResource"
 
 # Define a minimal Hyrax::Test::SimpleWork stub so FactoryBot can compile the :hyrax_work
 # factory (which declares class: 'Hyrax::Test::SimpleWork') without loading the full
-# simple_work.rb file. Loading simple_work.rb can cause UndefinedSchemaError/RepeatedAttributeError
-# due to its Wings/ActiveFedora registrations; this bare subclass avoids those side effects
-# while still satisfying the constantize check during factory compilation.
+# simple_work.rb file, which triggers Wings/ActiveFedora registrations that conflict
+# with Valkyrie even when HYRAX_FLEXIBLE=true.
 module Hyrax
   module Test
     class SimpleWork < Hyrax::Work; end unless const_defined?(:SimpleWork)
@@ -58,27 +49,29 @@ FactoryBot.definition_file_paths = [
 ]
 FactoryBot.find_definitions
 
+# Appeasing the Hyrax user factory interface (Hyku 7 compatibility; see samvera-labs/hyku_knapsack PR #49).
+# In Hyku 7, RoleMapper#add may not exist; define it to delegate to Rolify.
+def RoleMapper.add(user:, groups:)
+  groups.each do |group|
+    user.add_role(group.to_sym, Site.instance)
+  end
+end
+
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 Dir[HykuKnapsack::Engine.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  # Run only knapsack specs; exclude Hyku (submodule) specs that depend on QA authorities
-  # and other Hyku-specific setup not present in the knapsack (see hyku_knapsack PR #49).
-  config.exclude_pattern = 'spec/hyku_specs/**/*_spec.rb'
-
   config.fixture_paths = [Rails.root.join('spec', 'fixtures')]
-  config.file_fixture_path = Rails.root.join('spec', 'fixtures').to_s
   config.use_transactional_fixtures = false
 
   config.include HykuKnapsack::Engine.routes.url_helpers
   config.include Capybara::DSL
-  config.include ActionDispatch::TestProcess::FixtureFile
   config.include Fixtures::FixtureFileUpload if defined?(Fixtures::FixtureFileUpload)
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include FactoryBot::Syntax::Methods
-  config.include ApplicationHelper, type: :view if defined?(ApplicationHelper)
+  config.include ApplicationHelper, type: :view
   config.include Warden::Test::Helpers, type: :feature
   config.include ActiveJob::TestHelper
 
@@ -89,13 +82,5 @@ RSpec.configure do |config|
 
   config.after do
     DatabaseCleaner.clean
-  end
-end
-
-# Appeasing the Hyrax user factory interface (Hyku 7 compatibility; see samvera-labs/hyku_knapsack PR #49).
-# In Hyku 7, RoleMapper#add may not exist; define it to delegate to Rolify.
-def RoleMapper.add(user:, groups:)
-  groups.each do |group|
-    user.add_role(group.to_sym, Site.instance)
   end
 end
