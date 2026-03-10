@@ -12,9 +12,13 @@ scratch.md
 file_cache/
 /branding
 .byebug_history
+pry_history
 
 # we don't want Gemfile lockfile committed in the knapsack
 # It prevents Hyku's gemfile updates from taking effect like they should.
 Gemfile.lock
 .bash_history
 /.cache
+
+CLAUDE.md
+settings.local.json
