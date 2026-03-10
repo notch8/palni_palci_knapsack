@@ -55,11 +55,6 @@
   </div>
   <nav class="splash-footer-links">
     <ul>
-      <% if admin_host? && !user_signed_in? %>
-        <li>
-          <p><%= link_to t('hyku.footer.admin_login', default: [:'hyrax.toolbar.profile.login']), main_app.new_user_session_path %></p>
-        </li>
-      <% end %>
       <li><%= link_to "About", "https://www.hykuforconsortia.org", target: "blank" %></li>
       <li><%= mail_to "consortial-ir@palci.org", "Contact" %></li>
     </ul>
