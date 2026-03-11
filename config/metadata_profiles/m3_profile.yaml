@@ -83,6 +83,27 @@ properties:
     - Pencil drawn portrait study of woman
     view:
       html_dl: true
+  collection_subtitle:
+    available_on:
+      class:
+      - CollectionResource
+    cardinality:
+      minimum: 0
+      maximum: 1
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+      - 'null'
+    display_label:
+      default: Collection Subtitle
+    index_documentation: displayable, searchable
+    indexing:
+    - collection_subtitle_sim
+    - collection_subtitle_tesim
+    form:
+      primary: true
+    range: http://www.w3.org/2001/XMLSchema#string
   date_modified:
     available_on:
       class:
@@ -167,7 +188,6 @@ properties:
     available_on:
       class:
       - Hyrax::FileSet
-      - CollectionResource
       - ImageResource
       - CdlResource
       - OerResource
@@ -201,6 +221,7 @@ properties:
     available_on:
       class:
       - GenericWorkResource
+      - CollectionResource
     cardinality:
       minimum: 0
     data_type: array
@@ -385,6 +406,25 @@ properties:
     available_on:
       class:
       - CollectionResource
+    cardinality:
+      minimum: 0
+      maximum: 1
+    data_type: string
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+      - 'null'
+    display_label:
+      default: Arkivo Checksum
+    form:
+      primary: false
+    property_uri: http://scholarsphere.psu.edu/ns#arkivoChecksum
+    range: http://www.w3.org/2001/XMLSchema#string
+    sample_values:
+    - c0855931b7f1aefedb91d31af76873c0
+  arkivo_checksum_hidden:
+    available_on:
+      class:
       - GenericWorkResource
       - ImageResource
       - CdlResource
@@ -469,27 +509,6 @@ properties:
     - Doe, J. (2024). Example Citation. Journal of Examples, 12(3), 45-67.
     view:
       html_dl: true
-  collection_subtitle:
-    available_on:
-      class:
-      - CollectionResource
-    cardinality:
-      minimum: 0
-      maximum: 1
-    data_type: array
-    controlled_values:
-      format: http://www.w3.org/2001/XMLSchema#string
-      sources:
-      - 'null'
-    display_label:
-      default: Collection Subtitle
-    index_documentation: displayable, searchable
-    indexing:
-    - collection_subtitle_sim
-    - collection_subtitle_tesim
-    form:
-      primary: true
-    range: http://www.w3.org/2001/XMLSchema#string
   contributor:
     available_on:
       class:
@@ -588,7 +607,6 @@ properties:
     available_on:
       class:
       - Hyrax::FileSet
-      - CollectionResource
       - GenericWorkResource
       - ImageResource
       - CdlResource
@@ -609,6 +627,30 @@ properties:
     - description_tesim
     form:
       primary: false
+    property_uri: http://purl.org/dc/elements/1.1/description
+    range: http://www.w3.org/2001/XMLSchema#string
+    sample_values:
+    - This is a description.
+  description_primary:
+    name: description
+    available_on:
+      class:
+      - CollectionResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+      - 'null'
+    display_label:
+      default: blacklight.search.fields.show.description_tesim
+    index_documentation: displayable, searchable
+    indexing:
+    - description_sim
+    - description_tesim
+    form:
+      primary: true
     property_uri: http://purl.org/dc/elements/1.1/description
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -673,7 +715,6 @@ properties:
     available_on:
       class:
       - Hyrax::FileSet
-      - CollectionResource
       - ImageResource
       - CdlResource
       - OerResource
@@ -708,6 +749,7 @@ properties:
     available_on:
       class:
       - GenericWorkResource
+      - CollectionResource
     cardinality:
       minimum: 0
     data_type: array
@@ -737,6 +779,7 @@ properties:
     available_on:
       class:
       - Hyrax::FileSet
+      - CollectionResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -906,6 +949,34 @@ properties:
     form:
       primary: true
       required: true
+    property_uri: http://purl.org/dc/terms/type
+    range: http://www.w3.org/2001/XMLSchema#string
+    sample_values:
+    - Article
+    - Conference Proceeding
+    view:
+      render_as: linked
+      html_dl: true
+  resource_type_optional:
+    available_on:
+      class:
+      - CollectionResource
+    cardinality:
+      minimum: 1
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+      - resource_types
+    display_label:
+      default: blacklight.search.fields.index.resource_type_tesim
+    index_documentation: displayable, searchable
+    indexing:
+    - resource_type_sim
+    - resource_type_tesim
+    - facetable
+    form:
+      primary: false
     property_uri: http://purl.org/dc/terms/type
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
