@@ -168,7 +168,6 @@ properties:
       class:
       - Hyrax::FileSet
       - CollectionResource
-      - GenericWorkResource
       - ImageResource
       - CdlResource
       - OerResource
@@ -189,6 +188,35 @@ properties:
     - facetable
     form:
       required: true
+      primary: true
+    property_uri: http://purl.org/dc/elements/1.1/creator
+    range: http://www.w3.org/2001/XMLSchema#string
+    sample_values:
+    - Julie Allinson
+    view:
+      render_as: linked
+      html_dl: true
+  creator_optional:
+    name: creator
+    available_on:
+      class:
+      - GenericWorkResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+      - 'null'
+    display_label:
+      default: blacklight.search.fields.show.creator_tesim
+    index_documentation: displayable, searchable
+    indexing:
+    - creator_sim
+    - creator_tesim
+    - facetable
+    form:
+      required: optional
       primary: true
     property_uri: http://purl.org/dc/elements/1.1/creator
     range: http://www.w3.org/2001/XMLSchema#string
@@ -243,7 +271,7 @@ properties:
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
       sources:
-      - 'null'
+      - licenses
     display_label:
       default: blacklight.search.fields.index.license_tesim
     index_documentation: displayable, searchable
@@ -251,7 +279,7 @@ properties:
     - license_sim
     - license_tesim
     form:
-      primary: false
+      primary: true
     property_uri: http://purl.org/dc/terms/license
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -374,6 +402,7 @@ properties:
       default: Arkivo Checksum
     form:
       primary: false
+      display: false
     property_uri: http://scholarsphere.psu.edu/ns#arkivoChecksum
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -497,13 +526,41 @@ properties:
   date_created:
     available_on:
       class:
+      - OerResource
+      - EtdResource
+    cardinality:
+      minimum: 1
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#dateTime
+      sources:
+      - 'null'
+    display_label:
+      default: blacklight.search.fields.show.date_created_tesim
+    index_documentation: displayable, searchable
+    indexing:
+    - date_created_sim
+    - date_created_tesim
+    form:
+      primary: true
+      required: true
+    property_uri: http://purl.org/dc/terms/created
+    range: http://www.w3.org/2001/XMLSchema#dateTime
+    sample_values:
+    - '2024-06-06 21:06:51 +0000'
+    view:
+      render_as: linked
+      search_field: date_created_tesim
+      html_dl: true
+  date_created_optional:
+    name: date_created
+    available_on:
+      class:
       - Hyrax::FileSet
       - CollectionResource
       - GenericWorkResource
       - ImageResource
       - CdlResource
-      - OerResource
-      - EtdResource
     cardinality:
       minimum: 0
     data_type: array
@@ -617,7 +674,6 @@ properties:
       class:
       - Hyrax::FileSet
       - CollectionResource
-      - GenericWorkResource
       - ImageResource
       - CdlResource
       - OerResource
@@ -647,16 +703,40 @@ properties:
     view:
       render_as: linked
       html_dl: true
+  keyword_optional:
+    name: keyword
+    available_on:
+      class:
+      - GenericWorkResource
+    cardinality:
+      minimum: 0
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+      - 'null'
+    display_label:
+      default: blacklight.search.fields.show.keyword_tesim
+    index_documentation: displayable, searchable
+    indexing:
+    - keyword_sim
+    - keyword_tesim
+    - facetable
+    form:
+      required: false
+      primary: true
+    property_uri: http://schema.org/keywords
+    range: http://www.w3.org/2001/XMLSchema#string
+    sample_values:
+    - Metadata
+    - Repository
+    view:
+      render_as: linked
+      html_dl: true
   label:
     available_on:
       class:
       - Hyrax::FileSet
-      - CollectionResource
-      - GenericWorkResource
-      - ImageResource
-      - CdlResource
-      - OerResource
-      - EtdResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -962,7 +1042,6 @@ properties:
     available_on:
       class:
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -988,7 +1067,6 @@ properties:
     available_on:
       class:
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1010,32 +1088,10 @@ properties:
     sample_values:
     - Dr. John Doe
     - Dr. Jane Smith
-  degree_date:
-    available_on:
-      class:
-      - EtdResource
-    cardinality:
-      minimum: 0
-    data_type: array
-    controlled_values:
-      format: http://www.w3.org/2001/XMLSchema#dateTime
-      sources:
-      - 'null'
-    display_label:
-      default: Degree Date
-    index_documentation: displayable, searchable
-    indexing:
-    - degree_date_tesim
-    - degree_date_sim
-    form:
-      primary: false
-    property_uri: https://hykucommons.org/terms/degree_date
-    range: http://www.w3.org/2001/XMLSchema#dateTime
   degree_discipline:
     available_on:
       class:
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1063,7 +1119,6 @@ properties:
     available_on:
       class:
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1091,7 +1146,6 @@ properties:
     available_on:
       class:
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1119,7 +1173,6 @@ properties:
     available_on:
       class:
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1146,9 +1199,7 @@ properties:
   department:
     available_on:
       class:
-      - CollectionResource
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1295,7 +1346,6 @@ properties:
     available_on:
       class:
       - CollectionResource
-      - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1318,7 +1368,6 @@ properties:
     available_on:
       class:
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1343,7 +1392,6 @@ properties:
     available_on:
       class:
       - ImageResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1369,7 +1417,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1396,7 +1443,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1421,7 +1467,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1451,6 +1496,7 @@ properties:
       - EtdResource
       - CdlResource
       - GenericWorkResource
+      - ImageResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -1505,7 +1551,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1528,7 +1573,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1558,7 +1602,6 @@ properties:
       class:
       - OerResource
       - EtdResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1573,7 +1616,7 @@ properties:
     - date_tesim
     - date_sim
     form:
-      primary: true
+      primary: false
     property_uri: https://hykucommons.org/terms/date
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1583,7 +1626,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1610,7 +1652,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1639,7 +1680,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 1
     data_type: array
@@ -1668,7 +1708,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1691,7 +1730,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1716,7 +1754,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1739,7 +1776,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1762,7 +1798,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array
@@ -1788,7 +1823,6 @@ properties:
     available_on:
       class:
       - OerResource
-      - CdlResource
     cardinality:
       minimum: 0
     data_type: array

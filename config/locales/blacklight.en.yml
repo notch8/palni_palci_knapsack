@@ -14,6 +14,7 @@ en:
           publisher_sim: Publisher
           subject_sim: Subject
         index:
+          additional_information: Additional rights information
           based_near_label_tesim: Location
           contributor_tesim: Contributor
           creator_tesim: Creator
