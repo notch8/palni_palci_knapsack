@@ -957,11 +957,12 @@ properties:
       render_as: linked
       html_dl: true
   resource_type_optional:
+    name: resource_type
     available_on:
       class:
       - CollectionResource
     cardinality:
-      minimum: 1
+      minimum: 0
     data_type: array
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
