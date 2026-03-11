@@ -927,7 +927,6 @@ properties:
     available_on:
       class:
       - Hyrax::FileSet
-      - CollectionResource
       - GenericWorkResource
       - ImageResource
       - CdlResource
