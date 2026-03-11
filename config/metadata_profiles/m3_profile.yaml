@@ -717,7 +717,6 @@ properties:
       - Hyrax::FileSet
       - ImageResource
       - CdlResource
-      - OerResource
       - EtdResource
     cardinality:
       minimum: 1
@@ -750,6 +749,7 @@ properties:
       class:
       - GenericWorkResource
       - CollectionResource
+      - OerResource
     cardinality:
       minimum: 0
     data_type: array
@@ -766,7 +766,6 @@ properties:
     - facetable
     form:
       required: false
-      primary: true
     property_uri: http://schema.org/keywords
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1671,7 +1670,6 @@ properties:
   date:
     available_on:
       class:
-      - OerResource
       - EtdResource
     cardinality:
       minimum: 0
