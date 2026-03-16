@@ -9,8 +9,6 @@ module Hyrax
       def controlled_vocab_mappings
         super.merge(
           {
-            'accessibility_feature' => 'accessibility_features',
-            'accessibility_hazard' => 'accessibility_hazards',
             'contributing_library' => 'contributing_libraries'
           }
         )
@@ -19,8 +17,6 @@ module Hyrax
       def services
         super.merge(
           {
-            'accessibility_features' => 'Hyrax::AccessibilityFeaturesService',
-            'accessibility_hazards' => 'Hyrax::AccessibilityHazardsService',
             'contributing_libraries' => 'Hyrax::ContributingLibraryService'
           }
         )
