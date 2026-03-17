@@ -2,7 +2,7 @@ replicaCount: 3
 
 resources:
   limits:
-    memory: "10Gi"
+    memory: "11Gi"
     cpu: "1500m"
   requests:
     memory: "10Gi"
@@ -240,7 +240,7 @@ worker:
   replicaCount: 1
   resources:
     limits:
-      memory: "10Gi"
+      memory: "11Gi"
       cpu: "17500m"
     requests:
       memory: "10Gi"
@@ -477,7 +477,7 @@ solr:
 fits:
   resources:
     limits:
-      memory: "10Gi"
+      memory: "11Gi"
       cpu: "1000m"
     requests:
       memory: "10Gi"
