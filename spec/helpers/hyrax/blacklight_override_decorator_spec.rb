@@ -7,7 +7,7 @@
 RSpec.describe Hyrax::BlacklightOverride, type: :helper do
   include Hyrax::BlacklightOverride
 
-  let(:profile_path) { HykuKnapsack::Engine.root.join('config', 'metadata_profiles', 'default', 'm3_profile.yaml') }
+  let(:profile_path) { HykuKnapsack::Engine.root.join('config', 'metadata_profiles', 'm3_profile.yaml') }
   let(:profile) { YAML.safe_load_file(profile_path) }
 
   # Snapshot class-level blacklight_config label state before mutating it,
