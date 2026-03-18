@@ -483,6 +483,7 @@ properties:
     sample_values:
     - c0855931b7f1aefedb91d31af76873c0
   arkivo_checksum_hidden:
+    name: arkivo_checksum
     available_on:
       class:
       - GenericWorkResource
