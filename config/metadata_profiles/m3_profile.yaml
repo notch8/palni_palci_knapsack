@@ -1239,7 +1239,7 @@ properties:
     form:
       required: true
       primary: true
-      multiple: true
+      multiple: false
     property_uri: https://hykucommons.org/terms/degree_discipline
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
