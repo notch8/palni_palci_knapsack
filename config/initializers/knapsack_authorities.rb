@@ -9,7 +9,14 @@
 # Hyku's.  If two are of the same name, then the one in HykuKnapsack should override the
 # one in Hyku.
 
-HykuKnapsack::AUTHORITIES_PATH = File.join(HykuKnapsack::Engine.root, 'config', 'authorities')
+HykuKnapsack::AUTHORITIES_PATH = File.join(HykuKnapsack::Engine.root, 'config', 'authorities') \
+  unless defined?(HykuKnapsack::AUTHORITIES_PATH)
+
+# Hyku (hyrax-webapp) ships its own authorities that must also be available.
+# Rails.root may point to the knapsack root in test/engine contexts, so we
+# resolve Hyku's path explicitly from the knapsack engine root.
+HykuKnapsack::HYKU_AUTHORITIES_PATH = File.join(HykuKnapsack::Engine.root, 'hyrax-webapp', 'config', 'authorities') \
+  unless defined?(HykuKnapsack::HYKU_AUTHORITIES_PATH)
 
 module Qa
   module Authorities
@@ -19,7 +26,8 @@ module Qa
       # Overidding to handle to return an array of paths
       def subauthorities_path(knapsack_authorities_path: HykuKnapsack::AUTHORITIES_PATH)
         # knapsack_authorities_path should be first to allow for overriding in case of duplicate names
-        authorities_paths = [knapsack_authorities_path, config[:local_path]]
+        # hyku_authorities_path is included so Hyku's built-in authorities are always available
+        authorities_paths = [knapsack_authorities_path, HykuKnapsack::HYKU_AUTHORITIES_PATH, config[:local_path]]
 
         authorities_paths.map do |path|
           path if File.directory?(path)

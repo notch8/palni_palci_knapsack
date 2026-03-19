@@ -17,7 +17,8 @@ RSpec.describe "The splash page", type: :feature, clean: true, multitenant: true
     expect(page).to have_content 'Collaborative Repository'
 
     within '.splash-footer-links' do
-      expect(page).to have_link 'Admin'
+      expect(page).to have_link 'About'
+      expect(page).to have_link 'Contact'
     end
   end
 end

@@ -2,17 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Advanced Search', type: :feature, js: true, clean: true do
+# Run without js: true so we use rack_test (no Selenium/browser required in CI or Docker).
+RSpec.describe 'Advanced Search', type: :feature, clean: true do
   include Warden::Test::Helpers
 
   context 'with unauthenticated user' do
     it 'can perform advanced search' do
       visit '/advanced'
       fill_in('Title', with: 'ambitious aardvark')
-      search_btn = find('#advanced-search-submit')
-      # we send keys because the mocked web page didn't pick up the css change
-      # to prevent the footer from covering up the submit button
-      search_btn.send_keys :enter
+      find('#advanced-search-submit').click
 
       # Commenting out this because a weird error happens when #to_solr is called on a work
       #   where the search facet disappears.  No idea why but a way to replicate this is to

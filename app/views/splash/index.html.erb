@@ -26,7 +26,7 @@
     <% @accounts.each_with_index do |account, i| %>
       <% if @images[i].present? && !@images[i].match(/placeholder/) %>
         <%= link_to "//#{account.cname}" do %>
-          <%= image_tag @images[i], alt_text: @alt_text[i], class: 'logo-image' %>
+          <%= image_tag @images[i], alt: @alt_text[i], class: 'logo-image' %>
         <% end %>
       <% end %>
     <% end %>
@@ -55,28 +55,8 @@
   </div>
   <nav class="splash-footer-links">
     <ul>
-      <% if admin_host? && !user_signed_in? %>
-        <li>
-          <p><%= link_to t('hyku.footer.admin_login', default: [:'hyrax.toolbar.profile.login']), main_app.new_user_session_path %></p>
-        </li>
-      <% end %>
       <li><%= link_to "About", "https://www.hykuforconsortia.org", target: "blank" %></li>
       <li><%= mail_to "consortial-ir@palci.org", "Contact" %></li>
     </ul>
-    <div class="container-fluid splash-footer-license">
-      <div class="navbar-text text-left">
-        <p><%= t('hyrax.footer.service_html') %></p>
-        <p>Hyku v<%= Hyku::VERSION %> with Hyrax v<%= Hyrax::VERSION %></p>
-      </div>
-      <div class="navbar-right">
-        <div class="navbar-text text-right">
-          <p><%= t('hyrax.footer.copyright_html', current_year: Time.now.year) %></p>
-          <p><%= t('hyrax.background_attribution_html') %></p>
-        </div>
-        <div class="navbar-text text-right">
-          <p><a href="https://hykuforconsortia.palni.org/privacy" target="_blank">Privacy Policy</a></p>
-        </div>
-      </div>
-    </div>
   </nav>
 </section>

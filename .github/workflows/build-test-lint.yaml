@@ -1,4 +1,4 @@
-name: 'Build Test Lint'
+name: "Build Test Lint"
 run-name: Build Test Lint of ${{ github.ref_name }} by @${{ github.actor }}
 on:
   push:
@@ -9,18 +9,23 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      debug_enabled:
-        type: boolean
-        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+      debug_step:
         required: false
-        default: false
+        description: 'Pause the selected step to debug using tmate'
+        type: choice
+        default: ''
+        options:
+          - ''
+          - build
+          - test
+          - lint
 
 jobs:
   build:
     uses: notch8/actions/.github/workflows/build.yaml@v0.0.24
     secrets: inherit
     with:
-      platforms: 'linux/amd64'
+      platforms: "linux/amd64"
       webTarget: hyku-web
       workerTarget: hyku-worker
 
@@ -37,4 +42,4 @@ jobs:
     with:
       webTarget: hyku-web
       workerTarget: hyku-worker
-      rubocop_cmd: "cd .. && bundle && bundle exec rubocop --parallel --format progress"
+      rubocop_cmd: "cd .. && bundle && bundle exec rubocop --parallel --format progress --format junit --out rubocop.xml"

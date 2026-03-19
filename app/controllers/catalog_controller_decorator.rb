@@ -24,6 +24,8 @@ end
 
 # rubocop:disable Metrics/BlockLength
 CatalogController.configure_blacklight do |config|
+  config.advanced_search[:form_facet_partial] = "advanced_search_facets"
+
   # We need need to clear the facet fields that are already declared in the
   # catalog controller; if we do not, we'll encounter exceptions regarding
   # duplicate declarations.

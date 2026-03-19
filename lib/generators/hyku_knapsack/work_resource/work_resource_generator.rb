@@ -41,6 +41,8 @@ class HykuKnapsack::WorkResourceGenerator < Rails::Generators::NamedBase
   end
 
   def create_controller
+    return if class_name.ends_with? "Resource"
+
     template('controller.rb.erb', File.join('../app/controllers/hyrax', class_path, "#{plural_file_name}_controller.rb"))
   end
 

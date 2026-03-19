@@ -182,3 +182,12 @@ a {
     text-decoration: underline;
   }
 }
+
+// Footer buffer: prevent footer from cutting off content above it
+#content-wrapper {
+  padding-bottom: 2rem;
+}
+
+footer.navbar {
+  margin-top: 1.5rem;
+}

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable RSpec/FilePath
-RSpec.describe IiifPrint::Jobs::CreateRelationshipsJobDecorator, type: :decorator do
+RSpec.describe IiifPrint::CreateRelationshipsJobDecorator, type: :decorator do
   describe '#perform' do
     subject(:job) { IiifPrint::Jobs::CreateRelationshipsJob.new }
 
