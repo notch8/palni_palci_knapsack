@@ -12,7 +12,7 @@ module Hyrax
     module SortPropertiesValidatorDecorator
       # Override to validate the indexing property instead of the property name.
       def validate!
-          sort_properties.each do |property|
+        sort_properties.each do |property|
           work_types_covered_by_indexing = profile['properties'].flat_map do |_prop_name, prop_config|
             next [] unless Array(prop_config['indexing']).include?(property)
             Array(prop_config.dig('available_on', 'class'))
