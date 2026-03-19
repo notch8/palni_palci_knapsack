@@ -59,10 +59,19 @@ RSpec.describe Blacklight::AdvancedSearchHelper do
   end
 
   # a utility method for finding the correct yml files because the naming is inconsistent, plural vs singular
+  # Searches both the knapsack and hyrax-webapp authority directories.
   def fetch_local_yml(key)
-    YAML.load_file("config/authorities/#{key}.yml")
-  rescue Errno::ENOENT
-    YAML.load_file("config/authorities/#{key.pluralize}.yml")
+    authority_paths = [
+      HykuKnapsack::AUTHORITIES_PATH,
+      HykuKnapsack::HYKU_AUTHORITIES_PATH
+    ]
+    authority_paths.each do |path|
+      file = File.join(path, "#{key}.yml")
+      return YAML.load_file(file) if File.exist?(file)
+      plural_file = File.join(path, "#{key.pluralize}.yml")
+      return YAML.load_file(plural_file) if File.exist?(plural_file)
+    end
+    raise Errno::ENOENT, "No authority file found for key: #{key}"
   end
 
   describe "#fetch_service_for" do
