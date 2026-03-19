@@ -69,6 +69,7 @@ properties:
     indexing:
     - title_sim
     - title_tesim
+    - title_ssi
     form:
       required: true
       primary: true
@@ -621,6 +622,7 @@ properties:
     indexing:
     - date_created_sim
     - date_created_tesim
+    - date_ssi
     form:
       primary: true
       required: true
@@ -654,6 +656,7 @@ properties:
     indexing:
     - date_created_sim
     - date_created_tesim
+    - date_ssi
     form:
       primary: false
     property_uri: http://purl.org/dc/terms/created
