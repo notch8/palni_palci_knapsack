@@ -228,7 +228,8 @@ podSecurityContext:
   fsGroupChangePolicy: "OnRootMismatch"
 
 # When adding/removing key-value pairs to this block, ensure the
-# corresponding changes are made in the `extraDeploy` block below.
+# corresponding changes are made in the `extraDeploy` block below
+# (auxiliary Deployment and uploads cleanup CronJob job spec).
 workerAuxiliary:
   replicaCount: 1
   resources:
@@ -243,6 +244,16 @@ workerAuxiliary:
       value: "1"
     - name: SIDEKIQ_CONFIG
       value: "config/sidekiq_auxiliary.yml"
+
+uploadsCleanupCron:
+  enabled: false
+  schedule: "0 6 * * *"
+  resources:
+    limits:
+      memory: "2Gi"
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
 
 extraDeploy:
   - |-
@@ -386,6 +397,139 @@ extraDeploy:
             tolerations:
               {{- toYaml . | nindent 8 }}
             {{- end }}
+  - |-
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: {{ include "hyrax.fullname" . }}-uploads-cleanup
+        labels:
+          {{- include "hyrax.labels" . | nindent 10 }}
+      spec:
+        suspend: {{ not .Values.uploadsCleanupCron.enabled }}
+        schedule: {{ .Values.uploadsCleanupCron.schedule | quote }}
+        concurrencyPolicy: Forbid
+        successfulJobsHistoryLimit: 1
+        failedJobsHistoryLimit: 3
+        jobTemplate:
+          spec:
+            backoffLimit: 1
+            template:
+              metadata:
+                labels:
+                  app.kubernetes.io/component: uploads-cleanup
+                  {{- include "hyrax.workerSelectorLabels" . | nindent 18 }}
+              spec:
+                restartPolicy: OnFailure
+                initContainers:
+                  - name: service-wait
+                    image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}"
+                    imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+                    envFrom:
+                      - configMapRef:
+                          name: {{ include "hyrax.fullname" . }}-env
+                      - secretRef:
+                          name: {{ template "hyrax.fullname" . }}
+                    env:
+                      {{- toYaml .Values.workerAuxiliary.extraEnvVars | nindent 22 }}
+                      {{- toYaml .Values.worker.extraEnvVars | nindent 22 }}
+                    command:
+                      - sh
+                      - -c
+                      - "service-wait.sh {{ include "hyrax.redis.host" . }}:6379"
+                  {{- if .Values.worker.extraInitContainers }}
+                  {{- toYaml .Values.worker.extraInitContainers | nindent 18 }}
+                  {{- end }}
+                {{- with .Values.imagePullSecrets }}
+                imagePullSecrets:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
+                serviceAccountName: {{ include "hyrax.serviceAccountName" . }}
+                securityContext:
+                  {{- toYaml .Values.worker.podSecurityContext | nindent 18 }}
+                containers:
+                  - name: uploads-cleanup
+                    securityContext:
+                      {{- toYaml .Values.worker.securityContext | nindent 22 }}
+                    image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}"
+                    imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+                    envFrom:
+                      - configMapRef:
+                          name: {{ include "hyrax.fullname" . }}-env
+                      - secretRef:
+                          name: {{ template "hyrax.fullname" . }}
+                      {{- if .Values.solrExistingSecret }}
+                      - secretRef:
+                          name: {{ .Values.solrExistingSecret }}
+                      {{- end }}
+                      {{- with .Values.worker.extraEnvFrom }}
+                      {{- toYaml . | nindent 22 }}
+                      {{- end }}
+                    env:
+                      {{- toYaml .Values.workerAuxiliary.extraEnvVars | nindent 22 }}
+                      {{- toYaml .Values.worker.extraEnvVars | nindent 22 }}
+                    command:
+                      - sh
+                      - -c
+                      - cd /app/samvera/hyrax-webapp && bundle exec rake hyku:cleanup_uploads
+                    volumeMounts:
+                      - name: derivatives
+                        mountPath: /app/samvera/derivatives
+                      - name: uploads
+                        subPath: file_cache
+                        mountPath: /app/samvera/file_cache
+                      - name: uploads
+                        subPath: uploads
+                        mountPath: /app/samvera/uploads
+                      {{- if .Values.applicationExistingClaim }}
+                      - name: application
+                        mountPath: /app/samvera/hyrax-webapp
+                      {{- end }}
+                      {{- with .Values.worker.extraVolumeMounts }}
+                      {{- toYaml . | nindent 22 }}
+                      {{- end }}
+                    resources:
+                      {{- toYaml .Values.uploadsCleanupCron.resources | nindent 22 }}
+                volumes:
+                  - name: "derivatives"
+                    {{- if and .Values.derivativesVolume.enabled .Values.derivativesVolume.existingClaim }}
+                    persistentVolumeClaim:
+                      claimName: {{ .Values.derivativesVolume.existingClaim }}
+                    {{- else if .Values.derivativesVolume.enabled }}
+                    persistentVolumeClaim:
+                      claimName: {{ template "hyrax.fullname" . }}-derivatives
+                    {{ else }}
+                    emptyDir: {}
+                    {{ end }}
+                  - name: "uploads"
+                    {{- if and .Values.uploadsVolume.enabled .Values.uploadsVolume.existingClaim }}
+                    persistentVolumeClaim:
+                      claimName: {{ .Values.uploadsVolume.existingClaim }}
+                    {{- else if .Values.uploadsVolume.enabled }}
+                    persistentVolumeClaim:
+                      claimName: {{ template "hyrax.fullname" . }}-uploads
+                    {{ else }}
+                    emptyDir: {}
+                    {{ end }}
+                  {{- if .Values.applicationExistingClaim }}
+                  - name: "application"
+                    persistentVolumeClaim:
+                      claimName: {{ .Values.applicationExistingClaim }}
+                  {{- end }}
+                  {{- with .Values.worker.extraVolumes }}
+                  {{- toYaml . | nindent 16 }}
+                  {{- end }}
+                {{- with .Values.worker.nodeSelector }}
+                nodeSelector:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
+                {{- with .Values.worker.affinity }}
+                affinity:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
+                {{- with .Values.worker.tolerations }}
+                tolerations:
+                  {{- toYaml . | nindent 18 }}
+                {{- end }}
 
 embargoRelease:
   enabled: false
