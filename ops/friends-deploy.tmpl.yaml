@@ -208,12 +208,13 @@ extraEnvVars: &envVars
 worker:
   resources:
     limits:
-      memory: "4Gi"
+      memory: "6Gi"
       cpu: "1000m"
     requests:
-      memory: "2Gi"
+      memory: "3Gi"
       cpu: "100m"
-  replicaCount: 1
+      # temporarily increasing number of pods for large ingest
+  replicaCount: 3
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
   podSecurityContext:
