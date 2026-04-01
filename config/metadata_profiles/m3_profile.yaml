@@ -1,7 +1,7 @@
 ---
 m3_version: 1.0.beta2
 profile:
-  date_modified: '2024-06-01'
+  date_modified: '2026-04-01'
   responsibility: https://samvera.org
   responsibility_statement: PALS Initial Profile
   type: PALS Initial Profile
@@ -18,7 +18,7 @@ classes:
   AdminSetResource:
     display_label: AdminSetResource
   CollectionResource:
-    display_label: pcdmcollection
+    display_label: Collection
   Hyrax::FileSet:
     display_label: FileSet
   CdlResource:
@@ -304,6 +304,8 @@ properties:
     form:
       primary: true
       multiple: false
+    mappings:
+      simple_dc_pmh: dc:rights
     property_uri: http://purl.org/dc/terms/license
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -463,6 +465,33 @@ properties:
     - Alternate Title Example
     view:
       html_dl: true
+      html_dl: true
+  alt_text:
+    available_on:
+      class:
+        - Hyrax::FileSet
+    cardinality:
+      minimum: 0
+      maximum: 1
+    data_type: array
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#string
+      sources:
+        - "null"
+    display_label:
+      default: blacklight.search.fields.index.alt_text_tesim
+    index_documentation: displayable, searchable
+    indexing:
+      - alt_text_sim
+      - alt_text_tesim
+    form:
+      primary: true
+    property_uri: https://schema.org/description
+    range: http://www.w3.org/2001/XMLSchema#string
+    sample_values:
+      - A description of the file for accessibility purposes.
+    view:
+      html_dl: true
   arkivo_checksum:
     available_on:
       class:
@@ -597,6 +626,8 @@ properties:
     - facetable
     form:
       primary: false
+    mappings:
+      simple_dc_pmh: dc:contributor
     property_uri: http://purl.org/dc/elements/1.1/contributor
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -626,6 +657,8 @@ properties:
     form:
       primary: true
       required: true
+    mappings:
+      simple_dc_pmh: dc:date
     property_uri: http://purl.org/dc/terms/created
     range: http://www.w3.org/2001/XMLSchema#dateTime
     sample_values:
@@ -691,6 +724,8 @@ properties:
     - description_tesim
     form:
       primary: false
+    mappings:
+      simple_dc_pmh: dc:description
     property_uri: http://purl.org/dc/elements/1.1/description
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -889,6 +924,8 @@ properties:
     - facetable
     form:
       primary: false
+    mappings:
+      simple_dc_pmh: dc:language
     property_uri: http://purl.org/dc/elements/1.1/language
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -923,6 +960,8 @@ properties:
     - facetable
     form:
       primary: false
+    mappings:
+      simple_dc_pmh: dc:publisher
     property_uri: http://purl.org/dc/elements/1.1/publisher
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1103,6 +1142,8 @@ properties:
     - rights_notes_tesim
     form:
       primary: false
+    mappings:
+      simple_dc_pmh: dc:rights
     property_uri: http://purl.org/dc/elements/1.1/rights
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1380,6 +1421,8 @@ properties:
       primary: true
       required: true
       multiple: false
+    mappings:
+      simple_dc_pmh: dc:rights
     property_uri: http://www.europeana.eu/schemas/edm/rights
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1471,6 +1514,8 @@ properties:
     - facetable
     form:
       primary: false
+    mappings:
+      simple_dc_pmh: dc:subject
     property_uri: http://purl.org/dc/elements/1.1/subject
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1875,6 +1920,8 @@ properties:
     indexing:
     - related_item_id_tesim
     - related_item_id_sim
+    mappings:
+      simple_dc_pmh: dc:relation
     property_uri: http://purl.org/dc/terms/relation
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -1952,7 +1999,7 @@ properties:
       default: Bulkrax Identifier
     index_documentation: displayable, searchable
     indexing:
-    - bulkrax_identifier_tesi
+    - bulkrax_identifier_tesim
     - bulkrax_identifier_ssi
     form:
       display: false
@@ -2170,6 +2217,8 @@ properties:
       primary: false
       required: false
       multiple: false
+    mappings:
+      simple_dc_pmh: dc:rights
     property_uri: http://www.europeana.eu/schemas/edm/rights
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
@@ -2177,3 +2226,31 @@ properties:
     view:
       html_dl: true
       render_as: rights_statement
+  hide_from_catalog_search:
+    available_on:
+      class:
+        - CollectionResource
+    cardinality:
+      minimum: 0
+      maximum: 1
+    data_type: string
+    controlled_values:
+      format: http://www.w3.org/2001/XMLSchema#bool
+      sources:
+        - "null"
+    display_label:
+      default: Hide from Catalog Search
+    index_documentation: displayable, searchable
+    indexing:
+      - hide_from_catalog_search_bsi
+      - hide_from_catalog_search_tesim
+    form:
+      display: false
+      primary: false
+      required: false
+      multiple: false
+    property_uri: https://hykucommons.org/terms/hide_from_catalog_search
+    range: http://www.w3.org/2001/XMLSchema#bool
+    sample_values:
+      - true
+      - false
