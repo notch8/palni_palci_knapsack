@@ -214,7 +214,7 @@ worker:
       memory: "3Gi"
       cpu: "100m"
       # temporarily increasing number of pods for large ingest
-  replicaCount: 2
+  replicaCount: 1
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
   podSecurityContext:
