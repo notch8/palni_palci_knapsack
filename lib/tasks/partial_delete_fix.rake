@@ -20,7 +20,7 @@ namespace :hyku do
     switch!(cname)
 
     work_ids.each do |id|
-      Hyrax.query_service.find_by(id: id)
+      Hyrax.query_service.find_by(id:)
       Rails.logger.info("Work found - not deleting SolrDocument. ID: #{id}")
     rescue Valkyrie::Persistence::ObjectNotFoundError
       delete_solr_doc(uuid: id)
