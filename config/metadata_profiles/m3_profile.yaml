@@ -4,8 +4,8 @@ profile:
   date_modified: '2026-04-14'
   responsibility: https://samvera.org
   responsibility_statement: PALS Initial Profile
-  type: PALS/Pitt Profile
-  version: 7
+  type: Test - PALS/Pitt Profile
+  version: 8
 classes:
   GenericWorkResource:
     display_label: Generic Work
@@ -215,7 +215,7 @@ properties:
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   creator_optional:
     name: creator
@@ -245,7 +245,7 @@ properties:
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   creator_hidden:
     name: creator
@@ -273,7 +273,7 @@ properties:
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
     mappings:
       simple_dc_pmh: dc:creator
@@ -632,7 +632,7 @@ properties:
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   date_created:
     available_on:
@@ -809,7 +809,7 @@ properties:
     - Metadata
     - Repository
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   keyword_optional:
     name: keyword
@@ -839,7 +839,7 @@ properties:
     - Metadata
     - Repository
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   label:
     available_on:
@@ -900,7 +900,7 @@ properties:
     - English
     - Spanish
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   publisher:
     available_on:
@@ -935,7 +935,7 @@ properties:
     sample_values:
     - Scholastic
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   related_url:
     available_on:
@@ -1024,7 +1024,7 @@ properties:
     - Article
     - Conference Proceeding
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   resource_type_optional:
     name: resource_type
@@ -1053,7 +1053,7 @@ properties:
     - Article
     - Conference Proceeding
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   oer_resource_type:
     name: resource_type
@@ -1083,7 +1083,7 @@ properties:
     - Article
     - Conference Proceeding
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   rights_notes:
     available_on:
@@ -1464,7 +1464,7 @@ properties:
     - Art
     - Science
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   course:
     available_on:
@@ -2143,7 +2143,7 @@ properties:
     - 50" x 20"
     - 5 m x 10 m x 8 m
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   rights_statement_optional:
     name: rights_statement
