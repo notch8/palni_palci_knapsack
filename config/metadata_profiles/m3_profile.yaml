@@ -465,7 +465,6 @@ properties:
     - Alternate Title Example
     view:
       html_dl: true
-      html_dl: true
   alt_text:
     available_on:
       class:
@@ -1430,32 +1429,6 @@ properties:
     view:
       html_dl: true
       render_as: rights_statement
-  alt_text:
-    available_on:
-      class:
-      - Hyrax::FileSet
-    cardinality:
-      minimum: 0
-      maximum: 1
-    data_type: array
-    controlled_values:
-      format: http://www.w3.org/2001/XMLSchema#string
-      sources:
-      - 'null'
-    display_label:
-      default: blacklight.search.fields.index.alt_text_tesim
-    index_documentation: displayable, searchable
-    indexing:
-    - alt_text_sim
-    - alt_text_tesim
-    form:
-      primary: true
-    property_uri: https://schema.org/description
-    range: http://www.w3.org/2001/XMLSchema#string
-    sample_values:
-    - A description of the file for accessibility purposes.
-    view:
-      html_dl: true
   source:
     available_on:
       class:
