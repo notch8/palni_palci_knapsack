@@ -152,7 +152,8 @@ CatalogController.configure_blacklight do |config|
     config.search_fields.delete(search_field[:name])
     config.add_search_field(search_field[:name]) do |field|
       field.label = search_field[:label]
-      field.solr_parameters = { "spellcheck.dictionary": search_field[:name] }
+      # Omit spellcheck.dictionary: Hyku Solr configsets do not define per-field spellcheck
+      # dictionaries; Solr errors and Blacklight raises InvalidRequest / "don't understand" flash.
       solr_name = "#{search_field[:name]}_tesim"
       field.solr_local_parameters = {
         qf: solr_name,
@@ -200,9 +201,6 @@ CatalogController.configure_blacklight do |config|
   config.search_fields.delete('format')
   config.add_search_field('format') do |field|
     field.include_in_advanced_search = false
-    field.solr_parameters = {
-      "spellcheck.dictionary": "format"
-    }
     solr_name = 'format_tesim'
     field.solr_local_parameters = {
       qf: solr_name,
