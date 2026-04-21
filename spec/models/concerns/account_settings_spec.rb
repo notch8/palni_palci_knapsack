@@ -42,6 +42,8 @@ RSpec.describe AccountSettings do
            s3_bucket
            smtp_settings
            solr_collection_options
+           solr_max_results
+           solr_rows_per_request
            ssl_configured].sort
       end
 
@@ -71,6 +73,8 @@ RSpec.describe AccountSettings do
            oai_admin_email
            smtp_settings
            solr_collection_options
+           solr_max_results
+           solr_rows_per_request
            ssl_configured].sort
       end
 
