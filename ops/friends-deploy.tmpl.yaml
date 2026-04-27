@@ -56,6 +56,11 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+      # For testing Cloudflare-specific issues
+    - host: pittir-staging.hykucommons.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
   annotations:
     nginx.org/client-max-body-size: "0"
     cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
@@ -64,6 +69,10 @@ ingress:
         - palni-palci-knapsack-friends.notch8.cloud
         - "*.palni-palci-knapsack-friends.notch8.cloud"
       secretName: palni-palci-knapsack-friends-tls
+      # For testing Cloudflare-specific issues
+    - hosts:
+        - pittir-staging.hykucommons.org
+      secretName: pittir-staging-hykucommons-tls
 
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
