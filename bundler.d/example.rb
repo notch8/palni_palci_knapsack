@@ -11,5 +11,5 @@ ensure_gem "sentry-rails"
 ensure_gem "cancancan", "~> 3.0" # cancancan is bundling to v1.17.0 but we need at least 3.0
 override_gem "willow_sword",
   github: "notch8/willow_sword",
-  ref: "12199c22e963911e2aeb0f1034002de8e8660154"
+  ref: "f86d8f58ef487144e533ac68ca2f6958681a2b0c"
   
