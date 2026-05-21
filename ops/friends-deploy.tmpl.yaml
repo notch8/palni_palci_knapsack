@@ -399,42 +399,31 @@ extraDeploy:
               {{- toYaml . | nindent 8 }}
             {{- end }}
   - |-
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: {{ include "hyrax.fullname" . }}-sword-proxy-headers
-        labels:
-          {{- include "hyrax.labels" . | nindent 4 }}
-      data:
-        Host: pittir-staging.hykucommons.org
-  - |-
-      apiVersion: networking.k8s.io/v1
-      kind: Ingress
+      apiVersion: k8s.nginx.org/v1
+      kind: VirtualServer
       metadata:
         name: {{ include "hyrax.fullname" . }}-sword
         labels:
           {{- include "hyrax.labels" . | nindent 4 }}
-        annotations:
-          nginx.org/client-max-body-size: "0"
-          cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
-          nginx.org/proxy-set-headers: "{{ .Release.Namespace }}/{{ include "hyrax.fullname" . }}-sword-proxy-headers"
       spec:
-        ingressClassName: nginx-ingress
+        host: sword.pittir-staging.hykucommons.org
         tls:
-          - hosts:
-              - sword.pittir-staging.hykucommons.org
-            secretName: sword-pittir-staging-hykucommons-tls
-        rules:
-          - host: sword.pittir-staging.hykucommons.org
-            http:
-              paths:
-                - path: /sword
-                  pathType: Prefix
-                  backend:
-                    service:
-                      name: {{ include "hyrax.fullname" . }}
-                      port:
-                        number: 80
+          secret: sword-pittir-staging-hykucommons-tls
+          redirect:
+            enable: true
+        upstreams:
+          - name: app
+            service: {{ include "hyrax.fullname" . }}
+            port: 80
+        routes:
+          - path: /sword
+            action:
+              proxy:
+                upstream: app
+                requestHeaders:
+                  set:
+                    - name: Host
+                      value: pittir-staging.hykucommons.org
 
 embargoRelease:
   enabled: false
