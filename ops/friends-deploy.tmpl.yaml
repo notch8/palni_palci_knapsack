@@ -61,6 +61,11 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+      # Non-proxied subdomain for SWORD uploads - bypasses Cloudflare size limits
+    - host: sword.pittir-staging.hykucommons.org
+      paths:
+        - path: /sword
+          pathType: Prefix
   annotations:
     nginx.org/client-max-body-size: "0"
     cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
@@ -73,6 +78,10 @@ ingress:
     - hosts:
         - pittir-staging.hykucommons.org
       secretName: pittir-staging-hykucommons-tls
+      # Non-proxied subdomain for SWORD uploads
+    - hosts:
+        - sword.pittir-staging.hykucommons.org
+      secretName: sword-pittir-staging-hykucommons-tls
 
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
