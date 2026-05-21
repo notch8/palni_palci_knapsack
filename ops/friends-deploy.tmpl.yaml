@@ -424,6 +424,8 @@ extraDeploy:
                   set:
                     - name: Host
                       value: pittir-staging.hykucommons.org
+                    - name: X-Forwarded-Host
+                      value: pittir-staging.hykucommons.org
 
 embargoRelease:
   enabled: false
