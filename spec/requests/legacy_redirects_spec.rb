@@ -77,7 +77,7 @@ RSpec.describe 'Legacy and Hyrax redirects', type: :request, singletenant: true 
 
     context 'when the redirect is the display URL' do
       before do
-        Hyrax::RedirectPath.where(from_path: redirect_alias).update_all(
+        Hyrax::RedirectPath.find_by!(from_path: redirect_alias).update!(
           is_display_url: true,
           to_path: redirect_alias
         )

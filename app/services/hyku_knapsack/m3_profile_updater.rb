@@ -629,6 +629,7 @@ module HykuKnapsack
       }
     end
 
+    # rubocop:disable Metrics/ParameterLists
     def error_report(schema, results, exception, schema_was_initialized:, new_schema_id:, backup_path:)
       {
         tenant: tenant_name,
@@ -643,6 +644,7 @@ module HykuKnapsack
         schema_initialized: schema_was_initialized
       }
     end
+    # rubocop:enable Metrics/ParameterLists
 
     # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     def overall_status(results, schema_was_initialized, new_schema_id, backup_path)
