@@ -1,5 +1,9 @@
 <%# OVERRIDE Hyrax 5.0.1 and Hyku 6.0 to update the layout of the collection show page to be more visually appealing %>
 
+<% content_for :canonical_url do %>
+  <link rel="canonical" href="<%= canonical_url_for(@presenter) %>" />
+<% end %>
+
 <% provide :page_title, construct_page_title(@presenter.title) %>
 <div class="hyc-container" itemscope itemtype="http://schema.org/CollectionPage">
   <div class="row hyc-header">
