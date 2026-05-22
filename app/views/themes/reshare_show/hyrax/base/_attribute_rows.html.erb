@@ -1,23 +1,4 @@
-<%= presenter.attribute_to_html(:admin_note, html_dl: true) if presenter.editor? %>
-<%= presenter.attribute_to_html(:alternative_title, html_dl: true) %>
-<%= presenter.attribute_to_html(:creator, html_dl: true) %>
-<%= presenter.attribute_to_html(:contributor, html_dl: true) %>
-<%= presenter.attribute_to_html(:subject, html_dl: true) %>
-<%= presenter.attribute_to_html(:abstract, html_dl: true) %>
-<%= presenter.attribute_to_html(:publisher, html_dl: true) %>
-<%= presenter.attribute_to_html(:language, html_dl: true) %>
-<%= presenter.attribute_to_html(:identifier, search_field: 'identifier_tesim', html_dl: true) %>
-<%= presenter.attribute_to_html(:based_near_label, html_dl: true) %>
-<%= presenter.attribute_to_html(:keyword, html_dl: true) %>
-<%= presenter.attribute_to_html(:date_created, search_field: 'date_created_tesim', html_dl: true) %>
-<%= presenter.attribute_to_html(:related_url, render_as: :external_link, html_dl: true, label: 'Related URL') %>
-<%= presenter.attribute_to_html(:resource_type, html_dl: true) %>
-<%= presenter.attribute_to_html(:source, html_dl: true) %>
-<%= presenter.attribute_to_html(:additional_information, html_dl: true) %>
-<%= presenter.attribute_to_html(:rights_statement, html_dl: true) %>
-<%= presenter.attribute_to_html(:rights_notes, html_dl: true) %>
-<%= presenter.attribute_to_html(:extent, html_dl: true) %>
-<%= presenter.attribute_to_html(:bibliographic_citation, html_dl: true) %>
-<%= presenter.attribute_to_html(:contributing_library, html_dl: true) if presenter.editor? %>
-<%= presenter.attribute_to_html(:library_catalog_identifier, html_dl: true) if presenter.editor? %>
-<%= presenter.attribute_to_html(:chronology_note, html_dl: true) if presenter.editor? %>
+<% view_options_for(presenter).each do |field, options| %>
+  <% view_options = conform_options(field, options) %>
+  <%= presenter.attribute_to_html(conform_field(field, options), view_options) if field_visible?(view_options, presenter) %>
+<% end %>

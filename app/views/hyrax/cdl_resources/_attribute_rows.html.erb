@@ -1,9 +1,4 @@
 <% view_options_for(presenter).each do |field, options| %>
-  <% value = presenter.public_send(field) %>
-  <% render_attribute = value.present? && (value.is_a?(Enumerable) ? value.any?(&:present?) : true) %>
-  <% if field == :admin_note %>
-    <%= presenter.attribute_to_html(:admin_note, options) if presenter.editor? && render_attribute %>
-  <% else %>
-    <%= presenter.attribute_to_html(conform_field(field, options), conform_options(field, options)) if render_attribute %>
-  <% end %>
+  <% view_options = conform_options(field, options) %>
+  <%= presenter.attribute_to_html(conform_field(field, options), view_options) if field_visible?(view_options, presenter) %>
 <% end %>
