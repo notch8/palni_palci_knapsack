@@ -1,7 +1,7 @@
 ---
 m3_version: 1.0.beta2
 profile:
-  date_modified: '2026-04-01'
+  date_modified: '2026-05-13'
   responsibility: https://samvera.org
   responsibility_statement: PALS Initial Profile
   type: PALS Initial Profile
@@ -82,8 +82,6 @@ properties:
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
     - Pencil drawn portrait study of woman
-    view:
-      html_dl: true
   collection_subtitle:
     available_on:
       class:
@@ -181,14 +179,17 @@ properties:
     indexing:
     - depositor_tesim
     - depositor_ssim
+    - admin_only
     property_uri: http://id.loc.gov/vocabulary/relators/dpt
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
     - Julie Allinson
+    view:
+      search_results: false
   creator:
     available_on:
       class:
-      - Hyrax::FileSet
+      - GenericWorkResource
       - ImageResource
       - CdlResource
       - OerResource
@@ -215,14 +216,14 @@ properties:
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   creator_optional:
     name: creator
     available_on:
       class:
-      - GenericWorkResource
       - CollectionResource
+      - Hyrax::FileSet
     cardinality:
       minimum: 0
     data_type: array
@@ -238,14 +239,14 @@ properties:
     - creator_tesim
     - facetable
     form:
-      required: optional
+      required: false
       primary: true
     property_uri: http://purl.org/dc/elements/1.1/creator
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   creator_hidden:
     name: creator
@@ -273,7 +274,7 @@ properties:
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
     mappings:
       simple_dc_pmh: dc:creator
@@ -422,6 +423,7 @@ properties:
     index_documentation: searchable
     indexing:
     - admin_note_tesim
+    - editor_only
     form:
       primary: false
       multiple: false
@@ -468,7 +470,7 @@ properties:
   alt_text:
     available_on:
       class:
-        - Hyrax::FileSet
+      - Hyrax::FileSet
     cardinality:
       minimum: 0
       maximum: 1
@@ -476,19 +478,19 @@ properties:
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
       sources:
-        - "null"
+      - 'null'
     display_label:
       default: blacklight.search.fields.index.alt_text_tesim
     index_documentation: displayable, searchable
     indexing:
-      - alt_text_sim
-      - alt_text_tesim
+    - alt_text_sim
+    - alt_text_tesim
     form:
       primary: true
     property_uri: https://schema.org/description
     range: http://www.w3.org/2001/XMLSchema#string
     sample_values:
-      - A description of the file for accessibility purposes.
+    - A description of the file for accessibility purposes.
     view:
       html_dl: true
   arkivo_checksum:
@@ -632,7 +634,7 @@ properties:
     sample_values:
     - Julie Allinson
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   date_created:
     available_on:
@@ -812,7 +814,6 @@ properties:
   keyword:
     available_on:
       class:
-      - Hyrax::FileSet
       - GenericWorkResource
       - ImageResource
       - CdlResource
@@ -840,7 +841,7 @@ properties:
     - Metadata
     - Repository
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   keyword_optional:
     name: keyword
@@ -848,6 +849,7 @@ properties:
       class:
       - CollectionResource
       - OerResource
+      - Hyrax::FileSet
     cardinality:
       minimum: 0
     data_type: array
@@ -870,7 +872,7 @@ properties:
     - Metadata
     - Repository
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   label:
     available_on:
@@ -891,6 +893,7 @@ properties:
     indexing:
     - label_sim
     - label_tesim
+    - editor_only
     form:
       primary: false
     property_uri: info:fedora/fedora-system:def/model#downloadFilename
@@ -931,7 +934,7 @@ properties:
     - English
     - Spanish
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   publisher:
     available_on:
@@ -966,7 +969,7 @@ properties:
     sample_values:
     - Scholastic
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   related_url:
     available_on:
@@ -1027,7 +1030,6 @@ properties:
   resource_type:
     available_on:
       class:
-      - Hyrax::FileSet
       - GenericWorkResource
       - ImageResource
       - CdlResource
@@ -1055,13 +1057,14 @@ properties:
     - Article
     - Conference Proceeding
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   resource_type_optional:
     name: resource_type
     available_on:
       class:
       - CollectionResource
+      - Hyrax::FileSet
     cardinality:
       minimum: 0
     data_type: array
@@ -1084,7 +1087,7 @@ properties:
     - Article
     - Conference Proceeding
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   oer_resource_type:
     name: resource_type
@@ -1114,7 +1117,7 @@ properties:
     - Article
     - Conference Proceeding
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   rights_notes:
     available_on:
@@ -1187,6 +1190,7 @@ properties:
     indexing:
     - contributing_library_tesim
     - contributing_library_sim
+    - facetable
     form:
       primary: false
     property_uri: https://hykucommons.org/terms/contributing_library
@@ -1273,7 +1277,7 @@ properties:
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#string
       sources:
-        - discipline
+      - discipline
     display_label:
       default: Degree Discipline
     index_documentation: searchable
@@ -1495,7 +1499,7 @@ properties:
     - Art
     - Science
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   course:
     available_on:
@@ -1568,6 +1572,9 @@ properties:
     sample_values:
     - 300 dpi
     - 1024x768 pixels
+    view:
+      html_dl: true
+      search_results: false
   accessibility_feature:
     available_on:
       class:
@@ -1695,7 +1702,7 @@ properties:
     - Instructor
     view:
       html_dl: true
-      render_as: linked
+      render_as: faceted
   date:
     available_on:
       class:
@@ -1737,6 +1744,7 @@ properties:
     index_documentation: searchable
     indexing:
     - discipline_tesim
+    - discipline_sim
     form:
       required: true
       primary: true
@@ -1748,6 +1756,7 @@ properties:
     - Natural Sciences - Physics
     view:
       html_dl: true
+      render_as: faceted
   education_level:
     available_on:
       class:
@@ -1777,7 +1786,7 @@ properties:
     - College / Upper division
     view:
       html_dl: true
-      render_as: linked
+      render_as: faceted
   learning_resource_type:
     available_on:
       class:
@@ -1807,7 +1816,7 @@ properties:
     - Assessment (test, quizzes, etc.)
     view:
       html_dl: true
-      render_as: linked
+      render_as: faceted
   newer_version_id:
     available_on:
       class:
@@ -2165,7 +2174,7 @@ properties:
     - 50" x 20"
     - 5 m x 10 m x 8 m
     view:
-      render_as: linked
+      render_as: faceted
       html_dl: true
   rights_statement_optional:
     name: rights_statement
@@ -2202,7 +2211,7 @@ properties:
   hide_from_catalog_search:
     available_on:
       class:
-        - CollectionResource
+      - CollectionResource
     cardinality:
       minimum: 0
       maximum: 1
@@ -2210,13 +2219,13 @@ properties:
     controlled_values:
       format: http://www.w3.org/2001/XMLSchema#bool
       sources:
-        - "null"
+      - 'null'
     display_label:
       default: Hide from Catalog Search
     index_documentation: displayable, searchable
     indexing:
-      - hide_from_catalog_search_bsi
-      - hide_from_catalog_search_tesim
+    - hide_from_catalog_search_bsi
+    - hide_from_catalog_search_tesim
     form:
       display: false
       primary: false
@@ -2225,5 +2234,46 @@ properties:
     property_uri: https://hykucommons.org/terms/hide_from_catalog_search
     range: http://www.w3.org/2001/XMLSchema#bool
     sample_values:
-      - true
-      - false
+    - true
+    - false
+    view:
+      search_results: false
+      show_page: false
+  transcript_ids:
+    available_on:
+      class:
+        - Hyrax::FileSet
+    display_label:
+      default: Transcripts
+    indexing:
+      - transcript_ids_ssim
+    data_type: array
+    form:
+      primary: false
+    property_uri: http://vocabulary.samvera.org/ns#transcriptIds
+    range: http://www.w3.org/2001/XMLSchema#string
+  redirects:
+    available_on:
+      class:
+      - GenericWorkResource
+      - ImageResource
+      - OerResource
+      - EtdResource
+      - CdlResource
+      - CollectionResource
+    cardinality:
+      minimum: 0
+    display_label:
+      default: Redirects
+    type: hash
+    multiple: true
+    form:
+      display: false
+    indexing:
+      - editor_only
+    predicate: http://samvera.org/ns/hyku/redirects
+    range: http://www.w3.org/2001/XMLSchema#string
+    view:
+      render_term: redirects_path
+      render_as: redirects_label
+      html_dl: true
