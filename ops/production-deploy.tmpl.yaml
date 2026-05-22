@@ -158,6 +158,8 @@ extraEnvVars: &envVars
     value: /app/fits/fits.sh
   - name: HYRAX_FLEXIBLE
     value: "true"
+  - name: HYRAX_REDIRECTS_ENABLED
+    value: "true"
   - name: HYRAX_USE_SOLR_GRAPH_NESTING
     value: "true"
   - name: HYRAX_VALKYRIE
