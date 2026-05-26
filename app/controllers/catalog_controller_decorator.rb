@@ -31,32 +31,20 @@ CatalogController.configure_blacklight do |config|
   # duplicate declarations.
   config.facet_fields.clear
 
-  # Facets that cannot be M3-driven and must remain static in both flex modes:
-  #   - human_readable_type_sim: Hyrax pseudo-field derived from has_model_ssim
-  #   - based_near_label_sim: M3 indexing uses based_near_sim, not based_near_label_sim
-  #   - file_format_sim: computed from FileSet metadata, not a profile property
-  #   - date_ssi: range slider config not expressible in M3
-  #   - member_of_collections_ssim: Hyrax relationship index
-  #   - account_institution_name_ssim: Hyku cross-tenant aggregation
   config.add_facet_field 'human_readable_type_sim', label: "Type", limit: 5
+  config.add_facet_field 'resource_type_sim', label: "Resource Type", limit: 5
+  config.add_facet_field 'creator_sim', limit: 5
+  config.add_facet_field 'contributor_sim', label: "Contributor", limit: 5
+  config.add_facet_field 'keyword_sim', limit: 5
+  config.add_facet_field 'subject_sim', limit: 5
+  config.add_facet_field 'language_sim', limit: 5
   config.add_facet_field 'based_near_label_sim', limit: 5
+  config.add_facet_field 'publisher_sim', limit: 5
   config.add_facet_field 'file_format_sim', limit: 5
+  config.add_facet_field 'contributing_library_sim', limit: 5
   config.add_facet_field 'date_ssi', label: 'Date Created', range: { num_segments: 10, assumed_boundaries: [1100, Time.zone.now.year + 2], segments: false, slider_js: false, maxlength: 4 }
   config.add_facet_field 'member_of_collections_ssim', limit: 5, label: 'Collections'
   config.add_facet_field 'account_institution_name_ssim', label: 'Institution', limit: 5
-
-  unless Hyrax.config.flexible?
-    # Facets registered by FlexibleCatalogBehavior in flexible mode from M3 properties
-    # carrying 'facetable' in their indexing: array.
-    config.add_facet_field 'resource_type_sim', label: "Resource Type", limit: 5
-    config.add_facet_field 'creator_sim', limit: 5
-    config.add_facet_field 'contributor_sim', label: "Contributor", limit: 5
-    config.add_facet_field 'keyword_sim', limit: 5
-    config.add_facet_field 'subject_sim', limit: 5
-    config.add_facet_field 'language_sim', limit: 5
-    config.add_facet_field 'publisher_sim', limit: 5
-    config.add_facet_field 'contributing_library_sim', limit: 5
-  end
 
   # keep iiif_print index fields from Hyku so we don't have to redefine snippets logic
   config.index_fields.keys.each do |key|
@@ -65,81 +53,59 @@ CatalogController.configure_blacklight do |config|
 
     config.index_fields.delete(key)
   end
-  # Index fields that cannot be M3-driven and must remain static in both flex modes:
-  #   - based_near_label_tesim: M3 indexes based_near_tesim, different Solr suffix
-  #   - title (if: false): no M3 way to hide a field from search results yet
-  #     (pending Hyrax FCB display: false enhancement)
-  #   - creator (link_to_search): FCB hardcodes link_to_facet; link_to_search runs
-  #     a fresh keyword search instead of applying a facet filter, which is the
-  #     desired knapsack behavior
-  #   - description (truncate_and_iconify_auto_link helper): FCB only recognizes
-  #     external_link / linked / rights_statement render_as values
-  #   - resource_type (link_to_search): same reason as creator
   config.add_index_field 'based_near_label_tesim', itemprop: 'contentLocation', link_to_facet: 'based_near_label_sim'
   config.add_index_field solr_name("title", :stored_searchable), label: "Title", itemprop: 'name', if: false
   config.add_index_field solr_name("creator", :stored_searchable), itemprop: 'creator', link_to_search: solr_name("creator", :facetable)
+  config.add_index_field solr_name("date", :stored_searchable), itemprop: 'date'
+  config.add_index_field solr_name('collection_subtitle', :stored_searchable), label: "Collection Subtitle"
   config.add_index_field solr_name("description", :stored_searchable), itemprop: 'description', helper_method: :truncate_and_iconify_auto_link
   config.add_index_field solr_name("resource_type", :stored_searchable), label: "Resource Type", link_to_search: solr_name("resource_type", :facetable)
+  config.add_index_field solr_name('learning_resource_type', :stored_searchable), label: "Learning resource type"
+  config.add_index_field solr_name('education_level', :stored_searchable), label: "Education level"
+  config.add_index_field solr_name('audience', :stored_searchable), label: "Audience"
+  config.add_index_field solr_name('discipline', :stored_searchable), label: "Discipline"
 
-  unless Hyrax.config.flexible?
-    # Registered by FlexibleCatalogBehavior in flexible mode from M3 properties
-    # carrying stored_searchable or <itemprop>_tesim in their indexing: array.
-    config.add_index_field solr_name("date", :stored_searchable), itemprop: 'date'
-    config.add_index_field solr_name('collection_subtitle', :stored_searchable), label: "Collection Subtitle"
-    config.add_index_field solr_name('learning_resource_type', :stored_searchable), label: "Learning resource type"
-    config.add_index_field solr_name('education_level', :stored_searchable), label: "Education level"
-    config.add_index_field solr_name('audience', :stored_searchable), label: "Audience"
-    config.add_index_field solr_name('discipline', :stored_searchable), label: "Discipline"
-  end
+  config.show_fields.clear
 
-  # In flexible mode, show-page rendering is driven by M3 via
-  # `_attribute_rows.html.erb` and `M3SchemaLoader#view_definitions_for`.
-  # The only consumer of `config.show_fields` is the all_fields qf builder
-  # below, which FlexibleCatalogBehavior also populates by appending each
-  # searchable M3 property to qf at runtime.
-  unless Hyrax.config.flexible?
-    config.show_fields.clear
-
-    config.add_show_field solr_name("abstract", :stored_searchable), label: 'Abstract'
-    config.add_show_field solr_name('admin_note', :stored_searchable), label: "Administrative Notes"
-    config.add_show_field solr_name("alternative_title", :stored_searchable), label: "Alternative title"
-    config.add_show_field solr_name("creator", :stored_searchable)
-    config.add_show_field solr_name("contributor", :stored_searchable)
-    config.add_show_field solr_name("related_url", :stored_searchable), helper_method: :truncate_and_iconify_auto_link
-    config.add_show_field solr_name('learning_resource_type', :stored_searchable)
-    config.add_show_field solr_name('education_level', :stored_searchable)
-    config.add_show_field solr_name('audience', :stored_searchable)
-    config.add_show_field solr_name('discipline', :stored_searchable)
-    config.add_show_field solr_name("date", :stored_searchable), label: "Date", helper_method: :human_readable_date
-    config.add_show_field solr_name("description", :stored_searchable), helper_method: :truncate_and_iconify_auto_link
-    config.add_show_field solr_name("table_of_contents", :stored_searchable), label: "Table of contents"
-    config.add_show_field solr_name("subject", :stored_searchable)
-    config.add_show_field solr_name("rights_statement", :stored_searchable), helper_method: :rights_statement_links
-    config.add_show_field solr_name("license", :stored_searchable), helper_method: :license_links
-    config.add_show_field solr_name("rights_holder", :stored_searchable), label: "Rights holder"
-    config.add_show_field solr_name("additional_information", :stored_searchable), label: "Additional information"
-    config.add_show_field solr_name("language", :stored_searchable)
-    config.add_show_field solr_name("oer_size", :stored_searchable), label: "Size"
-    config.add_show_field solr_name("publisher", :stored_searchable)
-    config.add_show_field solr_name("identifier", :stored_searchable)
-    config.add_show_field solr_name("resource_type", :stored_searchable), label: "Resource Type"
-    config.add_show_field solr_name('accessibility_feature', :stored_searchable)
-    config.add_show_field solr_name('accessibility_hazard', :stored_searchable)
-    config.add_show_field solr_name('accessibility_summary', :stored_searchable), label: "Accessibility summary"
-    config.add_show_field solr_name("keyword", :stored_searchable)
-    config.add_show_field solr_name("based_near_label", :stored_searchable)
-    config.add_show_field solr_name("date_uploaded", :stored_searchable)
-    config.add_show_field solr_name("date_modified", :stored_searchable)
-    config.add_show_field solr_name("date_created", :stored_searchable)
-    config.add_show_field solr_name("format", :stored_searchable)
-    config.add_show_field solr_name('extent', :stored_searchable)
-    config.add_show_field solr_name('previous_version_id', :stored_searchable)
-    config.add_show_field solr_name('newer_version_id', :stored_searchable)
-    config.add_show_field solr_name('related_item_id', :stored_searchable)
-    config.add_show_field solr_name('contributing_library', :stored_searchable)
-    config.add_show_field solr_name('library_catalog_identifier', :stored_searchable)
-    config.add_show_field solr_name('chronology_note', :stored_searchable)
-  end
+  config.add_show_field solr_name("abstract", :stored_searchable), label: 'Abstract'
+  config.add_show_field solr_name('admin_note', :stored_searchable), label: "Administrative Notes"
+  config.add_show_field solr_name("alternative_title", :stored_searchable), label: "Alternative title"
+  config.add_show_field solr_name("creator", :stored_searchable)
+  config.add_show_field solr_name("contributor", :stored_searchable)
+  config.add_show_field solr_name("related_url", :stored_searchable), helper_method: :truncate_and_iconify_auto_link
+  config.add_show_field solr_name('learning_resource_type', :stored_searchable)
+  config.add_show_field solr_name('education_level', :stored_searchable)
+  config.add_show_field solr_name('audience', :stored_searchable)
+  config.add_show_field solr_name('discipline', :stored_searchable)
+  config.add_show_field solr_name("date", :stored_searchable), label: "Date", helper_method: :human_readable_date
+  config.add_show_field solr_name("description", :stored_searchable), helper_method: :truncate_and_iconify_auto_link
+  config.add_show_field solr_name("table_of_contents", :stored_searchable), label: "Table of contents"
+  config.add_show_field solr_name("subject", :stored_searchable)
+  config.add_show_field solr_name("rights_statement", :stored_searchable), helper_method: :rights_statement_links
+  config.add_show_field solr_name("license", :stored_searchable), helper_method: :license_links
+  config.add_show_field solr_name("rights_holder", :stored_searchable), label: "Rights holder"
+  config.add_show_field solr_name("additional_information", :stored_searchable), label: "Additional information"
+  config.add_show_field solr_name("language", :stored_searchable)
+  config.add_show_field solr_name("oer_size", :stored_searchable), label: "Size"
+  config.add_show_field solr_name("publisher", :stored_searchable)
+  config.add_show_field solr_name("identifier", :stored_searchable)
+  config.add_show_field solr_name("resource_type", :stored_searchable), label: "Resource Type"
+  config.add_show_field solr_name('accessibility_feature', :stored_searchable)
+  config.add_show_field solr_name('accessibility_hazard', :stored_searchable)
+  config.add_show_field solr_name('accessibility_summary', :stored_searchable), label: "Accessibility summary"
+  config.add_show_field solr_name("keyword", :stored_searchable)
+  config.add_show_field solr_name("based_near_label", :stored_searchable)
+  config.add_show_field solr_name("date_uploaded", :stored_searchable)
+  config.add_show_field solr_name("date_modified", :stored_searchable)
+  config.add_show_field solr_name("date_created", :stored_searchable)
+  config.add_show_field solr_name("format", :stored_searchable)
+  config.add_show_field solr_name('extent', :stored_searchable)
+  config.add_show_field solr_name('previous_version_id', :stored_searchable)
+  config.add_show_field solr_name('newer_version_id', :stored_searchable)
+  config.add_show_field solr_name('related_item_id', :stored_searchable)
+  config.add_show_field solr_name('contributing_library', :stored_searchable)
+  config.add_show_field solr_name('library_catalog_identifier', :stored_searchable)
+  config.add_show_field solr_name('chronology_note', :stored_searchable)
 
   # list of all the search_fields that will use the default configuration below.
   search_fields_without_customization = [

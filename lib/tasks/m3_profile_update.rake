@@ -20,16 +20,16 @@
 # Examples:
 #
 #   # Audit what would change in place on one tenant
-#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[pal,audit,update]
+#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[demo,audit,update]
 #
 #   # Apply the in-place changes on one tenant with a report
-#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[pal,apply,update,true]
+#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[demo,apply,update,true]
 #
 #   # Audit what would happen if we created a new revision row instead
-#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[pal,audit,add,true]
+#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[demo,audit,add,true]
 #
 #   # Apply: create a new revision row on one tenant
-#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[pal,apply,add,true]
+#   bundle exec rake hyku_knapsack:m3_profile_for_tenant[demo,apply,add,true]
 #
 #   # Across all tenants
 #   bundle exec rake hyku_knapsack:m3_profile_for_tenant[all,audit,update,true]
@@ -37,7 +37,7 @@
 #
 # In zsh quote the task name so brackets aren't glob-interpreted:
 #
-#   bundle exec rake 'hyku_knapsack:m3_profile_for_tenant[pal,apply,update,true]'
+#   bundle exec rake 'hyku_knapsack:m3_profile_for_tenant[demo,apply,update,true]'
 #
 # Output legend:
 #   🚫 nothing to change         (service status: :no_changes)
@@ -74,7 +74,7 @@
 #
 #   1. Audit one tenant in :update mode and inspect the report:
 #
-#        bundle exec rake 'hyku_knapsack:m3_profile_for_tenant[pal,audit,update,true]'
+#        bundle exec rake 'hyku_knapsack:m3_profile_for_tenant[demo,audit,update,true]'
 #
 #      The summary line shows the per-descriptor breakdown
 #      (will_update, will_create_path, already_correct, already_present,
@@ -93,7 +93,7 @@
 #
 #   3. Apply against one tenant first to confirm the result:
 #
-#        bundle exec rake 'hyku_knapsack:m3_profile_for_tenant[pal,apply,update,true]'
+#        bundle exec rake 'hyku_knapsack:m3_profile_for_tenant[demo,apply,update,true]'
 #
 #      Spot-check via Rails console in that tenant (see service-level docs
 #      and #597 verification notes) and on the work edit / show pages.
@@ -116,6 +116,51 @@
 #   Both paths live under tmp/imports/ specifically because that directory
 #   is not wiped as aggressively as the rest of tmp/. Copy off-host if you
 #   need a longer-term record.
+#
+# Reading a report file:
+#
+#   Each report YAML contains a `changes:` array with one entry per
+#   descriptor. Each entry has a `path:` (dotted profile location), a
+#   `status:` (Ruby symbol — note the leading colon when grepping), and
+#   a `current:` / `new:` (or `value:` for array mutations) showing
+#   before/after. The statuses to investigate fall into three buckets:
+#
+#     Investigate (something needs human judgement):
+#       :path_missing      — property doesn't exist on this tenant at all
+#       :unexpected_value  — current value is neither expected nor new
+#
+#     Informational (apply will do work here, no concern):
+#       :will_update       — value differs from desired; apply will set it
+#       :will_create_path  — intermediate sub-key missing; apply will create
+#       :updated           — apply mode wrote this descriptor
+#
+#     Safe to ignore (already in desired state):
+#       :already_correct   — scalar already matches
+#       :already_present   — array already includes value
+#       :already_absent    — array already excludes value
+#
+#   Useful grep commands (from inside the web container, with TENANT and
+#   TIMESTAMP filled in from the path the rake task printed):
+#
+#     # Property paths that don't exist on this tenant — start here.
+#     grep -B 8 -A 2 'status: :path_missing' \
+#       tmp/imports/m3_profile_reports/<TENANT>-<TIMESTAMP>-<action>-<revision>.yaml
+#
+#     # Descriptors with surprising current values — also worth investigating.
+#     grep -B 8 -A 2 'status: :unexpected_value' \
+#       tmp/imports/m3_profile_reports/<TENANT>-<TIMESTAMP>-<action>-<revision>.yaml
+#
+#     # Quick counts by status (sanity-check against the summary line).
+#     grep '^  status:' \
+#       tmp/imports/m3_profile_reports/<TENANT>-<TIMESTAMP>-<action>-<revision>.yaml \
+#       | sort | uniq -c
+#
+#     # All descriptor paths in this report, one per line.
+#     grep '^- path:' \
+#       tmp/imports/m3_profile_reports/<TENANT>-<TIMESTAMP>-<action>-<revision>.yaml
+#
+#   YAML serializes Ruby symbols with a leading colon, so the grep pattern
+#   must include it: `status: :path_missing`, not `status: path_missing`.
 #
 # Idempotency:
 #
