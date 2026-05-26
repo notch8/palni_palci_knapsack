@@ -14,6 +14,24 @@ module Hyrax
       safe_join(values.map { |item| link_to_facet(item, facet_field) }, separator)
     end
 
+    # OVERRIDE Hyrax v5.2.0 Hyrax::HyraxHelperBehavior#index_field_link
+    #   Upstream writes the bare M3 property name (e.g. "contributor") into
+    #   the catalog URL as search_field=contributor, which targets no real
+    #   Solr field. Prefer the facet form when the index field config has a
+    #   link_to_facet set; otherwise suffix _sim onto the bare name so the
+    #   search_field= URL routes to the indexed _sim field.
+    def index_field_link(options)
+      raise ArgumentError unless options[:config] && options[:config][:field_name]
+      facet_field = options[:config].try(:link_to_facet) || options[:config][:link_to_facet]
+      if facet_field.present?
+        safe_join(options[:value].map { |item| link_to_facet(item, facet_field) }, ", ")
+      else
+        name = options[:config][:field_name].to_s
+        name = "#{name}_sim" unless name.match?(/_(sim|ssim|tesim|tsim|ssi|tsi|dtsi)\z/)
+        safe_join(options[:value].map { |item| link_to_field(name, item, item) }, ", ")
+      end
+    end
+
     # Used by the gallery view
     def collection_thumbnail(_document, _image_options = {}, _url_options = {})
       return super if Site.instance.default_collection_image.blank?
