@@ -1,3 +1,7 @@
+<% content_for :canonical_url do %>
+  <link rel="canonical" href="<%= canonical_url_for(@presenter) %>" />
+<% end %>
+
 <% provide :page_title, @presenter.page_title %>
 <div class="row work-type">
   <div itemscope itemtype="http://schema.org/CreativeWork" class="col-12">

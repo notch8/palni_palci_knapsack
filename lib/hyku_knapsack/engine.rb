@@ -10,10 +10,6 @@ module HykuKnapsack
       end
     end
 
-    initializer 'hyku_knapsack.flipflop' do
-      Flipflop::FeatureLoader.current.append(self)
-    end
-
     def self.load_translations!
       HykuKnapsack::Engine.root.glob("config/locales/**/*.yml").each do |path|
         I18n.load_path << path.to_s
