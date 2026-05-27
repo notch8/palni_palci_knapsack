@@ -21,7 +21,7 @@ POD="${POD:-palni-palci-knapsack-production-worker-84686dc769-4zlrt}"
 NS="${NS:-palni-palci-knapsack-production}"
 DRY_RUN="${DRY_RUN:-true}"
 AGE_DAYS="${AGE_DAYS:-30}"
-LOG="cleanup_$(date +%Y%m%d_%H%M%S).log"
+LOG="bin/cleanup_$(date +%Y%m%d_%H%M%S).log"
 
 echo "Running cleanup on pod: $POD"
 echo "Namespace: $NS"
