@@ -9,10 +9,13 @@
 # POD=other-pod-name ./bin/cleanup.sh
 
 # Different namespace
-# NS=palni-palci-knapsack-staging ./bin/cleanup.sh
+# NS=palni-palci-knapsack-friends ./bin/cleanup.sh
 
 # Different age threshold (e.g., 60 days)
 # AGE_DAYS=60 ./bin/cleanup.sh
+
+# Parallel rm -rf workers during actual deletion (default 8, set to 1 to disable)
+# PARALLEL=16 ./bin/cleanup.sh
 
 # Combine multiple
 # DRY_RUN=false POD=my-pod NS=my-namespace ./bin/cleanup.sh
@@ -21,12 +24,14 @@ POD="${POD:-palni-palci-knapsack-production-worker-84686dc769-4zlrt}"
 NS="${NS:-palni-palci-knapsack-production}"
 DRY_RUN="${DRY_RUN:-true}"
 AGE_DAYS="${AGE_DAYS:-30}"
+PARALLEL="${PARALLEL:-8}"
 LOG="bin/cleanup_$(date +%Y%m%d_%H%M%S).log"
 
 echo "Running cleanup on pod: $POD"
 echo "Namespace: $NS"
 echo "DRY_RUN: $DRY_RUN"
 echo "AGE_DAYS: $AGE_DAYS"
+echo "PARALLEL: $PARALLEL"
 echo "Log file: $LOG"
 echo ""
 
@@ -34,6 +39,7 @@ kubectl exec -n "$NS" "$POD" -- bash -c "
 IMPORTS_DIR=\"/app/samvera/hyrax-webapp/tmp/imports\"
 AGE_DAYS=$AGE_DAYS
 DRY_RUN=$DRY_RUN
+PARALLEL=$PARALLEL
 TODAY=\$(date +%s)
 
 echo \"=== Bulkrax Imports Cleanup ===\"
@@ -43,6 +49,20 @@ echo \"\"
 
 deleted_count=0
 deleted_bytes=0
+dirs_to_delete=()
+
+human_size() {
+  local bytes=\"\$1\"
+  if [ \"\$bytes\" -gt 1099511627776 ]; then
+    awk -v b=\"\$bytes\" 'BEGIN {printf \"%.2f TB\", b / 1099511627776}'
+  elif [ \"\$bytes\" -gt 1073741824 ]; then
+    awk -v b=\"\$bytes\" 'BEGIN {printf \"%.2f GB\", b / 1073741824}'
+  elif [ \"\$bytes\" -gt 1048576 ]; then
+    awk -v b=\"\$bytes\" 'BEGIN {printf \"%.1f MB\", b / 1048576}'
+  else
+    awk -v b=\"\$bytes\" 'BEGIN {printf \"%.1f KB\", b / 1024}'
+  fi
+}
 
 extract_date() {
   local name=\"\$1\"
@@ -59,13 +79,13 @@ process_dir() {
   local epoch=\$(date -d \"\$date\" +%s 2>/dev/null || echo 0)
   [ \"\$epoch\" = \"0\" ] && return
   local age=\$(( (TODAY - epoch) / 86400 ))
-  local size=\$(du -sh \"\$dir\" 2>/dev/null | cut -f1)
-  local bytes=\$(du -sb \"\$dir\" 2>/dev/null | cut -f1)
   if [ \"\$age\" -ge \"\$AGE_DAYS\" ]; then
+    local bytes=\$(du -sb \"\$dir\" 2>/dev/null | cut -f1)
+    local size=\$(human_size \"\$bytes\")
     echo \"DELETE: \$dir (\$size, \${age}d old)\"
     deleted_count=\$((deleted_count + 1))
     deleted_bytes=\$((deleted_bytes + bytes))
-    [ \"\$DRY_RUN\" = \"false\" ] && rm -rf \"\$dir\"
+    dirs_to_delete+=(\"\$dir\")
   fi
 }
 
@@ -88,13 +108,13 @@ done
 echo \"\"
 echo \"=== Summary ===\"
 echo \"Directories: \$deleted_count\"
+echo \"Size: \$(human_size \$deleted_bytes)\"
 
-if [ \"\$deleted_bytes\" -gt 1099511627776 ]; then
-  echo \"Size: \$(echo \"scale=2; \$deleted_bytes / 1099511627776\" | bc) TB\"
-elif [ \"\$deleted_bytes\" -gt 1073741824 ]; then
-  echo \"Size: \$(echo \"scale=2; \$deleted_bytes / 1073741824\" | bc) GB\"
-else
-  echo \"Size: \$(echo \"scale=2; \$deleted_bytes / 1048576\" | bc) MB\"
+if [ \"\$DRY_RUN\" = \"false\" ] && [ \${#dirs_to_delete[@]} -gt 0 ]; then
+  echo \"\"
+  echo \"Deleting \${#dirs_to_delete[@]} directories with \$PARALLEL parallel workers...\"
+  printf '%s\0' \"\${dirs_to_delete[@]}\" | xargs -0 -P \"\$PARALLEL\" rm -rf
+  echo \"Deletion complete.\"
 fi
 
 echo \"Completed: \$(date)\"
