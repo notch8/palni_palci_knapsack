@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# OVERRIDE Hyku 6.2.0.rc3 to add custom local authorities for flexible=false
+# OVERRIDE Hyku 7.1 to add custom local authorities for flexible=false
 
 module Hyrax
   module ControlledVocabulariesDecorator
