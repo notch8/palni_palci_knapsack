@@ -45,4 +45,4 @@ jobs:
   reports:
     if: always()
     needs: [test, lint]
-    uses: notch8/actions/.github/workflows/report.yaml@nodejs24-upgrade
+    uses: notch8/actions/.github/workflows/report.yaml@v1.0.10
