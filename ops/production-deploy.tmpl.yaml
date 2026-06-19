@@ -504,6 +504,15 @@ nginx:
         default 1;
     }
 
+    # Block crawlers that bypass Cloudflare WAF by hitting the NLB directly.
+    # Remove once loadBalancerSourceRanges is restricted to CF IPs.
+    map ${DOLLAR}http_user_agent ${DOLLAR}bad_bot {
+        default        0;
+        ~*bingbot      1;
+        ~*msnbot       1;
+        ~*baiduspider  1;
+    }
+
     log_format loki 'host=${DOLLAR}host ip=${DOLLAR}http_x_forwarded_for remote_user=${DOLLAR}remote_user [${DOLLAR}time_local] '
                       'request="${DOLLAR}request" status=${DOLLAR}status bytes=${DOLLAR}body_bytes_sent '
                       'referer="${DOLLAR}http_referer" agent="${DOLLAR}http_user_agent" request_time=${DOLLAR}request_time upstream_response_time=${DOLLAR}upstream_response_time upstream_response_length=${DOLLAR}upstream_response_length';
@@ -557,6 +566,10 @@ nginx:
 
         include /opt/bitnami/nginx/conf/bots.d/ddos.conf;
         include /opt/bitnami/nginx/conf/bots.d/blockbots.conf;
+
+        if (${DOLLAR}bad_bot) {
+            return 403;
+        }
 
         location ~ (\.php|\.aspx|\.asp) {
         	return 404;
