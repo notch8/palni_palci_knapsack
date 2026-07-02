@@ -435,6 +435,12 @@ fcrepo:
       database: fcrepo
     containerPorts:
       postgresql: 5432
+  livenessProbe:
+    initialDelaySeconds: 90
+    failureThreshold: 6
+  readinessProbe:
+    initialDelaySeconds: 90
+    failureThreshold: 6
   s3:
     enabled: true
     bucket: besties-fcrepo-clone
