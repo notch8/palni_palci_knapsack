@@ -1,12 +1,19 @@
 replicaCount: 2
 
 resources:
+  # CPU bumped per calculate_limits_and_requests' r2-friends right-sizing
+  # report (2026-07-28): p95=597-655m, p99=690-748m against the old 1000m
+  # limit -- also independently confirmed via pals-stress-tests' before/after
+  # runs, which measured real CPU throttling (~29-38% of periods, both
+  # before and after the nginx fix) at the old limit. Memory left unchanged
+  # -- p99 usage was ~869-895Mi against this same 4Gi, no need there, and
+  # this cluster's nodes are memory- not CPU-constrained.
   limits:
     memory: "4Gi"
-    cpu: "1000m"
+    cpu: "1250m"
   requests:
     memory: "2Gi"
-    cpu: "300m"
+    cpu: "900m"
 
 livenessProbe:
   enabled: false
