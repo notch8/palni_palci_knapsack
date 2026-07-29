@@ -536,7 +536,7 @@ nginx:
     # no-op for every other request.
     map ${DOLLAR}http_upgrade ${DOLLAR}connection_upgrade {
         default upgrade;
-        ''      close;
+        ''      '';
     }
 
     log_format loki 'host=${DOLLAR}host ip=${DOLLAR}http_x_forwarded_for remote_user=${DOLLAR}remote_user [${DOLLAR}time_local] '
