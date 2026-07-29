@@ -516,18 +516,25 @@ nginx:
   # Step 1 (bug repro) was: enabled, no extraVolumes/extraVolumeMounts,
   # matching production's current broken no-op passthrough config -- see
   # hykuup_knapsack/timeout_notes.md and pals-stress-tests' README for that
-  # baseline. This is step 3, the real fix: mount the existing `uploads` PVC's
-  # public-system subPath so nginx can actually serve /system/* itself,
-  # matching the already-validated HykuUp pattern. Deliberately NOT widening
-  # this to public/uploads -- see the still-open safety question in
-  # timeout_notes.md about that path's permission model.
+  # baseline. Step 3 (the /system/* fix) mounted the existing `uploads` PVC's
+  # public-system subPath. This is step 3b: real user traffic showed
+  # /assets/* (fonts/css/js -- far higher volume than the one tenant logo)
+  # was STILL 100% proxied to Puma (18s+ responses seen live), because
+  # public/assets doesn't exist on the nginx pod at all -- it's baked into
+  # the *web* image at build time, not on any EFS volume, and this generic
+  # bitnami-nginx image has no copy of it. Fixed the same way HykuUp already
+  # does it: a dedicated `hyku-nginx` Dockerfile stage bakes public/assets,
+  # public/pdf.js, and public/uv into the nginx image itself from the exact
+  # same commit as the web image -- no shared volume, no deploy-time copy
+  # step needed for these three. public/system stays on the EFS mount below
+  # since that's genuinely runtime-uploaded content, not image-baked.
   enabled: true
   service:
     type: ClusterIP
   image:
-    registry: registry.gitlab.com
-    repository: notch8/scripts/bitnami-nginx
-    tag: 1.21.5-debian-10-r4
+    registry: ghcr.io
+    repository: "$REPO_LOWER/nginx"
+    tag: "$TAG"
   extraVolumes:
     - name: uploads
       persistentVolumeClaim:
@@ -614,7 +621,12 @@ nginx:
         }
 
         # serve static (compiled) assets directly if they exist (for rails production)
-        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system)/ {
+        # uv/pdf.js added -- now baked into the nginx image itself (see the
+        # hyku-nginx Dockerfile stage), matching HykuUp's pattern. `branding`
+        # deliberately left out: PALs' public/branding is a symlink to
+        # /app/samvera/branding, a separate chart-templated PVC mechanism
+        # this change doesn't touch -- not investigated, not in scope here.
+        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system|uv|pdf\.js)/ {
           try_files ${DOLLAR}uri @rails;
 
           # access_log off;
