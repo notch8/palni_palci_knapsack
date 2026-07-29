@@ -449,6 +449,7 @@ fcrepo:
     access_key: $AWS_ACCESS_KEY_ID
     secret_key: $AWS_SECRET_ACCESS_KEY
 global:
+  # Used by the nginx chart to calculate upstream rails_app
   hyraxHostName: palni-palci-knapsack-production
   # These global postgresql values are used by the fcrepo chart
   postgresql:
@@ -504,11 +505,8 @@ nginx:
         default 1;
     }
 
-    # Lets the ActionCable websocket handshake for Hyrax's realtime
-    # notifications (/notifications/endpoint) actually upgrade instead of
-    # silently falling through to a plain HTTP request that Rails 404s --
-    # only kicks in when the client sends an Upgrade header, so it's a
-    # no-op for every other request.
+    # For ActionCable websocket handshake for Hyrax's realtime
+    # notifications (/notifications/endpoint)
     map ${DOLLAR}http_upgrade ${DOLLAR}connection_upgrade {
         default upgrade;
         ''      close;
