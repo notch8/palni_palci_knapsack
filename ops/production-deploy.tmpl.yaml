@@ -580,7 +580,7 @@ nginx:
         }
 
         # serve static (compiled) assets directly if they exist (for rails production)
-        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system)/ {
+        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system|uv|pdf\.js)/ {
           try_files ${DOLLAR}uri @rails;
 
           # access_log off;
