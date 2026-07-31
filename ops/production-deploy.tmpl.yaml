@@ -449,6 +449,7 @@ fcrepo:
     access_key: $AWS_ACCESS_KEY_ID
     secret_key: $AWS_SECRET_ACCESS_KEY
 global:
+  # Used by the nginx chart to calculate upstream rails_app
   hyraxHostName: palni-palci-knapsack-production
   # These global postgresql values are used by the fcrepo chart
   postgresql:
@@ -491,9 +492,9 @@ nginx:
   service:
     type: ClusterIP
   image:
-    registry: registry.gitlab.com
-    repository: notch8/scripts/bitnami-nginx
-    tag: 1.21.5-debian-10-r4
+    registry: ghcr.io
+    repository: "$REPO_LOWER/nginx"
+    tag: "$TAG"
   serverBlock: |-
     upstream rails_app {
       server {{ .Values.global.hyraxHostName }};
@@ -502,6 +503,13 @@ nginx:
     map ${DOLLAR}status ${DOLLAR}loggable {
         ~^444  0;
         default 1;
+    }
+
+    # For ActionCable websocket handshake for Hyrax's realtime
+    # notifications (/notifications/endpoint)
+    map ${DOLLAR}http_upgrade ${DOLLAR}connection_upgrade {
+        default upgrade;
+        ''      '';
     }
 
     log_format loki 'host=${DOLLAR}host ip=${DOLLAR}http_x_forwarded_for remote_user=${DOLLAR}remote_user [${DOLLAR}time_local] '
@@ -572,7 +580,7 @@ nginx:
         }
 
         # serve static (compiled) assets directly if they exist (for rails production)
-        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system)/ {
+        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system|uv|pdf\.js)/ {
           try_files ${DOLLAR}uri @rails;
 
           # access_log off;
@@ -598,6 +606,9 @@ nginx:
           proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
           proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
           proxy_set_header Host ${DOLLAR}http_host;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade ${DOLLAR}http_upgrade;
+          proxy_set_header Connection ${DOLLAR}connection_upgrade;
           proxy_redirect off;
           proxy_pass http://rails_app;
         }
