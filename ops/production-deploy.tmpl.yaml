@@ -57,6 +57,7 @@ ingress:
           pathType: ImplementationSpecific
   annotations: {
     nginx.org/client-max-body-size: "0",
+    nginx.org/websocket-services: "palni-palci-knapsack-production-nginx",
     cert-manager.io/cluster-issuer: letsencrypt-production-dns
   }
   tls:
