@@ -496,6 +496,14 @@ nginx:
     registry: ghcr.io
     repository: "$REPO_LOWER/nginx"
     tag: "$TAG"
+  extraVolumes:
+    - name: uploads
+      persistentVolumeClaim:
+        claimName: "{{ .Values.global.hyraxHostName }}-uploads"
+  extraVolumeMounts:
+    - name: uploads
+      mountPath: /app/samvera/hyrax-webapp/public/system
+      subPath: public-system
   serverBlock: |-
     upstream rails_app {
       server {{ .Values.global.hyraxHostName }};
