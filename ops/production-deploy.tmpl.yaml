@@ -619,6 +619,9 @@ nginx:
           proxy_set_header Upgrade ${DOLLAR}http_upgrade;
           proxy_set_header Connection ${DOLLAR}connection_upgrade;
           proxy_redirect off;
+          proxy_connect_timeout 3600s;
+          proxy_send_timeout 3600s;
+          proxy_read_timeout 3600s;
           proxy_pass http://rails_app;
         }
     }
