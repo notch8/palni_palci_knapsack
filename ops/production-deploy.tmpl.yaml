@@ -3,10 +3,10 @@ replicaCount: 3
 resources:
   limits:
     memory: "8Gi"
-    cpu: "1250m"
+    cpu: "1750m"
   requests:
     memory: "4Gi"
-    cpu: "900m"
+    cpu: "1500m"
 
 livenessProbe:
   enabled: false
@@ -187,7 +187,7 @@ extraEnvVars: &envVars
   - name: RAILS_LOG_TO_STDOUT
     value: "true"
   - name: RAILS_MAX_THREADS
-    value: "20"
+    value: "10"
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
@@ -461,7 +461,7 @@ global:
       postgresPassword: $DB_PASSWORD
 postgresql:
   enabled: false
-  pool: 25
+  pool: 12
 redis:
   image:
     repository: bitnamilegacy/redis
