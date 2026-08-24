@@ -166,7 +166,7 @@ extraEnvVars: &envVars
   - name: RAILS_LOG_TO_STDOUT
     value: "true"
   - name: RAILS_MAX_THREADS
-    value: "5"
+    value: "7"
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
@@ -227,7 +227,6 @@ worker:
     requests:
       memory: "3Gi"
       cpu: "100m"
-      # temporarily increasing number of pods for large ingest
   replicaCount: 1
   extraVolumeMounts: *volMounts
   extraEnvVars: *envVars
@@ -458,6 +457,7 @@ global:
   hyraxHostName: palni-palci-knapsack-friends-hyrax
 postgresql:
   enabled: false
+  pool: 10
 redis:
   master:
     resources:
