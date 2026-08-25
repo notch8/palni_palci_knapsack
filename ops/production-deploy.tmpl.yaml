@@ -138,6 +138,8 @@ extraEnvVars: &envVars
     value: "%{tenant}.hykucommons.org"
   - name: HYKU_FILE_ACL
     value: "true"
+  - name: HYKU_VOCABULARY_SIDEBAR_ENABLED
+    value: "false"
   - name: HYKU_MULTITENANT
     value: "true"
   - name: HYKU_ATTACK_RATE_THROTTLE_OFF
