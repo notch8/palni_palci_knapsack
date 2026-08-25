@@ -126,6 +126,8 @@ extraEnvVars: &envVars
     value: "%{tenant}.palni-palci-knapsack-friends.notch8.cloud"
   - name: HYKU_FILE_ACL
     value: "true"
+  - name: HYKU_VOCABULARY_SIDEBAR_ENABLED
+    value: "true"
   - name: HYKU_MULTITENANT
     value: "true"
   - name: HYKU_ROOT_HOST
