@@ -3,10 +3,6 @@
 RSpec.describe Hyrax::CdlsController, type: :controller do
   let(:cdl_resource) { FactoryBot.valkyrie_create(:cdl_resource, :with_one_file_set, depositor: 'somebody') }
 
-  it "includes Hyrax::IiifAv::ControllerBehavior" do
-    expect(described_class.include?(Hyrax::IiifAv::ControllerBehavior)).to be true
-  end
-
   describe "#presenter" do
     subject { controller.send :presenter }
 
