@@ -1,9 +1,9 @@
-replicaCount: 3
+replicaCount: 5
 
 resources:
   limits:
     memory: "8Gi"
-    cpu: "1750m"
+    cpu: "2"
   requests:
     memory: "4Gi"
     cpu: "1500m"
@@ -617,7 +617,7 @@ nginx:
         # slow client transferring a lot of data doesn't get killed
         # mid-request; everything else stays on @rails' short default so
         # a genuinely hung backend request still fails fast.
-        location ~ ^/(uploads|downloads|importers|exporters|single_use_link)(/|${DOLLAR}) {
+        location ~ ^/(update|edit|new|uploads|downloads|importers|exporters|single_use_link)(/|${DOLLAR}) {
           proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
           proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
           proxy_set_header Host ${DOLLAR}http_host;
@@ -631,7 +631,7 @@ nginx:
           proxy_pass http://rails_app;
         }
 
-        # Work/collection show, edit, and update pages can legitimately take longer than @rails' 60s default to render under load.
+        # Work/collection and show pages can legitimately take longer than @rails' 60s default to render under load.
         location ~ ^/concern/ {
           proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
           proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
