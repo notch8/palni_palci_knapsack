@@ -14,7 +14,11 @@ capture and exits non-zero if anything in the must-not-change set moved.
 
 ```bash
 CTX=r2-besties; NS=palni-palci-knapsack-production
-POD() { kubectl --context $CTX -n $NS get pods --no-headers | awk '/-hyrax-[0-9a-f]/{print $1; exit}'; }
+# Excludes components rather than matching a name: production's web deployment is
+# `palni-palci-knapsack-production-*` while friends' is `...-friends-hyrax-*`.
+POD() { kubectl --context $CTX -n $NS get pods --no-headers | grep -E '\sRunning\s' \
+  | grep -vE 'worker|nginx|solr|fcrepo|postgres|redis|memcach|acme|fits|sidekiq|cron' \
+  | awk '{print $1; exit}'; }
 
 # Before the deploy
 kubectl --context $CTX -n $NS exec -i $(POD) -- bundle exec rails runner - \
