@@ -31,14 +31,14 @@ kubectl --context $CTX -n $NS exec -i $(POD) -- bundle exec rails runner - \
 bin/deploy-check/compare.rb before.json after.json
 ```
 
-The `sed` strips Rails boot warnings that precede the JSON — without it the file
+The `sed` strips Rails boot warnings that precede the JSON; without it the file
 will not parse.
 
 `snapshot.rb` is strictly read-only.
 
 ## Fails the check
 
-- `available_works` — a tenant's depositors gaining or losing work types
+- `available_works`: a tenant's depositors gaining or losing work types
 - `themes`, `schema_classes`
 - an existing feature flag whose **value** changed
 - a tenant disappearing, newly erroring, or a sample work losing its thumbnail
@@ -51,14 +51,14 @@ that is not a regression), and any key the previous version could not report.
 Identical findings across many tenants collapse to one line with a count, so a
 fleet-wide change reads as one finding rather than fifteen.
 
-A non-zero exit means look closer, not necessarily that something broke — an
+A non-zero exit means look closer, not necessarily that something broke; an
 intended change such as flipping a config flag will also fail, which is correct.
 
 ## Sequence check
 
 `sequence_check.rb` reports any tenant whose `id` sequence has fallen behind
 `max(id)`. When that happens the next insert reuses an existing id and Postgres
-raises `PG::UniqueViolation` on the primary key — which surfaces as a failed
+raises `PG::UniqueViolation` on the primary key, which surfaces as a failed
 metadata profile import or vocabulary create, with nothing obviously wrong in the
 logs. It reads `last_value` rather than calling `nextval`, so it consumes nothing.
 
@@ -77,7 +77,7 @@ To repair a tenant that is behind:
 end
 ```
 
-## Not covered — check these by hand
+## Not covered, check these by hand
 
 - **Static assets.** Fetch the homepage, extract the fingerprinted
   `/assets/application-*.css`, and confirm it returns 200. Where the nginx image
@@ -89,11 +89,11 @@ end
 
 `Site#available_works` is a persisted column seeded only when the Site row is
 created (`Site.instance` uses `first_or_create`). Nothing recomputes it at boot or
-during migration, so a deploy alone cannot change it — which is exactly why a change
+during migration, so a deploy alone cannot change it, which is exactly why a change
 there means something wrote to it, and is worth failing on.
 
 ## Baselines
 
 Keep only the capture for the deploy currently being gated. A baseline's value is
-comparative, so once the post-deploy diff is clean the file is dead weight — prune
+comparative, so once the post-deploy diff is clean the file is dead weight; prune
 it rather than accumulating one per deploy.
