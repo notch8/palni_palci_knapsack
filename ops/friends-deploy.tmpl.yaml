@@ -523,25 +523,11 @@ nginx:
     - name: uploads
       mountPath: /app/samvera/hyrax-webapp/public/system
       subPath: public-system
-  serverBlock: |-
-    upstream rails_app {
-      server {{ .Values.global.hyraxHostName }};
-      keepalive 32;
-    }
-
+  # sane default server block (keepalive, open_file_cache, hoisted proxy headers, asset paths) comes from the chart; below is only what this app adds on top
+  extraHttpConfig: |-
     map ${DOLLAR}status ${DOLLAR}loggable {
         ~^444  0;
         default 1;
-    }
-
-    # Lets the ActionCable websocket handshake for Hyrax's realtime
-    # notifications (/notifications/endpoint) actually upgrade instead of
-    # silently falling through to a plain HTTP request that Rails 404s --
-    # only kicks in when the client sends an Upgrade header, so it's a
-    # no-op for every other request.
-    map ${DOLLAR}http_upgrade ${DOLLAR}connection_upgrade {
-        default upgrade;
-        ''      '';
     }
 
     log_format loki 'host=${DOLLAR}host ip=${DOLLAR}http_x_forwarded_for remote_user=${DOLLAR}remote_user [${DOLLAR}time_local] '
@@ -576,90 +562,14 @@ nginx:
 
     real_ip_header X-Forwarded-For;
     real_ip_recursive on;
+  extraServerBlockConfig: |-
+    access_log off;
+    access_log /var/log/nginx/access.log loki;
 
-    server {
-        listen 8080;
-        server_name _;
-        root /app/samvera/hyrax-webapp/public;
-
-        access_log /var/log/nginx/access.log loki;
-        error_log  /var/log/nginx/error.log warn;
-        # if=${DOLLAR}loggable;
-
-        client_body_in_file_only clean;
-        client_body_buffer_size 32K;
-        client_max_body_size 0;
-
-        sendfile on;
-        send_timeout 300s;
-
-        open_file_cache max=1000 inactive=20s;
-        open_file_cache_valid 30s;
-        open_file_cache_min_uses 2;
-        open_file_cache_errors on;
-
-        proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
-        proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
-        proxy_set_header Host ${DOLLAR}http_host;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade ${DOLLAR}http_upgrade;
-        proxy_set_header Connection ${DOLLAR}connection_upgrade;
-        proxy_redirect off;
-
-        location ~ (\.php|\.aspx|\.asp) {
-        	return 404;
-        }
-
-        # deny requests for files that should never be accessed
-        location ~ /\. {
-          deny all;
-        }
-
-        location ~* ^.+\.(rb|log)${DOLLAR} {
-          deny all;
-        }
-
-        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system|uv|clover|clover-iiif|pdf\.js)/ {
-          try_files ${DOLLAR}uri @rails;
-
-          # access_log off;
-          gzip_static on; # to serve pre-gzipped version
-
-          expires max;
-          add_header Cache-Control public;
-
-          # Some browsers still send conditional-GET requests if there's a
-          # Last-Modified header or an ETag header even if they haven't
-          # reached the expiry date sent in the Expires header.
-          add_header Last-Modified "";
-          add_header ETag "";
-          break;
-        }
-
-        # long timeout for large uploads/downloads/import-export transfers; everything else keeps @rails' short default
-        location ~ ^/(uploads|downloads|importers|exporters|single_use_link)(/|${DOLLAR}) {
-          proxy_connect_timeout 3600s;
-          proxy_send_timeout 3600s;
-          proxy_read_timeout 3600s;
-          proxy_pass http://rails_app;
-        }
-
-        # Work/collection and show pages can legitimately take longer than @rails' 60s default to render under load.
-        location ~ ^/concern/ {
-          proxy_connect_timeout 180s;
-          proxy_send_timeout 180s;
-          proxy_read_timeout 180s;
-          proxy_pass http://rails_app;
-        }
-
-        # send non-static file requests to the app server
-        location / {
-          try_files ${DOLLAR}uri @rails;
-        }
-
-        location @rails {
-          proxy_pass http://rails_app;
-        }
+    # Work/collection and show pages can legitimately take longer than @rails' 60s default to render under load.
+    location ~ ^/concern/ {
+      proxy_connect_timeout 180s;
+      proxy_send_timeout 180s;
+      proxy_read_timeout 180s;
+      proxy_pass http://rails_app;
     }
-  extraServerBlockConfig: ""
-  extraHttpConfig: ""
