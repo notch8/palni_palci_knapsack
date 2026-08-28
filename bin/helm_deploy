@@ -4,6 +4,7 @@
 # commandline deployment or CI based deployment. It requires the following ENV vars be set
 #
 # CHART_VERSION: this is the version of the hyrax chart you want to deploy. default - 0.22.0
+# CHART_REGISTRY: OCI registry to pull the chart from. default - oci://ghcr.io/samvera/charts
 # DEPLOY_IMAGE: this is the build image that runs the rails application. Typically this would run puma or passenger. eg: samvera/hyrax or ghcr.io/samvera/hyku. Defaults to gcrh.io/samvera/hyku
 # WORKER_IMAGE: this is the worker target, usually built from the same Dockerfile as DEPLOY_IMAGE. eg: samvera/hyrax/worker or ghcr.io/samvera/hyku/worker. Defaults to gcrh.io/samvera/hyku/worker
 # DEPLOY_TAG: name of of the tag you want to deploy for deploy image. eg: "latest" or "v3.0.1" or "f123asdf1". Defaults to latest
@@ -19,6 +20,7 @@ release_name="${1//_/-}"
 namespace="${2//_/-}"
 
 CHART_VERSION="${CHART_VERSION:-3.7.4}"
+CHART_REGISTRY="${CHART_REGISTRY:-oci://ghcr.io/samvera/charts}"
 
 DEPLOY_IMAGE="${DEPLOY_IMAGE:-ghcr.io/samvera/hyku}"
 WORKER_IMAGE="${WORKER_IMAGE:-ghcr.io/samvera/hyku/worker}"
@@ -26,7 +28,7 @@ DEPLOY_TAG="${DEPLOY_TAG:-latest}"
 WORKER_TAG="${WORKER_TAG:-$DEPLOY_TAG}"
 echo $DEPLOY_TAG
 
-helm pull --untar oci://ghcr.io/samvera/charts/hyrax --version $CHART_VERSION
+helm pull --untar $CHART_REGISTRY/hyrax --version $CHART_VERSION
 helm repo update
 
 helm upgrade \

@@ -28,11 +28,11 @@ CMD ./bin/web
 FROM hyku-web AS hyku-worker
 CMD ./bin/worker
 
-FROM registry.gitlab.com/notch8/scripts/bitnami-nginx:1.21.5-debian-10-r4 AS hyku-nginx
+FROM nginxinc/nginx-unprivileged:1.29-alpine AS hyku-nginx
 # Copy assets & other public files into nginx so it can serve them as static files
-COPY --from=hyku-web /app/samvera/hyrax-webapp/public/assets /app/samvera/hyrax-webapp/public/assets
-COPY --from=hyku-web /app/samvera/hyrax-webapp/public/pdf.js /app/samvera/hyrax-webapp/public/pdf.js
-COPY --from=hyku-web /app/samvera/hyrax-webapp/public/uv /app/samvera/hyrax-webapp/public/uv
+COPY --chown=101:101 --from=hyku-web /app/samvera/hyrax-webapp/public/assets /app/samvera/hyrax-webapp/public/assets
+COPY --chown=101:101 --from=hyku-web /app/samvera/hyrax-webapp/public/pdf.js /app/samvera/hyrax-webapp/public/pdf.js
+COPY --chown=101:101 --from=hyku-web /app/samvera/hyrax-webapp/public/uv /app/samvera/hyrax-webapp/public/uv
 
 # Use a Solr version with patched Log4j to address CVE-2021-44228
 FROM solr:8.11.2 AS hyku-solr
