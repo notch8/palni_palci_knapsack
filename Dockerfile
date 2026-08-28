@@ -28,7 +28,8 @@ CMD ./bin/web
 FROM hyku-web AS hyku-worker
 CMD ./bin/worker
 
-FROM nginxinc/nginx-unprivileged:1.29-alpine AS hyku-nginx
+ARG NGINX_VERSION=1.29-alpine
+FROM nginxinc/nginx-unprivileged:$NGINX_VERSION AS hyku-nginx
 # Copy assets & other public files into nginx so it can serve them as static files
 COPY --chown=101:101 --from=hyku-web /app/samvera/hyrax-webapp/public/assets /app/samvera/hyrax-webapp/public/assets
 COPY --chown=101:101 --from=hyku-web /app/samvera/hyrax-webapp/public/pdf.js /app/samvera/hyrax-webapp/public/pdf.js

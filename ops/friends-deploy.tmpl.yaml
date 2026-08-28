@@ -563,7 +563,6 @@ nginx:
     real_ip_header X-Forwarded-For;
     real_ip_recursive on;
   extraServerBlockConfig: |-
-    access_log off;
     access_log /var/log/nginx/access.log loki;
 
     # Work/collection and show pages can legitimately take longer than @rails' 60s default to render under load.
