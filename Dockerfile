@@ -1,4 +1,5 @@
 ARG HYRAX_IMAGE_VERSION=hyrax-v5.2.0
+ARG NGINX_VERSION=1.29-alpine
 FROM ghcr.io/samvera/hyrax/hyrax-base:$HYRAX_IMAGE_VERSION AS hyku-web
 
 USER root
@@ -28,7 +29,6 @@ CMD ./bin/web
 FROM hyku-web AS hyku-worker
 CMD ./bin/worker
 
-ARG NGINX_VERSION=1.29-alpine
 FROM nginxinc/nginx-unprivileged:$NGINX_VERSION AS hyku-nginx
 # Copy assets & other public files into nginx so it can serve them as static files
 COPY --chown=101:101 --from=hyku-web /app/samvera/hyrax-webapp/public/assets /app/samvera/hyrax-webapp/public/assets
