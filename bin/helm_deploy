@@ -19,7 +19,7 @@ fi
 release_name="${1//_/-}"
 namespace="${2//_/-}"
 
-CHART_VERSION="${CHART_VERSION:-4.0.0-preview.2}"
+CHART_VERSION="${CHART_VERSION:-4.0.0-preview.3}"
 CHART_REGISTRY="${CHART_REGISTRY:-oci://ghcr.io/notch8/charts}"
 
 DEPLOY_IMAGE="${DEPLOY_IMAGE:-ghcr.io/samvera/hyku}"
