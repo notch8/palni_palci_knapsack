@@ -562,9 +562,8 @@ nginx:
 
     real_ip_header X-Forwarded-For;
     real_ip_recursive on;
+  accessLogFormat: loki
   extraServerBlockConfig: |-
-    access_log /var/log/nginx/access.log loki;
-
     # Work/collection and show pages can legitimately take longer than @rails' 60s default to render under load.
     location ~ ^/concern/ {
       proxy_connect_timeout 180s;
