@@ -13,6 +13,17 @@ livenessProbe:
 readinessProbe:
   enabled: false
 
+# pals_knapsack_staging has pittir's tenant schema but no public schema yet, so
+# db-setup's schema_migrations check dies under `set -e` (see utk-hyku's ops
+# file for the full envsubst/hardcoding rationale).
+dbPreSetupInitContainer:
+  - name: ensure-schema-migrations
+    image: "ghcr.io/$REPO_LOWER/web:$TAG"
+    command:
+      - sh
+      - -c
+      - PGPASSWORD=$DB_PASSWORD psql -h zalando-postgres-v14-pooler.postgres.svc.cluster.local -p 5432 -U postgres pals_knapsack_staging -c "CREATE TABLE IF NOT EXISTS schema_migrations (version character varying(255) NOT NULL PRIMARY KEY);"
+
 brandingVolume:
   storageClass: aws-efs
 derivativesVolume:
@@ -89,11 +100,17 @@ extraEnvVars: &envVars
   - name: DB_ADAPTER
     value: postgresql
   - name: DB_HOST
-    value: postgres-postgresql.postgres.svc.cluster.local
+    value: zalando-postgres-v14-pooler.postgres.svc.cluster.local
   - name: DB_NAME
-    value: palni-palci-knapsack-friends
+    value: pals_knapsack_staging
   - name: DB_USER
     value: postgres
+  - name: PGSSLMODE
+    value: require
+  - name: DB_PREPARED_STATEMENTS
+    value: "false"
+  - name: DB_ADVISORY_LOCKS
+    value: "false"
   - name: DISABLE_ANALYTICS_FEATURES
     value: "false"
   - name: FCREPO_BASE_PATH
@@ -498,9 +515,9 @@ fits:
     initialDelaySeconds: 60
     failureThreshold: 6
 externalPostgresql:
-  host: postgres-postgresql.postgres.svc.cluster.local
+  host: zalando-postgres-v14-pooler.postgres.svc.cluster.local
   username: postgres
-  database: palni-palci-knapsack-friends
+  database: pals_knapsack_staging
   password: $DB_PASSWORD
 
 externalSolrHost: solr.solr.svc.cluster.local
