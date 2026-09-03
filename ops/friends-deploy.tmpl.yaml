@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 resources:
   limits:
@@ -513,8 +513,7 @@ nginx:
   service:
     type: ClusterIP
   image:
-    registry: ghcr.io
-    repository: "$REPO_LOWER/nginx"
+    repository: "ghcr.io/$REPO_LOWER/nginx"
     tag: "$TAG"
   extraVolumes:
     - name: uploads
@@ -524,32 +523,16 @@ nginx:
     - name: uploads
       mountPath: /app/samvera/hyrax-webapp/public/system
       subPath: public-system
-  serverBlock: |-
-    upstream rails_app {
-      server {{ .Values.global.hyraxHostName }};
-    }
-
+  # sane default server block (keepalive, open_file_cache, hoisted proxy headers, asset paths) comes from the chart; below is only what this app adds on top
+  extraHttpConfig: |-
     map ${DOLLAR}status ${DOLLAR}loggable {
         ~^444  0;
         default 1;
     }
 
-    # Lets the ActionCable websocket handshake for Hyrax's realtime
-    # notifications (/notifications/endpoint) actually upgrade instead of
-    # silently falling through to a plain HTTP request that Rails 404s --
-    # only kicks in when the client sends an Upgrade header, so it's a
-    # no-op for every other request.
-    map ${DOLLAR}http_upgrade ${DOLLAR}connection_upgrade {
-        default upgrade;
-        ''      '';
-    }
-
     log_format loki 'host=${DOLLAR}host ip=${DOLLAR}http_x_forwarded_for remote_user=${DOLLAR}remote_user [${DOLLAR}time_local] '
                       'request="${DOLLAR}request" status=${DOLLAR}status bytes=${DOLLAR}body_bytes_sent '
                       'referer="${DOLLAR}http_referer" agent="${DOLLAR}http_user_agent" request_time=${DOLLAR}request_time upstream_response_time=${DOLLAR}upstream_response_time upstream_response_length=${DOLLAR}upstream_response_length';
-
-    error_log  /opt/bitnami/nginx/logs/error.log warn;
-    #tcp_nopush     on;
 
     # Cloudflare ips see for refresh
     # https://support.cloudflare.com/hc/en-us/articles/200170786-Restoring-original-visitor-IPs-logging-visitor-IP-addresses
@@ -579,106 +562,4 @@ nginx:
 
     real_ip_header X-Forwarded-For;
     real_ip_recursive on;
-    include /opt/bitnami/nginx/conf/conf.d/*.conf;
-    server {
-        listen 8080;
-        server_name _;
-        root /app/samvera/hyrax-webapp/public;
-        index index.html;
-
-        client_body_in_file_only clean;
-        client_body_buffer_size 32K;
-        client_max_body_size 0;
-        access_log /opt/bitnami/nginx/logs/access.log loki;
-        # if=${DOLLAR}loggable;
-
-        sendfile on;
-        send_timeout 300s;
-
-        include /opt/bitnami/nginx/conf/bots.d/ddos.conf;
-        include /opt/bitnami/nginx/conf/bots.d/blockbots.conf;
-
-        location ~ (\.php|\.aspx|\.asp) {
-        	return 404;
-        }
-
-        # deny requests for files that should never be accessed
-        location ~ /\. {
-          deny all;
-        }
-
-        location ~* ^.+\.(rb|log)${DOLLAR} {
-          deny all;
-        }
-
-        location ~ ^/(assets|packs|fonts|images|javascripts|stylesheets|swfs|system|uv|pdf\.js)/ {
-          try_files ${DOLLAR}uri @rails;
-
-          # access_log off;
-          gzip_static on; # to serve pre-gzipped version
-
-          expires max;
-          add_header Cache-Control public;
-
-          # Some browsers still send conditional-GET requests if there's a
-          # Last-Modified header or an ETag header even if they haven't
-          # reached the expiry date sent in the Expires header.
-          add_header Last-Modified "";
-          add_header ETag "";
-          break;
-        }
-
-        # Large request/response bodies live here: chunked file uploads
-        # (/uploads), single-file and single-use-link downloads
-        # (/downloads, /single_use_link), and Bulkrax bulk import/export
-        # (/importers, /exporters -- the classic importer form posts an
-        # unchunked file directly, and exporters/:id/download streams a
-        # zip of the whole export). These get a long proxy timeout so a
-        # slow client transferring a lot of data doesn't get killed
-        # mid-request; everything else stays on @rails' short default so
-        # a genuinely hung backend request still fails fast.
-        location ~ ^/(uploads|downloads|importers|exporters|single_use_link)(/|${DOLLAR}) {
-          proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
-          proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
-          proxy_set_header Host ${DOLLAR}http_host;
-          proxy_http_version 1.1;
-          proxy_set_header Upgrade ${DOLLAR}http_upgrade;
-          proxy_set_header Connection ${DOLLAR}connection_upgrade;
-          proxy_redirect off;
-          proxy_connect_timeout 3600s;
-          proxy_send_timeout 3600s;
-          proxy_read_timeout 3600s;
-          proxy_pass http://rails_app;
-        }
-
-        # Work/collection and show pages can legitimately take longer than @rails' 60s default to render under load.
-        location ~ ^/concern/ {
-          proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
-          proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
-          proxy_set_header Host ${DOLLAR}http_host;
-          proxy_http_version 1.1;
-          proxy_set_header Upgrade ${DOLLAR}http_upgrade;
-          proxy_set_header Connection ${DOLLAR}connection_upgrade;
-          proxy_redirect off;
-          proxy_connect_timeout 180s;
-          proxy_send_timeout 180s;
-          proxy_read_timeout 180s;
-          proxy_pass http://rails_app;
-        }
-
-        # send non-static file requests to the app server
-        location / {
-          try_files ${DOLLAR}uri @rails;
-        }
-
-        location @rails {
-          proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
-          proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
-          proxy_set_header Host ${DOLLAR}http_host;
-          proxy_http_version 1.1;
-          proxy_set_header Upgrade ${DOLLAR}http_upgrade;
-          proxy_set_header Connection ${DOLLAR}connection_upgrade;
-          proxy_redirect off;
-          proxy_pass http://rails_app;
-        }
-    }
+  accessLogFormat: loki
