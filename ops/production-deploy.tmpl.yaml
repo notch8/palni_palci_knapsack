@@ -8,10 +8,25 @@ resources:
     memory: "4Gi"
     cpu: "1500m"
 
+# Chart default path "/" does a full Solr+DB-backed page render - too slow/heavy for a health check. /healthz (okcomputer, standard Hyrax dependency) is cheap and dependency-free.
+startupProbe:
+  enabled: true
+  path: "/healthz"
+  failureThreshold: 30
 livenessProbe:
-  enabled: false
+  enabled: true
+  path: "/healthz"
+  initialDelaySeconds: 15
+  periodSeconds: 60
+  timeoutSeconds: 60
+  failureThreshold: 6
 readinessProbe:
-  enabled: false
+  enabled: true
+  path: "/healthz"
+  initialDelaySeconds: 15
+  periodSeconds: 60
+  timeoutSeconds: 60
+  failureThreshold: 6
 
 brandingVolume:
   storageClass: efs-sc
@@ -81,7 +96,7 @@ extraEnvVars: &envVars
   - name: DB_ADAPTER
     value: postgresql
   - name: DB_HOST
-    value: postgres-cluster-alpha-ha.postgres.svc.cluster.local
+    value: alpha-pgbouncer.postgres.svc.cluster.local
   - name: DB_NAME
     value: pals-production-hyku
   - name: DB_USER
@@ -482,7 +497,7 @@ fits:
 externalFcrepoHost: "palsfcrepo.palni-palci-production"
 
 externalPostgresql:
-  host: postgres-cluster-alpha-ha.postgres.svc.cluster.local
+  host: alpha-pgbouncer.postgres.svc.cluster.local
   username: main
   database: pals-production-hyku
   password: $DB_PASSWORD

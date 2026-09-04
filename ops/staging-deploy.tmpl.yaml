@@ -28,6 +28,18 @@ readinessProbe:
   timeoutSeconds: 60
   failureThreshold: 6
 
+# db-setup's migration-count check queries schema_migrations before db:create
+# ever runs, so it dies under `set -e` against a genuinely empty database.
+# Host/user/db are hardcoded, not $DB_HOST-style: this container gets no env
+# from the chart, and envsubst blanks any $VARNAME with no matching CI secret.
+dbPreSetupInitContainer:
+  - name: ensure-schema-migrations
+    image: "ghcr.io/$REPO_LOWER/web:$TAG"
+    command:
+      - sh
+      - -c
+      - PGPASSWORD=$DB_PASSWORD psql -h zalando-postgres-v14-pooler.postgres.svc.cluster.local -p 5432 -U postgres palni_palci_knapsack_staging -c "CREATE TABLE IF NOT EXISTS schema_migrations (version character varying(255) NOT NULL PRIMARY KEY);"
+
 brandingVolume:
   storageClass: aws-efs
 derivativesVolume:
@@ -63,32 +75,23 @@ ingress:
   enabled: true
   ingressClassName: "nginx-ingress"
   hosts:
-    - host: palni-palci-knapsack-friends.notch8.cloud
+    - host: palni-palci-knapsack-staging.notch8.cloud
       paths:
         - path: /
           pathType: ImplementationSpecific
-    - host: "*.palni-palci-knapsack-friends.notch8.cloud"
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-      # For testing Cloudflare-specific issues
-    - host: pittir-staging.hykucommons.org
+    - host: "*.palni-palci-knapsack-staging.notch8.cloud"
       paths:
         - path: /
           pathType: ImplementationSpecific
   annotations:
     nginx.org/client-max-body-size: "0"
-    nginx.org/websocket-services: "palni-palci-knapsack-friends-nginx"
+    nginx.org/websocket-services: "palni-palci-knapsack-staging-nginx"
     cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
   tls:
     - hosts:
-        - palni-palci-knapsack-friends.notch8.cloud
-        - "*.palni-palci-knapsack-friends.notch8.cloud"
-      secretName: palni-palci-knapsack-friends-tls
-      # For testing Cloudflare-specific issues
-    - hosts:
-        - pittir-staging.hykucommons.org
-      secretName: pittir-staging-hykucommons-tls
+        - palni-palci-knapsack-staging.notch8.cloud
+        - "*.palni-palci-knapsack-staging.notch8.cloud"
+      secretName: palni-palci-knapsack-staging-tls
 
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
@@ -104,17 +107,23 @@ extraEnvVars: &envVars
   - name: DB_ADAPTER
     value: postgresql
   - name: DB_HOST
-    value: postgres-postgresql.postgres.svc.cluster.local
+    value: zalando-postgres-v14-pooler.postgres.svc.cluster.local
   - name: DB_NAME
-    value: palni-palci-knapsack-friends
+    value: palni_palci_knapsack_staging
   - name: DB_USER
     value: postgres
+  - name: PGSSLMODE
+    value: require
+  - name: DB_PREPARED_STATEMENTS
+    value: "false"
+  - name: DB_ADVISORY_LOCKS
+    value: "false"
   - name: DISABLE_ANALYTICS_FEATURES
     value: "false"
   - name: FCREPO_BASE_PATH
-    value: /palni-palci-knapsack-friends-hyrax
+    value: /palni-palci-knapsack-staging-hyrax
   - name: FCREPO_HOST
-    value: palni-palci-knapsack-friends-fcrepo
+    value: palni-palci-knapsack-staging-fcrepo
   - name: FCREPO_PORT
     value: "8080"
   - name: FCREPO_REST_PATH
@@ -126,7 +135,7 @@ extraEnvVars: &envVars
   - name: GOOGLE_ACCOUNT_JSON
     value: $GOOGLE_ACCOUNT_JSON
   - name: HYKU_ADMIN_HOST
-    value: palni-palci-knapsack-friends.notch8.cloud
+    value: palni-palci-knapsack-staging.notch8.cloud
   - name: HYKU_ADMIN_ONLY_TENANT_CREATION
     value: "false"
   - name: HYKU_ALLOW_SIGNUP
@@ -138,7 +147,7 @@ extraEnvVars: &envVars
   - name: HYKU_CONTACT_EMAIL
     value: support@notch8.com
   - name: HYKU_DEFAULT_HOST
-    value: "%{tenant}.palni-palci-knapsack-friends.notch8.cloud"
+    value: "%{tenant}.palni-palci-knapsack-staging.notch8.cloud"
   - name: HYKU_FILE_ACL
     value: "true"
   - name: HYKU_USER_DEFAULT_PASSWORD
@@ -148,7 +157,7 @@ extraEnvVars: &envVars
   - name: HYKU_MULTITENANT
     value: "true"
   - name: HYKU_ROOT_HOST
-    value: palni-palci-knapsack-friends.notch8.cloud
+    value: palni-palci-knapsack-staging.notch8.cloud
   - name: HYKU_SHOW_BACKTRACE
     value: "true"
   - name: HYRAX_ACTIVE_JOB_QUEUE
@@ -178,7 +187,7 @@ extraEnvVars: &envVars
   - name: NEGATIVE_CAPTCHA_SECRET
     value: $NEGATIVE_CAPTCHA_SECRET
   - name: RAILS_CACHE_STORE_URL
-    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-friends-redis-master:6379/0
+    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-staging-redis-master:6379/0
   # do not change this value
   - name: RAILS_ENV
     value: production
@@ -189,9 +198,9 @@ extraEnvVars: &envVars
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
   - name: REDIS_HOST
-    value: palni-palci-knapsack-friends-redis-master
+    value: palni-palci-knapsack-staging-redis-master
   - name: REDIS_URL
-    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-friends-redis-master:6379/0
+    value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-staging-redis-master:6379/0
   - name: SENTRY_DSN
     value: $SENTRY_DSN
   - name: SENTRY_ENVIRONMENT
@@ -217,7 +226,7 @@ extraEnvVars: &envVars
   - name: SOLR_ADMIN_USER
     value: admin
   - name: SOLR_COLLECTION_NAME
-    value: palni-palci-knapsack-friends
+    value: palni-palci-knapsack-staging
   - name: SOLR_COLLECTION_REPLICAS
     value: "3"
   - name: SOLR_CONFIGSET_NAME
@@ -462,7 +471,7 @@ fcrepo:
     failureThreshold: 6
   s3:
     enabled: true
-    bucket: besties-fcrepo-clone
+    bucket: palni-palci-knapsack-staging-fcrepo
     access_key: $AWS_ACCESS_KEY_ID
     secret_key: $AWS_SECRET_ACCESS_KEY
 global:
@@ -473,7 +482,7 @@ global:
       password: $DB_PASSWORD
       postgresPassword: $DB_PASSWORD
   # Required for the nginx serverBlock's `upstream rails_app` to resolve
-  hyraxHostName: palni-palci-knapsack-friends-hyrax
+  hyraxHostName: palni-palci-knapsack-staging-hyrax
 postgresql:
   enabled: false
   pool: 10
@@ -513,14 +522,14 @@ fits:
     initialDelaySeconds: 60
     failureThreshold: 6
 externalPostgresql:
-  host: postgres-postgresql.postgres.svc.cluster.local
+  host: zalando-postgres-v14-pooler.postgres.svc.cluster.local
   username: postgres
-  database: palni-palci-knapsack-friends
+  database: palni_palci_knapsack_staging
   password: $DB_PASSWORD
 
 externalSolrHost: solr.solr.svc.cluster.local
 externalSolrUser: admin
-externalSolrCollection: "palni-palci-knapsack-friends"
+externalSolrCollection: "palni-palci-knapsack-staging"
 externalSolrPassword: $SOLR_ADMIN_PASSWORD
 
 nginx:
