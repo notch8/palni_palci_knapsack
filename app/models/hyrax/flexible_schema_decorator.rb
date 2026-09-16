@@ -13,7 +13,7 @@ module Hyrax
     private
 
     def current_record
-      RequestStore.store[:flexible_schema_current] ||= order("created_at asc").last
+      Hyrax::Current.flexible_schema ||= order("created_at asc").last
     end
   end
 end
