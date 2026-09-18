@@ -3,17 +3,18 @@
 # OVERRIDE Hyrax v5.2.0 backport of samvera/hyrax#7649 -- new class, not yet in this pin; remove once this pin includes that PR (the app shadows the gem's copy either way)
 module Hyrax
   class StatsPruner
-    def self.call(klass:, id_column:, dry_run: false, batch_size: 50_000)
-      new(klass:, id_column:, dry_run:, batch_size:).call
+    def self.call(klass:, id_column:, dry_run: false, batch_size: 50_000, tenant: nil)
+      new(klass:, id_column:, dry_run:, batch_size:, tenant:).call
     end
 
-    def initialize(klass:, id_column:, dry_run:, batch_size:)
+    def initialize(klass:, id_column:, dry_run:, batch_size:, tenant: nil)
       @klass = klass
       @id_column = id_column
       @count_column = klass.cache_column
       @table = klass.quoted_table_name
       @dry_run = dry_run
       @batch_size = batch_size
+      @tenant = tenant
     end
 
     def call
@@ -28,10 +29,14 @@ module Hyrax
 
     private
 
-    attr_reader :klass, :id_column, :count_column, :table, :dry_run, :batch_size
+    attr_reader :klass, :id_column, :count_column, :table, :dry_run, :batch_size, :tenant
 
     def connection
       klass.connection
+    end
+
+    def log_prefix
+      tenant ? "hyrax:stats:prune_zero_stats[#{tenant}]" : "hyrax:stats:prune_zero_stats"
     end
 
     def keepers_sql
@@ -54,16 +59,16 @@ module Hyrax
 
     def report_dry_run(before)
       count = connection.execute("SELECT count(*) FROM (#{stale_rows_sql}) redundant").first['count']
-      Hyrax.logger.info("hyrax:stats:prune_zero_stats: #{klass} would delete #{count} of #{before} rows (dry run)")
+      Hyrax.logger.info("#{log_prefix}: #{klass} would delete #{count} of #{before} rows (dry run)")
     end
 
     def delete_in_batches(before)
       loop do
         deleted = connection.execute("DELETE FROM #{table} WHERE id IN (#{stale_rows_sql(limit: batch_size)})").cmd_tuples
-        Hyrax.logger.info("hyrax:stats:prune_zero_stats: #{klass} deleted #{deleted} rows")
+        Hyrax.logger.info("#{log_prefix}: #{klass} deleted #{deleted} rows")
         break if deleted < batch_size
       end
-      Hyrax.logger.info("hyrax:stats:prune_zero_stats: #{klass} #{before} -> #{klass.count} rows")
+      Hyrax.logger.info("#{log_prefix}: #{klass} #{before} -> #{klass.count} rows")
     end
   end
 end

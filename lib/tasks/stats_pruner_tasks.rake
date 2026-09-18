@@ -15,7 +15,7 @@ namespace :hyrax do
 
         begin
           { FileViewStat => :file_id, FileDownloadStat => :file_id, WorkViewStat => :work_id }.each do |klass, id_column|
-            Hyrax::StatsPruner.call(klass:, id_column:, dry_run:, batch_size:)
+            Hyrax::StatsPruner.call(klass:, id_column:, dry_run:, batch_size:, tenant: account.cname)
           end
         rescue StandardError => e
           Hyrax.logger.error("hyrax:stats:prune_zero_stats: #{account.cname} failed: #{e.message}")
