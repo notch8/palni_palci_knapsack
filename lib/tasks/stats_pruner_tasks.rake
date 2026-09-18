@@ -10,7 +10,7 @@ namespace :hyrax do
       batch_size = (ENV['BATCH_SIZE'] || 50_000).to_i
 
       { FileViewStat => :file_id, FileDownloadStat => :file_id, WorkViewStat => :work_id }.each do |klass, id_column|
-        Hyrax::StatsPruner.call(klass: klass, id_column: id_column, dry_run: dry_run, batch_size: batch_size)
+        Hyrax::StatsPruner.call(klass:, id_column:, dry_run:, batch_size:)
       end
     end
   end

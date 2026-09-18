@@ -4,7 +4,7 @@
 module Hyrax
   class StatsPruner
     def self.call(klass:, id_column:, dry_run: false, batch_size: 50_000)
-      new(klass: klass, id_column: id_column, dry_run: dry_run, batch_size: batch_size).call
+      new(klass:, id_column:, dry_run:, batch_size:).call
     end
 
     def initialize(klass:, id_column:, dry_run:, batch_size:)

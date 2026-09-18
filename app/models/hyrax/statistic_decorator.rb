@@ -42,7 +42,7 @@ module Hyrax
 
     # @return [Array(Hyrax::Statistic, Date?)] the built stat, and its date if zero-count
     def record_stat(object, stat, object_method, ga_key, user_id)
-      lstat = build_for(object, date: stat[:date], object_method => stat[ga_key], user_id: user_id)
+      lstat = build_for(object, date: stat[:date], object_method => stat[ga_key], user_id:)
       return [lstat, nil] if stat[:date].to_date == Time.zone.today
       return [lstat, stat[:date].to_date] unless stat[ga_key].to_i.positive?
 
@@ -53,9 +53,9 @@ module Hyrax
     def advance_zero_marker(object, object_method, date, user_id)
       marker = statistics_for(object).where(object_method => 0).order(date: :asc).last
       if marker
-        marker.update(date: date) if date > marker.date
+        marker.update(date:) if date > marker.date
       else
-        build_for(object, date: date, object_method => 0, user_id: user_id).save
+        build_for(object, date:, object_method => 0, user_id:).save
       end
     end
   end
