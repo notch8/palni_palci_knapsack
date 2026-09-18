@@ -23,7 +23,7 @@ module Hyrax
              .for_path(path)
     end
 
-    # OVERRIDE Hyrax v5.2.0 backport of samvera/hyrax#7649 -- collapse zero-count days into one marker row instead of one row per empty day forever
+    # OVERRIDE Hyrax v5.2.0 backport of samvera/hyrax#7649 -- collapse zero-count days into one marker row; remove once this pin includes that PR
     def combined_stats(object, start_date, object_method, ga_key, user_id = nil)
       stat_cache_info = cached_stats(object, start_date, object_method)
       stats = stat_cache_info[:cached_stats]

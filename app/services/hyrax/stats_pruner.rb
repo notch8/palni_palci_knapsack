@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# OVERRIDE Hyrax v5.2.0 backport of samvera/hyrax#7649 -- new class, not yet in this knapsack's Hyrax pin; delete once it is (app shadows the gem's copy either way)
+# OVERRIDE Hyrax v5.2.0 backport of samvera/hyrax#7649 -- new class, not yet in this pin; remove once this pin includes that PR (the app shadows the gem's copy either way)
 module Hyrax
   class StatsPruner
     def self.call(klass:, id_column:, dry_run: false, batch_size: 50_000)
