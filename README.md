@@ -242,6 +242,25 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 - Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; a human publishes the draft. `HykuKnapsack::VERSION` tracks the pinned Hyku, and CI fails when they differ.
 - Before merging a promotion PR, capture the tenant regression baseline.
 
+#### Weekly cadence and client review
+
+| When | What |
+| --- | --- |
+| Friday end of day | Cutoff for merges to `main`. Later work waits a week. |
+| Monday morning | Merge Dependabot's submodule bump (and its `version.rb` fix, if Hyku's version changed). |
+| Monday by noon PT | Merge the `main` -> `staging` promotion PR, then send the client the Monday notice. |
+| Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. |
+| Thursday 3-5pm PT | Promote `staging` -> `production`. |
+
+- The Monday notice goes out every week. With `needs client review` tickets it asks the client
+  to approve or reject each one by Wednesday. Without any, it lists what goes out Thursday and
+  asks them to reply by Wednesday with concerns; no review is needed. The `-rc` release draft
+  lists every PR on staging, so start the notice from it.
+- Label a ticket `needs client review` when it is written, so Monday's promotion already knows
+  which kind of week it is.
+- A rejected ticket is reverted, not cherry-picked around: see "Client rejects a change" in the
+  playbook `knapsack-release` skill.
+
 The generic procedure lives in the deploy skills in [notch8/playbook](https://github.com/notch8/playbook); install them with its `bin/install-skills`.
 
 ### Theme files
