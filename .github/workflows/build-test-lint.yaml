@@ -27,6 +27,7 @@ on:
 
 jobs:
   version-check:
+    name: Knapsack version matches Hyku
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
