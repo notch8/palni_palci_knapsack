@@ -238,7 +238,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | `staging` | staging | `r2-friends` | `palni-palci-knapsack-staging` |
 | `production` | production | `r2-besties` | `palni-palci-knapsack-production` |
 
-- Production window: TBD, confirm with Shana.
+- Production window: Thursdays 3-5pm Pacific. Never on a Friday.
 - Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; a human publishes the draft. `HykuKnapsack::VERSION` tracks the pinned Hyku, and CI fails when they differ.
 - Before merging a promotion PR, capture the tenant regression baseline.
 
