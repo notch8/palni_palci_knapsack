@@ -11,7 +11,7 @@
       - [Fork on Github](#fork-on-github)
     - [Hyku and HykuKnapsack](#hyku-and-hykuknapsack)
     - [Overrides](#overrides)
-    - [Deployment scripts](#deployment-scripts)
+    - [Deploying](#deploying)
     - [Theme files](#theme-files)
     - [Gems](#gems)
   - [Converting a Fork of Hyku Prime to a Knapsack](#converting-a-fork-of-hyku-prime-to-a-knapsack)
@@ -228,9 +228,21 @@ Adding decorators to override features is fairly simple. We do recommend some [b
 
 Any file with `_decorator.rb` in the app or lib directory will automatically be loaded along with any classes in the app directory.
 
-### Deployment scripts
+### Deploying
 
-Deployment code can be added as needed.
+Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. A push that passes Build Test Lint deploys its branch; the Deploy workflow's dispatch covers ad-hoc and rollback deploys.
+
+| Branch | Environment | kubectl context | Namespace |
+| --- | --- | --- | --- |
+| `main` | friends | `r2-friends` | `palni-palci-knapsack-friends` |
+| `staging` | staging | `r2-friends` | `palni-palci-knapsack-staging` |
+| `production` | production | `r2-besties` | `palni-palci-knapsack-production` |
+
+- Production window: TBD, confirm with Shana.
+- Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; a human publishes the draft. `HykuKnapsack::VERSION` tracks the pinned Hyku, and CI fails when they differ.
+- Before merging a promotion PR, capture the tenant regression baseline.
+
+The generic procedure lives in the deploy skills in [notch8/playbook](https://github.com/notch8/playbook); install them with its `bin/install-skills`.
 
 ### Theme files
 
