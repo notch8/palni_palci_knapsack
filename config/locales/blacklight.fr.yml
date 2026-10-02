@@ -9,6 +9,7 @@ fr:
         facet:
           based_near_label_sim: Emplacement
           creator_sim: Créateur
+          date_range_isim: date créée
           depositor_ssim: Déposant
           file_format_sim: Format
           generic_type_sim: Type

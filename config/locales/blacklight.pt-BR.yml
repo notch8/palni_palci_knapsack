@@ -9,6 +9,7 @@ pt-BR:
         facet:
           based_near_label_sim: Localização
           creator_sim: O Criador
+          date_range_isim: Data Criada
           depositor_ssim: Depositante
           file_format_sim: Formato
           generic_type_sim: Tipo

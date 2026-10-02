@@ -9,6 +9,7 @@ de:
         facet:
           based_near_label_sim: Ort
           creator_sim: Schöpfer
+          date_range_isim: Datum erstellt
           depositor_ssim: Einleger
           file_format_sim: Format
           generic_type_sim: Art
