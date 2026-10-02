@@ -234,12 +234,13 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 
 | Branch | Environment | kubectl context | Namespace |
 | --- | --- | --- | --- |
-| `main` | friends | `r2-friends` | `palni-palci-knapsack-friends` |
+| `main` | dev | `r2-friends` | `palni-palci-knapsack-dev` |
 | `staging` | staging | `r2-friends` | `palni-palci-knapsack-staging` |
 | `production` | production | `r2-besties` | `palni-palci-knapsack-production` |
 
 - Production window: Thursdays 3-5pm Pacific. Never on a Friday.
-- Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; a human publishes the draft. `HykuKnapsack::VERSION` tracks the pinned Hyku, and CI fails when they differ.
+- Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; a human publishes the draft. Each draft records the pinned Hyku version and SHA.
+- Production deploys wait for approval from `@notch8/hyku-knapsack-owners` on the `production` environment.
 - Before merging a promotion PR, capture the tenant regression baseline.
 
 #### Weekly cadence and client review
@@ -247,7 +248,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | When | What |
 | --- | --- |
 | Friday end of day | Cutoff for merges to `main`. Later work waits a week. |
-| Monday morning | Merge Dependabot's submodule bump (and its `version.rb` fix, if Hyku's version changed). |
+| Monday morning | Merge Dependabot's submodule bump. |
 | Monday by noon PT | Merge the `main` -> `staging` promotion PR, then send the client the Monday notice. |
 | Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. |
 | Thursday 3-5pm PT | Promote `staging` -> `production`. |
