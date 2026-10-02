@@ -24,5 +24,9 @@ RSpec.describe CatalogController do
       expect(facet_fields[DateRangeIndexing::SOLR_FIELD].display_label('facet')).to eq('Date Created')
       expect(facet_fields).not_to have_key('date_ssi')
     end
+
+    it "labels works without a value as Not specified" do
+      expect(I18n.t('blacklight.search.facets.missing', locale: :en)).to eq('Not specified')
+    end
   end
 end
