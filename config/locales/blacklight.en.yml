@@ -48,6 +48,8 @@ en:
           rights_tesim: Rights
           subject_tesim: Subject
           title_tesim: Title
+      facets:
+        missing: Not specified
       start_over: New Search
     range_limit:
       submit_limit: Update

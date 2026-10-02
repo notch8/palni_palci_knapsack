@@ -25,4 +25,8 @@ RSpec.describe CatalogController do
       expect(facet_fields).not_to have_key('date_ssi')
     end
   end
+
+  it "labels works without a value as Not specified" do
+    expect(I18n.t('blacklight.search.facets.missing', locale: :en)).to eq('Not specified')
+  end
 end
