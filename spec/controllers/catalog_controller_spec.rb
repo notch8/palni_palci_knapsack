@@ -15,4 +15,18 @@ RSpec.describe CatalogController do
       end
     end
   end
+
+  describe "date facet" do
+    let(:facet_fields) { described_class.blacklight_config.facet_fields }
+
+    it "ranges over the integer years Hyku indexes, not the date_ssi string" do
+      expect(facet_fields).to have_key(DateRangeIndexing::SOLR_FIELD)
+      expect(facet_fields[DateRangeIndexing::SOLR_FIELD].display_label('facet')).to eq('Date Created')
+      expect(facet_fields).not_to have_key('date_ssi')
+    end
+
+    it "labels works without a value as Not specified" do
+      expect(I18n.t('blacklight.search.facets.missing', locale: :en)).to eq('Not specified')
+    end
+  end
 end
