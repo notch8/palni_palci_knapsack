@@ -11,7 +11,7 @@
       - [Fork on Github](#fork-on-github)
     - [Hyku and HykuKnapsack](#hyku-and-hykuknapsack)
     - [Overrides](#overrides)
-    - [Deployment scripts](#deployment-scripts)
+    - [Deploying](#deploying)
     - [Theme files](#theme-files)
     - [Gems](#gems)
   - [Converting a Fork of Hyku Prime to a Knapsack](#converting-a-fork-of-hyku-prime-to-a-knapsack)
@@ -228,9 +228,41 @@ Adding decorators to override features is fairly simple. We do recommend some [b
 
 Any file with `_decorator.rb` in the app or lib directory will automatically be loaded along with any classes in the app directory.
 
-### Deployment scripts
+### Deploying
 
-Deployment code can be added as needed.
+Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. A push that passes Build Test Lint deploys its branch; the Deploy workflow's dispatch covers ad-hoc and rollback deploys.
+
+| Branch | Environment | kubectl context | Namespace |
+| --- | --- | --- | --- |
+| `main` | dev | `r2-friends` | `palni-palci-knapsack-dev` |
+| `staging` | staging | `r2-friends` | `palni-palci-knapsack-staging` |
+| `production` | production | `r2-besties` | `palni-palci-knapsack-production` |
+
+- Production window: Thursdays 3-5pm Pacific. Never on a Friday.
+- Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; after a verified production deploy, approving the Publish Release run publishes the stable draft at the deployed commit. Each draft records the pinned Hyku version and SHA.
+- Production deploys wait for approval from `@notch8/hyku-knapsack-owners` on the `production` environment.
+- Before merging a promotion PR, capture the tenant regression baseline.
+
+#### Weekly cadence and client review
+
+| When | What |
+| --- | --- |
+| Friday end of day | Cutoff for merges to `main`. Later work waits a week. |
+| Monday morning | Merge Dependabot's submodule bump. |
+| Monday by noon PT | Merge the `main` -> `staging` promotion PR, then send the client the Monday notice. |
+| Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. |
+| Thursday 3-5pm PT | Promote `staging` -> `production`. |
+
+- The Monday notice goes out every week. With `needs client review` tickets it asks the client
+  to approve or reject each one by Wednesday. Without any, it lists what goes out Thursday and
+  asks them to reply by Wednesday with concerns; no review is needed. The `-rc` release draft
+  lists every PR on staging, so start the notice from it.
+- Label a ticket `needs client review` when it is written, so Monday's promotion already knows
+  which kind of week it is.
+- A rejected ticket is reverted, not cherry-picked around: see "Client rejects a change" in the
+  playbook `knapsack-release` skill.
+
+The generic procedure lives in the deploy skills in [notch8/playbook](https://github.com/notch8/playbook); install them with its `bin/install-skills`.
 
 ### Theme files
 
