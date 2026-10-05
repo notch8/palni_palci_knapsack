@@ -34,6 +34,12 @@ COPY --from=hyku-web /app/samvera/hyrax-webapp/public/assets /app/samvera/hyrax-
 COPY --from=hyku-web /app/samvera/hyrax-webapp/public/pdf.js /app/samvera/hyrax-webapp/public/pdf.js
 COPY --from=hyku-web /app/samvera/hyrax-webapp/public/uv /app/samvera/hyrax-webapp/public/uv
 
+# nginx for the hyrax chart 4.x nginx template (stock nginx-unprivileged; the chart mounts its own nginx.conf and server block).
+FROM nginxinc/nginx-unprivileged:1.29-alpine AS hyku-nginx-unprivileged
+COPY --from=hyku-web /app/samvera/hyrax-webapp/public/assets /app/samvera/hyrax-webapp/public/assets
+COPY --from=hyku-web /app/samvera/hyrax-webapp/public/pdf.js /app/samvera/hyrax-webapp/public/pdf.js
+COPY --from=hyku-web /app/samvera/hyrax-webapp/public/uv /app/samvera/hyrax-webapp/public/uv
+
 # Use a Solr version with patched Log4j to address CVE-2021-44228
 FROM solr:8.11.2 AS hyku-solr
 ENV SOLR_USER="solr" \
