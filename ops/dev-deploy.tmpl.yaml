@@ -178,9 +178,9 @@ extraEnvVars: &envVars
   - name: IN_DOCKER
     value: "true"
   - name: INITIAL_ADMIN_EMAIL
-    value: admin@example.com
+    value: support@notch8.com
   - name: INITIAL_ADMIN_PASSWORD
-    value: testing123
+    value: $INITIAL_ADMIN_PASSWORD
   - name: LD_LIBRARY_PATH
     value: /app/fits/tools/mediainfo/linux
   - name: NEGATIVE_CAPTCHA_SECRET
