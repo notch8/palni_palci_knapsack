@@ -19,5 +19,9 @@ on:
 
 jobs:
   deploy:
-    uses: notch8/actions/.github/workflows/deploy.yaml@v1.0.10
+    uses: notch8/actions/.github/workflows/deploy.yaml@v1.0.14
+    with:
+      environment: ${{ inputs.environment }}
+      # Staging trials hyrax chart 4.x (own nginx template); production stays on the bin/helm_deploy default until cutover.
+      chart-version: ${{ inputs.environment == 'staging' && '4.1.0' || '' }}
     secrets: inherit
