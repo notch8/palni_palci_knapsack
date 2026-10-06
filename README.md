@@ -242,6 +242,10 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 - Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; after a verified production deploy, approving the Publish Release run publishes the stable draft at the deployed commit. Each draft records the pinned Hyku version and SHA.
 - Production deploys wait for approval from `@notch8/hyku-knapsack-owners` on the `production` environment.
 - Before merging a promotion PR, capture the tenant regression baseline.
+- Announcement channel: **#n8-palni-palci**, the client's channel, so write for the client
+  there. Post the Monday notice, "deploying now" before merging the production promotion, and
+  the release notes once the release is published. Internal discussion stays in
+  #dev-palni-palci.
 
 #### Weekly cadence and client review
 
@@ -250,8 +254,9 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | Friday end of day | Cutoff for merges to `main`. Later work waits a week. |
 | Monday morning | Merge Dependabot's submodule bump. |
 | Monday by noon PT | Merge the `main` -> `staging` promotion PR, then send the client the Monday notice. |
-| Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. |
-| Thursday 3-5pm PT | Promote `staging` -> `production`. |
+| Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. Follow up Wednesday morning on any without an answer. |
+| Wednesday end of day | Every `needs client review` ticket approved. A rejected or unanswered one is reverted on `main` and promoted again; unapproved work does not ship. |
+| Thursday 3-5pm PT | Announce in #n8-palni-palci, promote `staging` -> `production`, then post the release notes there. |
 
 - The Monday notice goes out every week. With `needs client review` tickets it asks the client
   to approve or reject each one by Wednesday. Without any, it lists what goes out Thursday and
@@ -262,7 +267,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 - A rejected ticket is reverted, not cherry-picked around: see "Client rejects a change" in the
   playbook `knapsack-release` skill.
 
-The generic procedure lives in the deploy skills in [notch8/playbook](https://github.com/notch8/playbook); install them with its `bin/install-skills`.
+The generic procedure lives in the deploy skills in [notch8/playbook](https://github.com/notch8/playbook); install them with its `bin/install-skills`. The weekly checklist is in its [knapsack release onboarding](https://github.com/notch8/playbook/blob/main/devops/deployments/knapsack-release-onboarding.md#7-your-week).
 
 ### Theme files
 
