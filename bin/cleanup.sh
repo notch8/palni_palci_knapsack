@@ -9,7 +9,7 @@
 # POD=other-pod-name ./bin/cleanup.sh
 
 # Different namespace
-# NS=palni-palci-knapsack-friends ./bin/cleanup.sh
+# NS=palni-palci-knapsack-dev ./bin/cleanup.sh
 
 # Different age threshold (e.g., 60 days)
 # AGE_DAYS=60 ./bin/cleanup.sh

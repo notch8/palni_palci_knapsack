@@ -9,6 +9,7 @@ it:
         facet:
           based_near_label_sim: luogo
           creator_sim: Creatore
+          date_range_isim: data di creazione
           depositor_ssim: Depositante
           file_format_sim: Formato
           generic_type_sim: Tipo
@@ -50,4 +51,6 @@ it:
           rights_tesim: Diritti
           subject_tesim: Soggetto
           title_tesim: Titolo
+      facets:
+        missing: Non specificato
       start_over: Nuova ricerca

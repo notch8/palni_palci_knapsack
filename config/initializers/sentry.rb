@@ -4,7 +4,7 @@ require 'sentry-ruby'
 Sentry.init do |config|
   config.dsn = ENV['SENTRY_DSN']
   config.breadcrumbs_logger = [:active_support_logger, :http_logger]
-  config.enabled_environments = %w[palni-palci-knapsack-friends palni-palci-knapsack-demo palni-palci-knapsack-production]
+  config.enabled_environments = %w[palni-palci-knapsack-dev palni-palci-knapsack-demo palni-palci-knapsack-production]
   # Skip Hyrax 404s
   config.excluded_exceptions += ['Hyrax::ObjectNotFoundError']
   config.debug = false
