@@ -3,10 +3,10 @@ replicaCount: 2
 resources:
   limits:
     memory: "4Gi"
-    cpu: "1250m"
+    cpu: "1100m"
   requests:
     memory: "2Gi"
-    cpu: "900m"
+    cpu: "100m"
 
 # Chart default path "/" does a full Solr+DB-backed page render - too slow/heavy for a health check. /healthz (okcomputer, standard Hyrax dependency) is cheap and dependency-free.
 startupProbe:
