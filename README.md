@@ -252,7 +252,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | When | What |
 | --- | --- |
 | Friday end of day | Cutoff for merges to `main`. Later work waits a week. |
-| Monday morning | Merge Dependabot's submodule bump. |
+| Monday morning | Merge the Bump Hyku workflow's `hyrax-webapp` bump (or run it by hand from Actions). |
 | Monday by noon PT | Merge the `main` -> `staging` promotion PR, then send the client the Monday notice. |
 | Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. Follow up Wednesday morning on any without an answer. |
 | Wednesday end of day | Every `needs client review` ticket approved. A rejected or unanswered one is reverted on `main` and promoted again; unapproved work does not ship. |
