@@ -239,7 +239,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | `production` | production | `r2-besties` | `palni-palci-knapsack-production` |
 
 - Production window: Thursdays 3-5pm Pacific. Never on a Friday.
-- Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; after a verified production deploy, approving the Publish Release run publishes the stable draft at the deployed commit. Each draft records the pinned Hyku version and SHA.
+- Release tags continue the `v0.2.x` line. Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; after a verified production deploy, approving the `publish-release` job in the production Build Test Lint run publishes the stable draft at the deployed commit. Each draft records the pinned Hyku version and SHA.
 - Production deploys wait for approval from `@notch8/hyku-knapsack-owners` on the `production` environment.
 - Before merging a promotion PR, capture the tenant regression baseline.
 - Announcement channel: **#n8-palni-palci**, the client's channel, so write for the client
