@@ -1,0 +1,18 @@
+name: Verify
+on:
+  pull_request:
+    branches:
+      - '**'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - unlabeled
+
+permissions:
+  pull-requests: read
+
+jobs:
+  check_pr_labels:
+    uses: notch8/actions/.github/workflows/verify-labels.yaml@v1.0.13

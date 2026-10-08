@@ -1,4 +1,6 @@
 name: "Deploy"
+# Ad-hoc deploys and rollbacks. Pushes to main, staging and production deploy from their
+# Build Test Lint run instead.
 run-name: Deploy (${{ github.ref_name }} -> ${{ inputs.environment }}) by @${{ github.actor }}
 on:
   workflow_dispatch:
@@ -9,6 +11,7 @@ on:
         default: 'staging'
         type: choice
         options:
+          - dev
           - staging
           - production
       debug_enabled:
@@ -17,7 +20,13 @@ on:
         required: false
         default: false
 
+
 jobs:
   deploy:
-    uses: notch8/actions/.github/workflows/deploy.yaml@v1.0.10
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: false
+    uses: notch8/actions/.github/workflows/deploy.yaml@v1.0.12
     secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
