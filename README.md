@@ -150,7 +150,7 @@ Cloning into '/path/to/$PROJECT_NAME_knapsack/hyrax-webapp'...
 Submodule path 'hyrax-webapp': checked out '<KNAPSACK-SPECIFIED-HYKU-REPOSITORY-SHA>'
 ```
 
-The configuration of the submodule can be found in the `./.gitmodules` file.  During development, we've specified the submodule's branch (via `git submodule set-branch --branch <NAME> -- ./hyrax-webapp`).
+The configuration of the submodule can be found in the `./.gitmodules` file. It follows Hyku's `production` branch, so Dependabot only bumps Hyku to released code; anything sooner goes into Hyku as a hotfix first.  During development, we've specified the submodule's branch (via `git submodule set-branch --branch <NAME> -- ./hyrax-webapp`).
 
 Below is an example of our Adventist Knapsack submodule.
 
@@ -252,7 +252,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | When | What |
 | --- | --- |
 | Friday end of day | Cutoff for merges to `main`. Later work waits a week. |
-| Monday morning | Merge Dependabot's submodule bump. |
+| Monday morning, when Hyku has released | Review Dependabot's `hyrax-webapp` bump to Hyku's `production` branch: read its Hyku Bump Report comment (Hyku and Hyrax PRs, files this knapsack overrides), add any knapsack changes they need to the same PR, then merge. No bump means Hyku hasn't released. |
 | Monday by noon PT | Merge the `main` -> `staging` promotion PR, then send the client the Monday notice. |
 | Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. Follow up Wednesday morning on any without an answer. |
 | Wednesday end of day | Every `needs client review` ticket approved. A rejected or unanswered one is reverted on `main` and promoted again; unapproved work does not ship. |
