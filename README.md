@@ -232,7 +232,7 @@ When an override stands in for a fix that belongs upstream, say which upstream P
 
 ### Deploying
 
-Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. A push that passes Build Test Lint deploys its branch; the Deploy workflow's dispatch covers ad-hoc and rollback deploys.
+Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. A push that passes Build Test Lint deploys its branch through the Deploy workflow (the same shape as samvera/hyku; its run name shows the branch); dispatch Deploy by hand for ad-hoc and rollback deploys.
 
 | Branch | Environment | kubectl context | Namespace |
 | --- | --- | --- | --- |
@@ -241,7 +241,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | `production` | production | `r2-besties` | `palni-palci-knapsack-production` |
 
 - Production window: Thursdays 3-5pm Pacific. Never on a Friday.
-- Release tags are pals' own `v0.x` line, not Hyku's version; labels set the bump (a `minor-ver` PR moves `v0.2.4` to `v0.3.0`). Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; once the production deploy succeeds, the `publish-release` job in the same Build Test Lint run publishes the stable draft at the deployed commit, with no second approval. Each draft records the pinned Hyku version and SHA.
+- Release tags are pals' own `v0.x` line, not Hyku's version; labels set the bump (a `minor-ver` PR moves `v0.2.4` to `v0.3.0`). Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; once the production deploy succeeds, the `publish-release` job in the same Deploy run publishes the stable draft at the deployed commit, with no second approval. Each draft records the pinned Hyku version and SHA.
 - Production deploys wait for approval from `@notch8/hyku-knapsack-owners` on the `production` environment.
 - Before merging a promotion PR, capture the tenant regression baseline.
 - Announcement channel: **#n8-palni-palci**, the client's channel, so write for the client
