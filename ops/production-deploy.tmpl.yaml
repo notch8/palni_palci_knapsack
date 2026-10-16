@@ -433,6 +433,43 @@ extraDeploy:
             tolerations:
               {{- toYaml . | nindent 8 }}
             {{- end }}
+  # Web HPA. The chart's own autoscaling.enabled renders autoscaling/v2beta1, removed in Kubernetes 1.26, so it's defined here.
+  # A single Puma process is GVL-bound at ~1 core, i.e. ~65% of the 1500m request, so the target must sit well below that or it never triggers.
+  # maxReplicas is bounded by the pgbouncer pool (each pod holds up to RAILS_MAX_THREADS DB connections) and by node room (no cluster autoscaler on besties).
+  - |-
+      apiVersion: autoscaling/v2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: {{ include "hyrax.fullname" . }}
+        labels:
+          {{- include "hyrax.labels" . | nindent 4 }}
+      spec:
+        scaleTargetRef:
+          apiVersion: apps/v1
+          kind: Deployment
+          name: {{ include "hyrax.fullname" . }}
+        minReplicas: 5
+        maxReplicas: 8
+        metrics:
+          - type: Resource
+            resource:
+              name: cpu
+              target:
+                type: Utilization
+                averageUtilization: 50
+        behavior:
+          scaleUp:
+            stabilizationWindowSeconds: 0
+            policies:
+              - type: Pods
+                value: 2
+                periodSeconds: 60
+          scaleDown:
+            stabilizationWindowSeconds: 600
+            policies:
+              - type: Pods
+                value: 1
+                periodSeconds: 300
 
 podSecurityContext:
   runAsUser: 1001
