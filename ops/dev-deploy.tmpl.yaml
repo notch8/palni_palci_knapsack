@@ -196,6 +196,12 @@ extraEnvVars: &envVars
     value: "7"
   - name: RAILS_SERVE_STATIC_FILES
     value: "true"
+  - name: REPOSITORY_S3_STORAGE
+    value: "true"
+  - name: REPOSITORY_S3_BUCKET
+    value: palni-palci-knapsack-dev-repository-559021623471
+  - name: REPOSITORY_S3_REGION
+    value: us-west-2
   - name: REDIS_HOST
     value: palni-palci-knapsack-dev-redis-master
   - name: REDIS_URL
