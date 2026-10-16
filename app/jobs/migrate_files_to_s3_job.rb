@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-# Enqueues a MigrateFileSetToS3Job for every file set in the current tenant whose original is still
-# on disk. Run it inside the tenant (jobs enqueued from a tenant keep that tenant).
-class MigrateTenantFilesToS3Job < ApplicationJob
+# Enqueues a MigrateFileSetToS3Job for every file set whose original is still on disk.
+class MigrateFilesToS3Job < Hyrax::ApplicationJob
   queue_as { ENV.fetch('S3_MIGRATION_QUEUE', 'default') }
 
   def perform(limit: nil)
     enqueued = 0
-    Hyrax.query_service.find_all_of_model(model: Hyku::S3Migration.file_set_class).each do |file_set|
+    Hyrax.query_service.find_all_of_model(model: Hyrax::S3Migration.file_set_class).each do |file_set|
       break if limit && enqueued >= limit
       next unless on_disk?(file_set)
 

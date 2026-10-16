@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Hyku
+module Hyrax
   module S3Migration
     # The checksum Hyrax recorded for a file at characterization (FileMetadata#checksum). FITS reports
     # a bare MD5 hex string; an explicit urn:<algorithm>: prefix is also understood. Anything else

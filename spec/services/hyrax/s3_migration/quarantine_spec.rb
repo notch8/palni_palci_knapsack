@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Hyku::S3Migration::Quarantine do
+RSpec.describe Hyrax::S3Migration::Quarantine do
   let(:file_metadata) { Struct.new(:file_identifier) }
   let(:base) { Dir.mktmpdir }
   let(:content) { 'original bytes' }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Hyku
+module Hyrax
   module S3Migration
     # Copies one original file from the disk storage adapter to the S3 repository adapter and
     # switches its identifier only after the copy is verified. Never touches the disk copy.
@@ -8,15 +8,14 @@ module Hyku
     class FileMigrator
       Result = Struct.new(:status, :message, :entry, keyword_init: true)
 
-      # @param file_set [Valkyrie::Resource] a file set (Hyku::S3Migration.file_set_class)
+      # @param file_set [Valkyrie::Resource] a file set (Hyrax::S3Migration.file_set_class)
       # @param original [Hyrax::FileMetadata] the file set's original file
-      def initialize(file_set:, original:, dry_run: false, s3_storage: nil, manifest: nil, tenant: nil) # rubocop:disable Metrics/ParameterLists
+      def initialize(file_set:, original:, dry_run: false, s3_storage: nil, manifest: nil)
         @file_set = file_set
         @original = original
         @dry_run = dry_run
         @s3_storage = s3_storage || Valkyrie::StorageAdapter.find(:repository_s3)
         @manifest = manifest
-        @tenant = tenant
       end
 
       # @return [Result] status is one of :migrated, :would_migrate, :already_migrated,
@@ -94,7 +93,7 @@ module Hyku
       end
 
       def build_entry(uploaded, disk_sha256)
-        { tenant: @tenant || Site.account&.cname, file_set_id: file_set.id.to_s,
+        { file_set_id: file_set.id.to_s,
           file_metadata_id: original.id.to_s, old_id: identifier, new_id: uploaded.id.to_s,
           size: File.size(disk_path), sha256: disk_sha256, at: Time.current.utc.iso8601 }
       end

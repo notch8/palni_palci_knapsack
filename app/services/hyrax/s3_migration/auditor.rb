@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Hyku
+module Hyrax
   module S3Migration
     # Read-only check of one original file already in S3: the object must be readable, match the
     # recorded size, and match the stored checksum when one is present.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Hyku::S3Migration::Auditor do
+RSpec.describe Hyrax::S3Migration::Auditor do
   subject(:result) { described_class.new(original:, storage:).call }
 
   let(:content) { 'bytes in s3' }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe MigrateTenantFilesToS3Job do
+RSpec.describe MigrateFilesToS3Job do
   let(:file_sets) { %w[disk1 shrine disk2 none disk3].map { |id| double(id, id: Valkyrie::ID.new(id)) } }
   let(:originals) do
     {
@@ -13,7 +13,7 @@ RSpec.describe MigrateTenantFilesToS3Job do
   end
 
   before do
-    allow(Hyrax.query_service).to receive(:find_all_of_model).with(model: Hyku::S3Migration.file_set_class).and_return(file_sets)
+    allow(Hyrax.query_service).to receive(:find_all_of_model).with(model: Hyrax::S3Migration.file_set_class).and_return(file_sets)
     allow(Hyrax.custom_queries).to receive(:find_original_file) { |file_set:| originals[file_set.id.to_s] }
     allow(MigrateFileSetToS3Job).to receive(:perform_later)
   end

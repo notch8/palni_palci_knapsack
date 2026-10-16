@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Hyku::S3Migration::FileMigrator do
+RSpec.describe Hyrax::S3Migration::FileMigrator do
   let(:file_metadata) { Struct.new(:id, :file_identifier, :checksum, :original_filename, keyword_init: true) }
   let(:dir) { Dir.mktmpdir }
   let(:content) { 'original file bytes' }
@@ -16,11 +16,11 @@ RSpec.describe Hyku::S3Migration::FileMigrator do
   let(:uploaded) { Struct.new(:id).new(Valkyrie::ID.new('shrine://fs1/uuid')) }
   let(:s3_content) { content }
   let(:s3_storage) { double('s3_storage', upload: uploaded, delete: nil) }
-  let(:manifest) { instance_double(Hyku::S3Migration::Manifest, write: nil) }
+  let(:manifest) { instance_double(Hyrax::S3Migration::Manifest, write: nil) }
   let(:dry_run) { false }
 
   subject(:result) do
-    described_class.new(file_set:, original:, dry_run:, s3_storage:, manifest:, tenant: 'pitt.example.com').call
+    described_class.new(file_set:, original:, dry_run:, s3_storage:, manifest:).call
   end
 
   before do
@@ -42,7 +42,7 @@ RSpec.describe Hyku::S3Migration::FileMigrator do
       expect(Hyrax.persister).to have_received(:save).with(resource: current)
       expect(Hyrax.index_adapter).to have_received(:save).with(resource: file_set)
       expect(manifest).to have_received(:write).with(hash_including(
-                                                       tenant: 'pitt.example.com', file_set_id: 'fs1', file_metadata_id: 'fm1',
+                                                       file_set_id: 'fs1', file_metadata_id: 'fm1',
                                                        old_id: identifier, new_id: 'shrine://fs1/uuid',
                                                        size: content.bytesize, sha256: Digest::SHA256.hexdigest(content)
                                                      ))

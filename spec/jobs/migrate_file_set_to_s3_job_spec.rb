@@ -3,31 +3,31 @@
 RSpec.describe MigrateFileSetToS3Job do
   let(:file_set) { double('file_set') }
   let(:original) { double('original') }
-  let(:migrator) { instance_double(Hyku::S3Migration::FileMigrator, call: result) }
-  let(:result) { Hyku::S3Migration::FileMigrator::Result.new(status: :migrated) }
+  let(:migrator) { instance_double(Hyrax::S3Migration::FileMigrator, call: result) }
+  let(:result) { Hyrax::S3Migration::FileMigrator::Result.new(status: :migrated) }
 
   before do
     allow(Hyrax.query_service).to receive(:find_by).with(id: 'fs1').and_return(file_set)
     allow(Hyrax.custom_queries).to receive(:find_original_file).with(file_set:).and_return(original)
-    allow(Hyku::S3Migration::FileMigrator).to receive(:new).and_return(migrator)
+    allow(Hyrax::S3Migration::FileMigrator).to receive(:new).and_return(migrator)
   end
 
   it 'runs the migrator for the file set and returns its result' do
     expect(described_class.perform_now('fs1')).to eq result
-    expect(Hyku::S3Migration::FileMigrator).to have_received(:new).with(file_set:, original:, dry_run: false)
+    expect(Hyrax::S3Migration::FileMigrator).to have_received(:new).with(file_set:, original:, dry_run: false)
   end
 
   it 'passes dry_run through' do
     described_class.perform_now('fs1', dry_run: true)
 
-    expect(Hyku::S3Migration::FileMigrator).to have_received(:new).with(file_set:, original:, dry_run: true)
+    expect(Hyrax::S3Migration::FileMigrator).to have_received(:new).with(file_set:, original:, dry_run: true)
   end
 
   it 'does nothing when the file set has no original file' do
     allow(Hyrax.custom_queries).to receive(:find_original_file).with(file_set:).and_return(nil)
 
     expect(described_class.perform_now('fs1')).to be_nil
-    expect(Hyku::S3Migration::FileMigrator).not_to have_received(:new)
+    expect(Hyrax::S3Migration::FileMigrator).not_to have_received(:new)
   end
 
   it 'skips file sets that no longer exist' do

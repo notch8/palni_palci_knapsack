@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module Hyku
+module Hyrax
   module S3Migration
     # Handles the disk copy of one manifest entry after migration: move it into <storage>/.quarantine
     # (a rename on the same volume), restore it, and later purge old quarantined files.
-    # Callers switch to the entry's tenant first. All actions are dry runs unless apply: true.
+    # All actions are dry runs unless apply: true.
     class Quarantine
       DIRECTORY = '.quarantine'
 
