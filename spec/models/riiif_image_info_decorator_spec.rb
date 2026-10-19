@@ -5,7 +5,7 @@ RSpec.describe RiiifImageInfoDecorator do
   let(:path) { File.join(dir, 'oriented.jpg') }
   let(:orientation) { 6 }
   let(:autorotate) { true }
-  let(:file) { Riiif::File.new(path) }
+  let(:file) { Riiif::File.new(path, id: 'id') }
   let(:image) { Riiif::Image.new('id', file) }
 
   before do
