@@ -5,9 +5,10 @@ module Hyku
     # Runs a block inside each tenant (or the given ones, by cname), skipping search-only accounts.
     # A failure in one tenant is reported to on_error and the loop carries on.
     #
-    # Switching a tenant takes two steps: Apartment switches the database schema (where Valkyrie
-    # resources live), and Account#switch points Solr, Fedora and Redis at the tenant. Either one alone
-    # leaves queries or indexing aimed at the wrong tenant.
+    # Stopgap for the pinned Hyku, whose tenantize:task only repoints Solr/Fedora/Redis and leaves the
+    # default database schema active. Apartment's switch also repoints those endpoints, through the
+    # :switch callback in config/initializers/apartment.rb. Delete this and use tenantize:task once the
+    # Hyku pin includes samvera/hyku#3393.
     module Tenants
       # @return [Array<String>] cnames of tenants that raised
       def self.each(tenants: [], on_error: ->(_account, _error) {})
@@ -16,7 +17,7 @@ module Hyku
         accounts.find_each do |account|
           next if skip?(account)
 
-          Apartment::Tenant.switch(account.tenant) { account.switch { yield account } }
+          Apartment::Tenant.switch(account.tenant) { yield account }
         rescue StandardError => e
           on_error.call(account, e)
           failed << account.cname

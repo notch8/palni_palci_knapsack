@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 # Runs Hyrax's S3 migration tasks (hyrax:migrate:files_to_s3 and friends) once per tenant.
-# Limit to some tenants with tenants="a.example.com b.example.com". See docs/migrating-files-to-s3.md.
+# Limit to some tenants with tenants="a.example.com b.example.com".
+# Stopgap for the pinned Hyku's tenantize:task, which does not switch the database schema; once the Hyku pin
+# includes samvera/hyku#3393, delete this and run `rake "tenantize:task[hyrax:migrate:files_to_s3]"` instead.
 namespace :hyku do
   namespace :s3_migration do
     %w[files_to_s3 verify_s3_files report_file_storage quarantine_disk_files rollback_s3_migration purge_quarantine].each do |name|

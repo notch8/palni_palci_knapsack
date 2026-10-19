@@ -4,17 +4,19 @@ RSpec.describe Hyku::S3Migration::Tenants do
   let(:accounts) { [account('one'), account('search'), account('two')] }
   let(:relation) { double('relation') }
   let(:switched) { [] }
+  let(:seen) { [] }
 
   def account(name)
-    acct = double(name, name:, cname: "#{name}.example.com", tenant: "#{name}-schema")
-    allow(acct).to receive(:switch) { |&block| switched << [:endpoints, name]; block.call } # rubocop:disable Style/Semicolon
-    acct
+    double(name, name:, cname: "#{name}.example.com", tenant: "#{name}-schema")
   end
 
   before do
     allow(relation).to receive(:find_each) { |&block| accounts.each(&block) }
     allow(Account).to receive_messages(all: relation, where: relation)
-    allow(Apartment::Tenant).to receive(:switch) { |tenant, &block| switched << [:schema, tenant]; block.call } # rubocop:disable Style/Semicolon
+    allow(Apartment::Tenant).to receive(:switch) do |tenant, &block|
+      switched << tenant
+      block.call
+    end
   end
 
   it 'visits every tenant except the search account' do
@@ -25,14 +27,14 @@ RSpec.describe Hyku::S3Migration::Tenants do
     expect(visited).to eq %w[one.example.com two.example.com]
   end
 
-  it 'switches both the database schema and the Solr/Fedora/Redis endpoints' do
-    described_class.each(tenants: []) { |_acct| nil }
+  it 'switches into each tenant with Apartment' do
+    described_class.each { |acct| seen << acct.cname }
 
-    expect(switched).to eq [[:schema, 'one-schema'], [:endpoints, 'one'], [:schema, 'two-schema'], [:endpoints, 'two']]
+    expect(switched).to eq %w[one-schema two-schema]
   end
 
   it 'limits to the given tenants' do
-    described_class.each(tenants: ['one.example.com']) { |_acct| nil }
+    described_class.each(tenants: ['one.example.com']) { |acct| seen << acct.cname }
 
     expect(Account).to have_received(:where).with(cname: ['one.example.com'])
   end
