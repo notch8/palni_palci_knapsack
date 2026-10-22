@@ -75,8 +75,10 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
   config.include ActiveJob::TestHelper
 
-  config.before do
-    DatabaseCleaner.strategy = :transaction
+  # :truncation opts in a spec that spawns real threads, since a thread's own DB connection
+  # can't see data from the main thread's open transaction
+  config.before do |example|
+    DatabaseCleaner.strategy = example.metadata[:truncation] ? :truncation : :transaction
     DatabaseCleaner.start
   end
 
