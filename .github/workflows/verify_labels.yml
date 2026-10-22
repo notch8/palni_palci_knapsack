@@ -15,4 +15,4 @@ permissions:
 
 jobs:
   check_pr_labels:
-    uses: notch8/actions/.github/workflows/verify-labels.yaml@v1.0.15
+    uses: notch8/actions/.github/workflows/verify-labels.yaml@v1.0.16
