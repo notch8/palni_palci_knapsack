@@ -213,6 +213,12 @@ extraEnvVars: &envVars
     value: palni-palci-knapsack-production-redis-master
   - name: REDIS_URL
     value: redis://:$REDIS_PASSWORD@palni-palci-knapsack-production-redis-master:6379/0
+  - name: REPOSITORY_S3_STORAGE
+    value: "true"
+  - name: REPOSITORY_S3_BUCKET
+    value: palni-palci-knapsack-production-repository-559021623471
+  - name: REPOSITORY_S3_REGION
+    value: us-west-2
   - name: SECRET_KEY_BASE
     value: $SECRET_KEY_BASE
   - name: SENTRY_DSN
