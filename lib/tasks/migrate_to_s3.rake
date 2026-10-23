@@ -17,6 +17,13 @@ namespace :hyrax do
       abort 'Set up the :repository_s3 Valkyrie storage adapter first (see documentation/migrating-files-to-s3.md).' unless Valkyrie::StorageAdapter.storage_adapters.key?(:repository_s3)
     end
 
+    def s3_migration_require_storage!
+      s3_migration_require_s3!
+      Hyrax::S3Migration::SourceStorage.adapter
+    rescue Hyrax::S3Migration::SourceStorage::Unsupported => e
+      abort e.message
+    end
+
     def s3_migration_each_original(counts, &)
       progress = Hyrax::S3Migration::Progress.new(detail: -> { counts.map { |status, count| "#{status}: #{count}" }.join('  ') })
       on_error = lambda do |file_set, error|
@@ -52,14 +59,14 @@ namespace :hyrax do
     end
 
     desc <<~DESC
-      Move disk-stored original files (disk:// ids) to the :repository_s3 storage adapter. By default this
+      Move original files from the plain disk storage adapter (disk:// ids) to the :repository_s3 adapter. By default this
       enqueues jobs (one per file set; set S3_MIGRATION_QUEUE to use a dedicated queue). Each upload is
       verified by SHA-256 read-back, and against the stored characterization checksum, before the identifier
       is switched; the disk copy is never touched.
       Env: DRY_RUN=true runs inline and only reports; INLINE=true runs inline for real; LIMIT=<n> files.
     DESC
     task files_to_s3: :environment do
-      s3_migration_require_s3!
+      s3_migration_require_storage!
       dry_run = s3_migration_flag('DRY_RUN')
 
       if dry_run || s3_migration_flag('INLINE')
@@ -98,6 +105,53 @@ namespace :hyrax do
       Hyrax::S3Migration::StorageReport.call(progress: Hyrax::S3Migration::Progress.new).sort.each do |(use, scheme), (count, bytes)|
         puts "#{use} | #{scheme} | #{count} | #{(bytes / 1e9).round(2)}"
       end
+    end
+
+    def s3_migration_run_quarantine(label, action)
+      counts = Hash.new(0)
+      progress = Hyrax::S3Migration::Progress.new(detail: -> { counts.map { |status, count| "#{status}: #{count}" }.join('  ') })
+      Hyrax::S3Migration::Manifest.new.each_entry do |entry|
+        progress.tick
+        quarantine = Hyrax::S3Migration::Quarantine.new(entry, apply: s3_migration_flag('APPLY'),
+                                                               verify_sha: s3_migration_flag('VERIFY_SHA', default: 'true'))
+        status = quarantine.public_send(action)
+        counts[status] += 1
+        puts "  #{label} #{entry[:file_set_id]}" if %i[quarantined rolled_back].include?(status)
+      rescue StandardError => e
+        counts[:error] += 1
+        puts "  ERROR #{entry[:file_set_id]} - #{e.class}: #{e.message}"
+      end
+      puts "\n#{counts.map { |status, count| "#{status}: #{count}" }.join('  ')}".strip
+      puts 'No manifest entries found.' if counts.empty?
+    end
+
+    desc <<~DESC
+      Move the disk copies of manifested files to <storage>/.quarantine after re-checking the database
+      and the S3 object against the manifest. Dry run unless APPLY=true. VERIFY_SHA=false skips the hash.
+    DESC
+    task quarantine_disk_files: :environment do
+      s3_migration_require_storage!
+      puts "[DRY RUN] Nothing will be moved. Set APPLY=true to move.\n\n" unless s3_migration_flag('APPLY')
+      s3_migration_run_quarantine('Quarantine', :quarantine)
+    end
+
+    desc 'Undo a migration from the manifest (restores the disk copy and id). Dry run unless APPLY=true.'
+    task rollback_s3_migration: :environment do
+      s3_migration_require_storage!
+      puts "[DRY RUN] Nothing will change. Set APPLY=true to roll back.\n\n" unless s3_migration_flag('APPLY')
+      s3_migration_run_quarantine('Rolling back', :rollback)
+    end
+
+    desc 'Permanently delete the quarantined copies of manifested files older than MIN_AGE_DAYS (default 14). Dry run unless APPLY=true.'
+    task purge_quarantine: :environment do
+      s3_migration_require_storage!
+      apply = s3_migration_flag('APPLY')
+      puts "[DRY RUN] Nothing will be deleted. Set APPLY=true to delete.\n\n" unless apply
+      min_age_days = Float(ENV.fetch('MIN_AGE_DAYS', '14'), exception: false)
+      abort "MIN_AGE_DAYS must be a positive number, got #{ENV['MIN_AGE_DAYS'].inspect}." unless min_age_days&.positive? && min_age_days.finite?
+
+      purged, kept = Hyrax::S3Migration::Quarantine.purge(apply:, min_age: min_age_days.days)
+      puts "#{apply ? 'Deleted' : 'Would delete'}: #{purged}  Too recent: #{kept}"
     end
   end
 end
