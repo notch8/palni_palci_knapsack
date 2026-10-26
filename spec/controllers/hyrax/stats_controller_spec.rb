@@ -23,7 +23,7 @@ RSpec.describe Hyrax::StatsController, type: :controller do
         let(:error) { error_class.new(google_message) }
 
         it 'renders the page with the matching notice and hides the Google message' do
-          get action, params: { id: id }
+          get action, params: { id: }
 
           expect(response).to be_successful
           expect(response).to render_template("stats/#{action}")
@@ -49,7 +49,7 @@ RSpec.describe Hyrax::StatsController, type: :controller do
       let(:error) { Google::Cloud::PermissionDeniedError.new(google_message) }
 
       it 'shows zeroed totals' do
-        get :file, params: { id: id }
+        get :file, params: { id: }
 
         expect(assigns(:stats).total_pageviews).to eq 0
         expect(assigns(:stats).total_downloads).to eq 0
@@ -70,7 +70,7 @@ RSpec.describe Hyrax::StatsController, type: :controller do
       let(:error) { Google::Cloud::PermissionDeniedError.new(google_message) }
 
       it 'shows zeroed totals' do
-        get :work, params: { id: id }
+        get :work, params: { id: }
 
         expect(assigns(:pageviews).all).to eq 0
         expect(assigns(:downloads).all).to eq 0
