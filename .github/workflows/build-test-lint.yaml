@@ -49,7 +49,7 @@ jobs:
   reports:
     if: always()
     needs: [test, lint]
-    uses: notch8/actions/.github/workflows/report.yaml@v1.0.16
+    uses: notch8/actions/.github/workflows/report.yaml@v1.0.11
 
   # Deploying from this run (not a separate workflow_run-triggered Deploy) keeps the run on the
   # pushed commit: GitHub shows a workflow_run's SHA and branch as the default branch's.
