@@ -10,8 +10,8 @@
 <%= content_tag :h1, @file_set, class: "lower" %>
 
 <%# HYRAX-BACKPORT: samvera/hyrax#7676 %>
-<%# Temporary hotfix; delete this file once the Hyku pin includes the merged upstream fix. Only change from Hyrax 1489c95 is the analytics_error render below. %>
-<%= render "hyrax/admin/analytics/analytics_error" %>
+<%# Temporary hotfix; delete this file once the Hyku pin includes the merged upstream fix. Only change from Hyrax 1489c95 is the analytics_notice render below. %>
+<%= render "hyrax/stats/analytics_notice" %>
 
 <div class="row">
   <div class="col-sm-12">

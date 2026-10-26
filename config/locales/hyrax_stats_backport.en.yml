@@ -1,0 +1,6 @@
+# HYRAX-BACKPORT: samvera/hyrax#7676
+# Temporary hotfix; delete this file once the Hyku pin includes the merged upstream fix.
+en:
+  hyrax:
+    stats:
+      analytics_unavailable: Analytics data is not currently available.
