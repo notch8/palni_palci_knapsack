@@ -22,7 +22,7 @@ module Hyrax
       Rails.logger.error "Analytics error: #{exception.message}"
       @analytics_error = analytics_error_details(exception)
       if action_name == 'file'
-        @stats = Hyrax::FileUsage.new(params[:id]).tap(&:without_analytics)
+        (@stats ||= Hyrax::FileUsage.new(params[:id])).without_analytics
       else
         @document ||= ::SolrDocument.find(params[:id])
         @pageviews = @downloads = Hyrax::Analytics::Results.new([])
@@ -36,8 +36,7 @@ module Hyrax
       { title: I18n.t('title', scope:),
         message: I18n.t('message', scope:),
         troubleshooting_steps: Array.wrap(I18n.t('troubleshooting_steps', scope:)),
-        documentation_url: I18n.t('documentation_url', scope:),
-        details: exception.message }
+        documentation_url: I18n.t('documentation_url', scope:) }
     end
   end
 end
