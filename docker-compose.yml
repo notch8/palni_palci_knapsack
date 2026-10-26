@@ -52,6 +52,7 @@ services:
       service: zoo
 
   solr:
+    image: ghcr.io/notch8/palni_palci_knapsack/solr:${TAG:-latest}
     extends:
       file: hyrax-webapp/docker-compose.yml
       service: solr
