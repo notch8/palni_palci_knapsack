@@ -12,6 +12,7 @@ RSpec.describe Hyku::EachTenant do
 
   before do
     allow(relation).to receive(:find_each) { |&block| accounts.each(&block) }
+    allow(relation).to receive(:distinct).and_return(relation)
     allow(Account).to receive_messages(all: relation, tenants: relation)
     allow(Apartment::Tenant).to receive(:switch) do |tenant, &block|
       switched << tenant
@@ -37,6 +38,18 @@ RSpec.describe Hyku::EachTenant do
     described_class.call(tenants: ['one.example.com']) { |acct| seen << acct.cname }
 
     expect(Account).to have_received(:tenants).with(['one.example.com'])
+  end
+
+  it 'runs a tenant once when two of its aliases are named' do
+    joined = double('joined')
+    deduped = double('deduped')
+    allow(Account).to receive(:tenants).and_return(joined)
+    allow(joined).to receive(:distinct).and_return(deduped)
+    allow(deduped).to receive(:find_each) { |&block| [accounts.first].each(&block) }
+
+    described_class.call(tenants: ['one.example.com', 'one-alias.example.com']) { |acct| seen << acct.cname }
+
+    expect(seen).to eq ['one.example.com']
   end
 
   context 'when tenants are required' do
