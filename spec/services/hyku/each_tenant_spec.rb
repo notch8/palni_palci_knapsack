@@ -12,6 +12,7 @@ RSpec.describe Hyku::EachTenant do
 
   before do
     allow(relation).to receive(:find_each) { |&block| accounts.each(&block) }
+    allow(relation).to receive(:distinct).and_return(relation)
     allow(Account).to receive_messages(all: relation, tenants: relation)
     allow(Apartment::Tenant).to receive(:switch) do |tenant, &block|
       switched << tenant
@@ -33,10 +34,11 @@ RSpec.describe Hyku::EachTenant do
     expect(switched).to eq %w[one-schema two-schema]
   end
 
-  it 'limits to the given tenants' do
+  it 'limits to the given tenants, once each even when two of their aliases are named' do
     described_class.call(tenants: ['one.example.com']) { |acct| seen << acct.cname }
 
     expect(Account).to have_received(:tenants).with(['one.example.com'])
+    expect(relation).to have_received(:distinct)
   end
 
   context 'when tenants are required' do

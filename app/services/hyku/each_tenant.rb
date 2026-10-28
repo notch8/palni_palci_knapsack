@@ -16,7 +16,7 @@ module Hyku
     def self.call(tenants: [], require_tenants: false, on_error: ->(_account, _error) {})
       raise TenantsRequired, 'name the tenants to run on' if require_tenants && tenants.blank?
 
-      accounts = tenants.present? ? Account.tenants(tenants) : Account.all
+      accounts = tenants.present? ? Account.tenants(tenants).distinct : Account.all
       failed = []
       accounts.find_each do |account|
         next if skip?(account)

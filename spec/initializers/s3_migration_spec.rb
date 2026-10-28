@@ -7,9 +7,9 @@ RSpec.describe 'S3Migration tenant scope' do
     expect(S3Migration.scope).to eq 'one.example.com'
   end
 
-  it 'has no scope outside a tenant' do
+  it 'refuses outside a tenant, where an unscoped purge would reach every tenant' do
     allow(Site).to receive(:account).and_return(nil)
 
-    expect(S3Migration.scope).to be_nil
+    expect { S3Migration.scope }.to raise_error(ArgumentError, /inside a tenant/)
   end
 end
