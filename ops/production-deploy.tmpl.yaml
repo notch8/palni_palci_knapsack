@@ -113,6 +113,8 @@ extraEnvVars: &envVars
     value: rest
   - name: FCREPO_URL
     value: http://palsfcrepo.palni-palci-production:8080/
+  - name: GOOD_JOB_MAX_THREADS
+    value: "5"
   - name: GOOGLE_ANALYTICS_ID
     value: $GOOGLE_ANALYTICS_ID
   - name: GOOGLE_ANALYTICS_PROPERTY_ID
