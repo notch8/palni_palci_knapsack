@@ -290,6 +290,17 @@ bundle exec rails generate hyku_knapsack:work_resource WorkType
 ```
 Replace `WorkType` with the desired name for your new work type. The generator will create the necessary model, controller, form, indexer, and view files in the appropriate directories within the knapsack.
 
+## Moving original files to S3
+
+The [s3_migration](https://github.com/samvera-labs/s3_migration) gem moves original files from EFS to S3; its docs cover the bucket, the adapter and each step. In this app `hyku:s3_migration:<step>` runs a step once per tenant (steps: `report`, `verify`, `migrate`, `quarantine`, `rollback`, `purge`), and `config/initializers/s3_migration.rb` keeps each tenant's manifest under its own cname.
+
+Go one step at a time and check the result before the next. `report` and `verify` are read-only and run on every tenant by default. `migrate`, `quarantine`, `rollback` and `purge` change data and abort unless you name tenants, so do one tenant, check it, then the next:
+
+```bash
+bundle exec rake hyku:s3_migration:report
+DRY_RUN=true tenants="a.example.com" bundle exec rake hyku:s3_migration:migrate
+```
+
 ## Converting a Fork of Hyku Prime to a Knapsack
 
 Prior to Hyku Knapsack, organizations would likely clone [Hyku](https://github.com/samvera/hyku) and begin changing the code to reflect their specific needs.  The result was that the clone would often drift away from Samvera Hyku version.  This drift created challenges in reconciling what you had changed locally as well as how you could easily contribute some of your changes upstream to Samvera's Hyku.
