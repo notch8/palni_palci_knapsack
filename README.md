@@ -150,7 +150,7 @@ Cloning into '/path/to/$PROJECT_NAME_knapsack/hyrax-webapp'...
 Submodule path 'hyrax-webapp': checked out '<KNAPSACK-SPECIFIED-HYKU-REPOSITORY-SHA>'
 ```
 
-The configuration of the submodule can be found in the `./.gitmodules` file.  During development, we've specified the submodule's branch (via `git submodule set-branch --branch <NAME> -- ./hyrax-webapp`).
+The configuration of the submodule can be found in the `./.gitmodules` file. It follows Hyku's `production` branch, so Dependabot only bumps Hyku to released code; anything sooner goes into Hyku as a hotfix first.  During development, we've specified the submodule's branch (via `git submodule set-branch --branch <NAME> -- ./hyrax-webapp`).
 
 Below is an example of our Adventist Knapsack submodule.
 
@@ -168,7 +168,7 @@ When you want to bring down an updated version of your Hyku submodule, use the f
 > git submodule update --remote
 ```
 
-This will checkout the submodule to the HEAD of the specified branch.
+This will checkout the submodule to the HEAD of the specified branch, which is Hyku's `production` (its latest release). Do it in a PR, like any other Hyku bump, so the Hyku Bump Report runs.
 
 ### 🚀 Getting Started with Stack Car
 
@@ -228,9 +228,11 @@ Adding decorators to override features is fairly simple. We do recommend some [b
 
 Any file with `_decorator.rb` in the app or lib directory will automatically be loaded along with any classes in the app directory.
 
+When an override stands in for a fix that belongs upstream, say which upstream PR or issue it waits on in its `OVERRIDE` comment, e.g. `# OVERRIDE ... remove once Hyku includes samvera/hyku#3358`. The Hyku Bump Report lists such overrides when a bump brings that fix in, so they get removed instead of outliving it.
+
 ### Deploying
 
-Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. A push that passes Build Test Lint deploys its branch; the Deploy workflow's dispatch covers ad-hoc and rollback deploys.
+Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. A push that passes Build Test Lint deploys its branch through the Deploy workflow (the same shape as samvera/hyku; its run name shows the branch); dispatch Deploy by hand for ad-hoc and rollback deploys.
 
 | Branch | Environment | kubectl context | Namespace |
 | --- | --- | --- | --- |
@@ -239,7 +241,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | `production` | production | `r2-besties` | `palni-palci-knapsack-production` |
 
 - Production window: Thursdays 3-5pm Pacific. Never on a Friday.
-- Release tags are pals' own `v0.x` line, not Hyku's version; labels set the bump (a `minor-ver` PR moves `v0.2.4` to `v0.3.0`). Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; after a verified production deploy, approving the `publish-release` job in the production Build Test Lint run publishes the stable draft at the deployed commit. Each draft records the pinned Hyku version and SHA.
+- Release tags are pals' own `v0.x` line, not Hyku's version; labels set the bump (a `minor-ver` PR moves `v0.2.4` to `v0.3.0`). Pushes to `staging` and `production` draft `v<next>-rc` and `v<next>`; once the production deploy succeeds, the `publish-release` job in the same Deploy run publishes the stable draft at the deployed commit, with no second approval. Each draft records the pinned Hyku version and SHA.
 - Production deploys wait for approval from `@notch8/hyku-knapsack-owners` on the `production` environment.
 - Before merging a promotion PR, capture the tenant regression baseline.
 - Announcement channel: **#n8-palni-palci**, the client's channel, so write for the client
@@ -252,7 +254,7 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 | When | What |
 | --- | --- |
 | Friday end of day | Cutoff for merges to `main`. Later work waits a week. |
-| Monday morning | Merge Dependabot's submodule bump. |
+| Monday morning, when Hyku has released | Review Dependabot's `hyrax-webapp` bump to Hyku's `production` branch: read its Hyku Bump Report comment (Hyku, Hyrax and gem changes, files this knapsack overrides, and overrides the bump may make unnecessary), add any knapsack changes they need to the same PR, then merge. No bump means Hyku hasn't released. |
 | Monday by noon PT | Merge the `main` -> `staging` promotion PR, then send the client the Monday notice. |
 | Monday to Wednesday | Client reviews tickets labelled `needs client review` on staging. Follow up Wednesday morning on any without an answer. |
 | Wednesday end of day | Every `needs client review` ticket approved. A rejected or unanswered one is reverted on `main` and promoted again; unapproved work does not ship. |
