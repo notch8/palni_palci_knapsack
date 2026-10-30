@@ -6,16 +6,15 @@
 # check it, then the next. report and verify are read-only and default to every tenant.
 # Once the Hyku pin includes samvera/hyku#3393, `rake "tenantize:task[s3_migration:report]"` does the same.
 # The gem's own s3_migration:* tasks run in no tenant, so they abort here.
+all_steps = %w[migrate verify report quarantine rollback purge].freeze
+
 namespace :hyku do
   namespace :s3_migration do
     named_tenants_only = %w[migrate quarantine rollback purge].freeze
-    all_steps = %w[migrate verify report quarantine rollback purge].freeze
 
     task :refuse_untenanted do
       abort 'Run these per tenant: rake hyku:s3_migration:<step> tenants="a.example.com"'
     end
-
-    all_steps.each { |name| task("rake:s3_migration:#{name}" => 'hyku:s3_migration:refuse_untenanted') }
 
     all_steps.each do |name|
       desc "Run s3_migration:#{name} in each tenant (tenants=\"a.example.com b.example.com\" " \
@@ -36,3 +35,5 @@ namespace :hyku do
     end
   end
 end
+
+all_steps.each { |name| task("s3_migration:#{name}" => 'hyku:s3_migration:refuse_untenanted') }
