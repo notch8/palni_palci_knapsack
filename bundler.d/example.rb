@@ -9,5 +9,5 @@
 ensure_gem "sentry-ruby"
 ensure_gem "sentry-rails"
 ensure_gem "cancancan", "~> 3.0" # cancancan is bundling to v1.17.0 but we need at least 3.0
-ensure_gem 's3_migration', '~> 0.1.0' # utility gem for moving from EFS to S3 for storage
+ensure_gem 's3_migration', '~> 0.1.1' # utility gem for moving from EFS to S3 for storage
 override_gem "willow_sword", github: "notch8/willow_sword", tag: "v0.9.1"
