@@ -3,7 +3,7 @@ name: "Deploy"
 # it tested once it passes. A push to main deploys dev, staging deploys staging, production deploys
 # production (after the environment's approval) and then publishes the release. Run it by hand to
 # deploy a branch or tag ad hoc, or to roll back.
-run-name: Deploy (${{ github.event.workflow_run.head_branch || github.ref_name }} -> ${{ inputs.environment || (github.event.workflow_run.head_branch == 'main' && 'dev') || github.event.workflow_run.head_branch }}) by @${{ github.actor }}
+run-name: Deploy (${{ github.event.workflow_run.head_branch || github.ref_name }} -> ${{ inputs.environment || (github.event.workflow_run.head_branch == 'main' && 'dev') || github.event.workflow_run.head_branch }}) ${{ github.event.workflow_run.head_sha || github.sha }} by @${{ github.actor }}
 on:
   workflow_run:
     workflows: ["Build Test Lint"]
@@ -60,7 +60,7 @@ jobs:
     concurrency:
       group: deploy-${{ needs.determine-environment.outputs.environment }}
       cancel-in-progress: false
-    uses: notch8/actions/.github/workflows/deploy.yaml@v1.0.15
+    uses: notch8/actions/.github/workflows/deploy.yaml@v1.0.16
     secrets: inherit
     with:
       environment: ${{ needs.determine-environment.outputs.environment }}
@@ -73,7 +73,7 @@ jobs:
     permissions:
       actions: read
       contents: write
-    uses: notch8/actions/.github/workflows/publish-release.yaml@v1.0.15
+    uses: notch8/actions/.github/workflows/publish-release.yaml@v1.0.16
     with:
       sha: ${{ github.event.workflow_run.head_sha }}
       deploy-run-id: ${{ github.run_id }}
