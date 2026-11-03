@@ -2,7 +2,7 @@
 
 RSpec.describe Hyrax::RiiifFileResolverDecorator do
   let(:dir) { Dir.mktmpdir }
-  let(:now) { Time.current }
+  let(:now) { Time.now }
   let(:uuid) { SecureRandom.uuid }
   let(:old_copy) { File.join(dir, "#{uuid}-shrine___fs1_abc") }
   let(:new_copy) { File.join(dir, "#{SecureRandom.uuid}-shrine___fs2_def") }
