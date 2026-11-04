@@ -58,4 +58,14 @@ RSpec.describe Hyrax::RiiifFileResolverDecorator do
       expect(described_class).to have_received(:sweep_tmp_copies)
     end
   end
+
+  describe '#find' do
+    it 'refreshes the mtime of a cached copy so the sweep keeps it' do
+      allow(Riiif::Image.cache).to receive(:fetch).and_return(old_copy)
+
+      Hyrax::RiiifFileResolver.new.find('fs1/files/abc')
+
+      expect(File.mtime(old_copy)).to be > now - described_class::TMP_COPY_TTL
+    end
+  end
 end
