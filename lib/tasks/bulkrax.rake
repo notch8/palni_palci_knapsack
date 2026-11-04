@@ -21,3 +21,19 @@ namespace :bulkrax do
     end
   end
 end
+
+namespace :bulkrax do
+  desc 'Remove generated: true from descriptive fields in saved tenant mappings (DRY_RUN=true to preview)'
+  task ungenerate_descriptive_fields: :environment do
+    dry_run = ENV['DRY_RUN'] == 'true'
+    Account.find_each do |account|
+      next if account.name == 'search'
+
+      changed = HykuKnapsack::BulkraxGeneratedFlagRemover.new(account, dry_run:).call
+      verb = dry_run ? 'would update' : 'updated'
+      puts changed.any? ? "#{account.name}: #{verb} #{changed.join(', ')}" : "#{account.name}: no change"
+    rescue StandardError => e
+      puts "#{account.name}: failed (#{e.class}: #{e.message})"
+    end
+  end
+end
