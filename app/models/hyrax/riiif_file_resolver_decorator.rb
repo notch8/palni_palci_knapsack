@@ -33,6 +33,14 @@ module Hyrax
       @last_sweep = nil
     end
 
+    def find(id)
+      super.tap do |file|
+        FileUtils.touch(file.path)
+      rescue Errno::ENOENT
+        nil
+      end
+    end
+
     private
 
     def load_file(id)
