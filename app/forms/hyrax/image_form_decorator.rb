@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyrax 5.3.0 Hyrax::ImageForm terms: add admin note and the PALS fields to the ActiveFedora image form.
+#   No longer used; remove in a follow-up to #820.
 # Wrapped in module for Zeitwerk; config runs when file is loaded.
 module Hyrax
   module ImageFormDecorator
