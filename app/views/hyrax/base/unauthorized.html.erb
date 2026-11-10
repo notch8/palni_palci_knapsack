@@ -1,3 +1,5 @@
+<%# OVERRIDE Hyrax 5.3.0 hyrax/base/unauthorized: add a re-authorize link. %>
+<%#   Client-specific, keep. %>
 <h1><%= t('.unauthorized') %></h1>
 <% if respond_to?(:curation_concern) && curation_concern %>
   <p><%= t('.is_private', type: curation_concern.human_readable_type.downcase ) %><p>
