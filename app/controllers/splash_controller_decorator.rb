@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyku v7.1.0 SplashController#index: load each public tenant's directory image and alt text for the PALS splash page.
+#   Client-specific, keep.
 module SplashControllerDecorator
   def index
     @accounts = Account.where('is_public = ?', true).order(cname: :asc)

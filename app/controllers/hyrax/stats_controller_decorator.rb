@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 require 'google/cloud/errors'
 
+# OVERRIDE Hyrax 5.3.0 Hyrax::StatsController#file, #work: render stats pages when Google Analytics errors.
+#   Remove once samvera/hyrax#7676 is released.
 # HYRAX-BACKPORT: samvera/hyrax#7676 (find every piece with `git grep -l HYRAX-BACKPORT`)
-# Delete once the Hyku pin includes the merged fix: rescues Google errors on the stats pages.
 module Hyrax
   module StatsControllerDecorator
     extend ActiveSupport::Concern
