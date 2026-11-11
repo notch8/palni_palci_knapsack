@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Backport of samvera/hyku#3331 - remove once the hyrax-webapp pin includes it.
+# HYKU-BACKPORT: samvera/hyku#3331 - remove once the hyrax-webapp pin includes it.
 namespace :hyku do
   desc "Delete redundant zero-count rows from the stats cache tables (FileViewStat, FileDownloadStat, " \
        "WorkViewStat) across all tenants, keeping the newest zero row per object (Hyrax::StatsPruner, " \
