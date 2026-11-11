@@ -50,9 +50,16 @@ RSpec.describe 'hyku:prune_zero_stats' do
     expect(Apartment::Tenant).to have_received(:switch).with('public')
   end
 
-  it 'lets a tenant failure abort the run' do
-    allow(Hyrax::StatsPruner).to receive(:call).and_raise(ActiveRecord::StatementInvalid, 'boom')
+  it 'keeps going after a tenant fails, then exits non-zero naming it' do
+    other = instance_double(Account, tenant: 'public', cname: 'other.test')
+    allow(Account).to receive(:find_each).and_yield(account).and_yield(other)
+    calls = 0
+    allow(Hyrax::StatsPruner).to receive(:call) do
+      calls += 1
+      raise ActiveRecord::StatementInvalid, 'boom' if calls == 1
+    end
 
-    expect { invoke }.to raise_error(ActiveRecord::StatementInvalid, /boom/)
+    expect { invoke }.to raise_error(SystemExit).and output(/failed for: example.test/).to_stderr
+    expect(calls).to eq(4)
   end
 end
