@@ -441,6 +441,73 @@ extraDeploy:
             tolerations:
               {{- toYaml . | nindent 8 }}
             {{- end }}
+  - |-
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: {{ include "hyrax.fullname" . }}-uploads-trim
+        labels:
+          {{- include "hyrax.labels" . | nindent 4 }}
+      spec:
+        schedule: "0 8 * * 0"
+        concurrencyPolicy: Forbid
+        successfulJobsHistoryLimit: 3
+        failedJobsHistoryLimit: 3
+        jobTemplate:
+          spec:
+            backoffLimit: 0
+            template:
+              spec:
+                restartPolicy: Never
+                {{- with .Values.imagePullSecrets }}
+                imagePullSecrets:
+                  {{- toYaml . | nindent 14 }}
+                {{- end }}
+                securityContext:
+                  runAsUser: 1001
+                  runAsGroup: 101
+                containers:
+                  - name: uploads-trim
+                    image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}"
+                    imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+                    command: ["sh", "/app/samvera/ops/uploads-trim.sh"]
+                    env:
+                      # Report only until reviewed: set DRY_RUN to "false" to delete.
+                      - name: DRY_RUN
+                        value: "true"
+                      - name: FILE_CACHE_DIR
+                        value: /trim/file_cache
+                      - name: FILE_CACHE_DAYS
+                        value: "30"
+                      # Unset = skip. Bulkrax runs deleted when nothing in them changed for N days.
+                      - name: EXPORTS_DIR
+                        value: /trim/exports
+                      - name: IMPORTS_DIR
+                        value: /trim/imports
+                    resources:
+                      requests:
+                        cpu: 250m
+                        memory: 256Mi
+                      limits:
+                        memory: 512Mi
+                    volumeMounts:
+                      - name: uploads
+                        subPath: file_cache
+                        mountPath: /trim/file_cache
+                      - name: uploads
+                        subPath: exports
+                        mountPath: /trim/exports
+                      - name: uploads
+                        subPath: imports
+                        mountPath: /trim/imports
+                volumes:
+                  - name: uploads
+                    persistentVolumeClaim:
+                      {{- if .Values.uploadsVolume.existingClaim }}
+                      claimName: {{ .Values.uploadsVolume.existingClaim }}
+                      {{- else }}
+                      claimName: {{ template "hyrax.fullname" . }}-uploads
+                      {{- end }}
 
 podSecurityContext:
   runAsUser: 1001
