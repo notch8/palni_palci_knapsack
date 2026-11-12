@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# HYKU-BACKPORT: samvera/hyku#3536 - remove once the hyrax-webapp pin includes it.
+# HYKU-BACKPORT: samvera/hyku#3538 - remove once the hyrax-webapp pin includes it.
 # rubocop:disable Metrics/BlockLength
 namespace :hyku do
   desc <<~DESC
