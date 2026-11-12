@@ -1,3 +1,5 @@
+# OVERRIDE Hyku v7.1.0 config/authorities/licenses.yml: same terms as Hyku, without its description.
+#   No PALS change; can be removed in a follow-up to #820.
 terms:
   - id: https://creativecommons.org/licenses/by/4.0/
     term: Creative Commons BY Attribution 4.0 International

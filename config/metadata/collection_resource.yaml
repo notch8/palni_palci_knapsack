@@ -1,3 +1,5 @@
+# OVERRIDE Hyku v7.1.0 config/metadata/collection_resource.yaml: define the PALS collection fields here, including collection_subtitle.
+#   Client-specific, keep.
 # Simple yaml config-driven schema which is used to define model attributes,
 # index key names, and form properties.
 #

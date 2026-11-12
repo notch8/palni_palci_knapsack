@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyrax 5.3.0 Hyrax::Forms::CollectionForm: add the subtitle and hide role grants on the ActiveFedora collection form.
+#   No longer used; remove in a follow-up to #820.
 module Hyrax
   module Forms
     # Add new method to filter out access_grants for Collection Roles and Work Roles
