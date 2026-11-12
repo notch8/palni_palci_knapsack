@@ -434,6 +434,62 @@ extraDeploy:
             tolerations:
               {{- toYaml . | nindent 8 }}
             {{- end }}
+  # SWORD-only hosts outside the Cloudflare proxy, for large deposits (#671).
+  # Their DNS is in notch8-ops terraform/cloudflare/envs/pals/dns.tfvars.
+  - |-
+      {{- range .Values.swordHosts }}
+      ---
+      apiVersion: cert-manager.io/v1
+      kind: Certificate
+      metadata:
+        name: {{ include "hyrax.fullname" $ }}-{{ .name }}
+        labels:
+          {{- include "hyrax.labels" $ | nindent 4 }}
+      spec:
+        secretName: {{ include "hyrax.fullname" $ }}-{{ .name }}-tls
+        dnsNames:
+          - {{ .host }}
+        issuerRef:
+          kind: ClusterIssuer
+          name: letsencrypt-production-dns
+      ---
+      apiVersion: k8s.nginx.org/v1
+      kind: VirtualServer
+      metadata:
+        name: {{ include "hyrax.fullname" $ }}-{{ .name }}
+        labels:
+          {{- include "hyrax.labels" $ | nindent 4 }}
+      spec:
+        host: {{ .host }}
+        ingressClassName: nginx-ingress
+        tls:
+          secret: {{ include "hyrax.fullname" $ }}-{{ .name }}-tls
+          redirect:
+            enable: true
+        upstreams:
+          - name: nginx
+            service: {{ include "hyrax.nginx.host" $ }}
+            port: {{ $.Values.nginx.service.port }}
+            client-max-body-size: "0"
+            read-timeout: 3600s
+            send-timeout: 3600s
+        routes:
+          - path: /sword
+            action:
+              proxy:
+                upstream: nginx
+                requestHeaders:
+                  set:
+                    - name: Host
+                      value: {{ .tenantHost }}
+                    - name: X-Forwarded-Host
+                      value: {{ .tenantHost }}
+      {{- end }}
+
+swordHosts:
+  - name: sword-pittir
+    host: sword.pittir-staging.hykucommons.org
+    tenantHost: pittir.palni-palci-knapsack-staging.notch8.cloud
 
 embargoRelease:
   enabled: false
@@ -660,8 +716,8 @@ nginx:
           break;
         }
 
-        # Large request/response bodies live here: chunked file uploads
-        # (/uploads), single-file and single-use-link downloads
+        # Large request/response bodies live here: SWORD deposits (/sword),
+        # chunked file uploads (/uploads), single-file and single-use-link downloads
         # (/downloads, /single_use_link), and Bulkrax bulk import/export
         # (/importers, /exporters -- the classic importer form posts an
         # unchunked file directly, and exporters/:id/download streams a
@@ -669,7 +725,7 @@ nginx:
         # slow client transferring a lot of data doesn't get killed
         # mid-request; everything else stays on @rails' short default so
         # a genuinely hung backend request still fails fast.
-        location ~ ^/(uploads|downloads|importers|exporters|single_use_link)(/|${DOLLAR}) {
+        location ~ ^/(uploads|downloads|importers|exporters|single_use_link|sword)(/|${DOLLAR}) {
           proxy_set_header  X-Real-IP  ${DOLLAR}remote_addr;
           proxy_set_header  X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
           proxy_set_header Host ${DOLLAR}http_host;
