@@ -112,8 +112,6 @@ extraEnvVars: &envVars
     value: palni_palci_knapsack_staging
   - name: DB_USER
     value: postgres
-  - name: PGSSLMODE
-    value: require
   - name: DB_PREPARED_STATEMENTS
     value: "false"
   - name: DB_ADVISORY_LOCKS
