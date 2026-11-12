@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # HYKU-BACKPORT: samvera/hyku#3535 - remove once the hyrax-webapp pin includes it.
+# rubocop:disable Metrics/BlockLength
 namespace :hyku do
   desc <<~DESC
     Delete old anonymous (unsaved) Blacklight searches across every tenant, in
@@ -49,3 +50,4 @@ namespace :hyku do
     abort("hyku:prune_old_searches - failed for: #{failed.join(', ')}") if failed.any?
   end
 end
+# rubocop:enable Metrics/BlockLength

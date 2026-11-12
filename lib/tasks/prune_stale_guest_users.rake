@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # HYKU-BACKPORT: samvera/hyku#3536 - remove once the hyrax-webapp pin includes it.
+# rubocop:disable Metrics/BlockLength
 namespace :hyku do
   desc <<~DESC
     Delete stale guest users in throttled batches. Users are shared across
@@ -34,3 +35,4 @@ namespace :hyku do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
