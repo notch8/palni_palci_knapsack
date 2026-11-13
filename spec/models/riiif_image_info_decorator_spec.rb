@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'vips'
+
 RSpec.describe RiiifImageInfoDecorator do
   let(:dir) { Dir.mktmpdir }
   let(:path) { File.join(dir, 'oriented.jpg') }
