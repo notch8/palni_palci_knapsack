@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# OVERRIDE Hyku (198f4950), backporting v7.2.1: also clear the per-request analytics config
+# OVERRIDE Hyku v7.1.0, backporting v7.2.1: also clear the per-request analytics config
 # (Hyrax::AnalyticsDecorator) on every tenant switch
 module SiteDecorator
   def reset!

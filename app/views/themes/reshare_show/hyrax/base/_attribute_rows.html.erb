@@ -1,3 +1,5 @@
+<%# OVERRIDE Hyku v7.1.0 hyrax/base/_attribute_rows for reshare_show: plain metadata rows for ReShare show pages. %>
+<%#   Client-specific, keep. %>
 <% view_options_for(presenter).each do |field, options| %>
   <% view_options = conform_options(field, options) %>
   <%= presenter.attribute_to_html(conform_field(field, options), view_options) if field_visible?(view_options, presenter) %>

@@ -1,3 +1,5 @@
+<%# OVERRIDE Hyku v7.1.0 _user_util_links for reshare_show: admin-only dashboard menu, no login link. %>
+<%#   Client-specific, keep. %>
 <ul id="user_utility_links" class="navbar-nav ml-auto">
   <%= render 'shared/locale_picker' if available_translations.size > 1 %>
   <% if current_ability.user_groups.include?('admin') %>

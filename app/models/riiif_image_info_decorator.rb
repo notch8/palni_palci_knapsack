@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Riiif 2.9.0 Riiif::Image#info: swap width and height for EXIF orientations 5-8 when autorotating.
+#   Keep: not fixed upstream.
 # Hyku's riiif info service reports the stored width/height from Solr, which ignore EXIF orientation.
 # With autorotate on, swap them for tags that turn the image 90/270 degrees so they match the tiles.
 module RiiifImageInfoDecorator

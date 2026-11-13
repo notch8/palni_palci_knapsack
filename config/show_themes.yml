@@ -1,3 +1,5 @@
+# OVERRIDE Hyku v7.1.0 config/show_themes.yml: add the reshare_show theme; Hyku's newer reference_show is not listed.
+#   Client-specific, keep.
 # These settings are to provide information about your theme
 # and should follow the format
 # theme:
