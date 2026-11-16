@@ -23,10 +23,10 @@ RUN bundle install --jobs "$(nproc)"
 ############## END KNAPSACK SPECIFIC CODE ################
 
 RUN RAILS_ENV=production SECRET_KEY_BASE=$(bin/rails secret) DB_ADAPTER=nulldb DB_URL='postgresql://fake' bundle exec rails assets:precompile && yarn install
-CMD ./bin/web
+CMD ["./bin/web"]
 
 FROM hyku-web AS hyku-worker
-CMD ./bin/worker
+CMD ["./bin/worker"]
 
 FROM registry.gitlab.com/notch8/scripts/bitnami-nginx:1.21.5-debian-10-r4 AS hyku-nginx
 # Copy assets & other public files into nginx so it can serve them as static files
