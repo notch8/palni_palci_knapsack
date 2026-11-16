@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyku v7.1.0 Image: reopen the ActiveFedora model to add the PALS properties and ordered metadata.
+#   Client-specific, keep.
 # Generated via
 #  `rails generate hyrax:work Image`
 # Empty module for Zeitwerk (this file defines Image, not a decorator mixin).

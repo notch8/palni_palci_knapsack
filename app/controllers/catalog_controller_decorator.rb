@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyku v7.1.0 CatalogController: sort faceted searches by title; replace the facet, show and sort fields.
+#   Client-specific, keep.
 module CatalogControllerDecorator
   extend ActiveSupport::Concern
 

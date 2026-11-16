@@ -1,3 +1,5 @@
+# OVERRIDE Hyku v7.1.0 config/authorities/resource_types.yml: add Newspaper, Preprint, Realia and Text.
+#   Client-specific, keep.
 terms:
   - id: Article
     term: Article

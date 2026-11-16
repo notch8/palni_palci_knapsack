@@ -1,3 +1,5 @@
+<%# OVERRIDE Hyrax 5.3.0 hyrax/base/iiif_viewers/_universal_viewer for reshare_show: load the ReShare viewer config. %>
+<%#   Client-specific, keep. %>
 <div class="viewer-wrapper">
   <iframe aria-label="image view"
     src="<%= universal_viewer_base_url %>#?manifest=<%= main_app.polymorphic_url [main_app, :manifest, presenter], { locale: nil } %>&config=<%= "#{request&.base_url}/uv/uv-config-reshare.json" %>"

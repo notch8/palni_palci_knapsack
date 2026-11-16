@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyku v7.1.0 Users::OmniauthCallbacksController#callback: grant CDL work authorization on sign-in and redirect to the requested work.
+#   Client-specific, keep.
 module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     skip_before_action :verify_authenticity_token

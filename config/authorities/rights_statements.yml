@@ -1,3 +1,5 @@
+# OVERRIDE Hyku v7.1.0 config/authorities/rights_statements.yml: same terms as Hyku, without its description.
+#   No PALS change; can be removed in a follow-up to #820.
 terms:
 - id: http://rightsstatements.org/vocab/InC/1.0/
   term: "In Copyright"

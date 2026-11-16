@@ -1,3 +1,5 @@
+# OVERRIDE Hyku v7.1.0 config/metadata/oer_resource.yaml: make license a primary, optional field; older copy of Hyku's schema.
+#   Client-specific, keep.
 # Simple yaml config-driven schema which is used to define model attributes,
 # index key names, and form properties.
 #

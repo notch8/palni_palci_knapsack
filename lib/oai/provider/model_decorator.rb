@@ -4,12 +4,11 @@ module HykuKnapsack
   module OAI
     module Provider
       module ModelDecorator
-        # Map Qualified Dublin Core (Terms) fields to PALNI/PALCI fields
-        # rubocop:disable Metrics/MethodLength
+        # OVERRIDE Hyku v7.1.0 Oai::Provider::ModelDecorator#map_oai_hyku: leave owner, depositor and system dates out of OAI.
+        #   Client-specific, keep.
         def map_oai_hyku
           super.reject { |key, _| %i[owner date_modified date_uploaded depositor].include?(key) }
         end
-        # rubocop:enable Metrics/MethodLength
       end
     end
   end

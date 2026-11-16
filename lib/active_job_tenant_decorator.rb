@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyku v7.1.0 ActiveJobTenant: same tenant switching as Hyku, plus Sentry job extras.
+#   No longer used; remove in a follow-up to #820.
 module ActiveJobTenantDecorator
   extend ActiveSupport::Concern
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# OVERRIDE Hyku (198f4950), backporting v7.2.1: in multitenant mode tenant settings load in
+# OVERRIDE Hyku v7.1.0, backporting v7.2.1: in multitenant mode tenant settings load in
 # Account#switch! instead of on every Account load, so loading another tenant's account
 # (e.g. shared search) can't overwrite them
 module AccountDecorator
@@ -13,7 +13,7 @@ module AccountDecorator
   end
 end
 
-# OVERRIDE Hyku (198f4950), backporting v7.2.1: load tenant settings on every tenant switch
+# OVERRIDE Hyku v7.1.0, backporting v7.2.1: load tenant settings on every tenant switch
 module AccountSwitchDecorator
   def switch!
     super

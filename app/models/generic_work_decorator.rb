@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# OVERRIDE Hyku v7.1.0 GenericWork: add the PALS properties so their values carry over when ActiveFedora works migrate to Valkyrie.
+#   Client-specific, keep.
 module GenericWorkDecorator
   extend ActiveSupport::Concern
 

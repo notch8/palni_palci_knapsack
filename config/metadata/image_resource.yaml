@@ -1,3 +1,5 @@
+# OVERRIDE Hyku v7.1.0 config/metadata/image_resource.yaml: define the PALS image fields here, including admin_note and date.
+#   Client-specific, keep.
 # Simple yaml config-driven schema which is used to define model attributes,
 # index key names, and form properties.
 #
