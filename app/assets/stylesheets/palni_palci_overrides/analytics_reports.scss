@@ -1,0 +1,11 @@
+// HYRAX-BACKPORT: samvera/hyrax#7755 (find every piece with `git grep -l HYRAX-BACKPORT`)
+// Hyrax's analytics report buttons are .btn inside .nav-pills, whose .nav-link rule strips their background.
+.nav-pills .btn.nav-link {
+  &.btn-primary {
+    @include button-variant($primary, $primary);
+  }
+
+  &.btn-secondary {
+    @include button-variant($secondary, $secondary);
+  }
+}
