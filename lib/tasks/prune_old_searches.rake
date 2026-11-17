@@ -19,7 +19,8 @@ namespace :hyku do
                            deleted. (default: false)
   DESC
   task prune_old_searches: :environment do
-    older_than_days = ENV.fetch('OLDER_THAN_DAYS', 30).to_i
+    older_than_days = Integer(ENV.fetch('OLDER_THAN_DAYS', 30))
+    abort('hyku:prune_old_searches - OLDER_THAN_DAYS must be at least 1') unless older_than_days.positive?
     batch_size = ENV.fetch('BATCH_SIZE', 5_000).to_i
     batch_sleep_seconds = ENV.fetch('BATCH_SLEEP_SECONDS', 1).to_f
     dry_run = ActiveModel::Type::Boolean.new.cast(ENV.fetch('DRY_RUN', false))
