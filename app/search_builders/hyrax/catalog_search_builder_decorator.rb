@@ -5,7 +5,7 @@
 module Hyrax
   module CatalogSearchBuilderDecorator
     # OVERRIDE Hyrax 5.3.0 Hyrax::CatalogSearchBuilder#filter_collection_facet_for_access: allow the collections
-    # the user can see in Solr, not only those they participate in.
+    # the user can see in Solr, not only those they participate in, unless hidden from catalog search.
     def filter_collection_facet_for_access(solr_parameters)
       return if current_ability.admin?
 
@@ -16,7 +16,7 @@ module Hyrax
     private
 
     def collection_ids_for_facet
-      query = Hyrax::SolrQueryService.new
+      query = Hyrax::SolrQueryService.new(query: ['-hide_from_catalog_search_bsi:true'])
                                      .with_field_pairs(field_pairs: { has_model_ssim: Hyrax::ModelRegistry.collection_rdf_representations.join(',') },
                                                        type: 'terms')
                                      .accessible_by(ability: current_ability)

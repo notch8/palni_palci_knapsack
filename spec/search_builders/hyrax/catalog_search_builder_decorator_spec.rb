@@ -35,4 +35,13 @@ RSpec.describe Hyrax::CatalogSearchBuilder, :clean_repo do
       expect(facet_matches).not_to include private_collection.id.to_s
     end
   end
+
+  context 'with a public collection hidden from catalog search' do
+    let!(:hidden_collection) { FactoryBot.valkyrie_create(:hyrax_collection, :public, hide_from_catalog_search: true) }
+
+    it 'leaves it out of the facet' do
+      expect(facet_matches).to include "^#{public_collection.id}$"
+      expect(facet_matches).not_to include hidden_collection.id.to_s
+    end
+  end
 end
