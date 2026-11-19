@@ -535,7 +535,6 @@ nginx:
   service:
     type: ClusterIP
   image:
-    # Chart's nginx template reads `repository` only, not a separate `registry` key.
     repository: "ghcr.io/$REPO_LOWER/nginx"
     tag: "$TAG"
   extraVolumes:
