@@ -28,7 +28,7 @@ CMD ./bin/web
 FROM hyku-web AS hyku-worker
 CMD ./bin/worker
 
-FROM registry.gitlab.com/notch8/scripts/bitnami-nginx:1.21.5-debian-10-r4 AS hyku-nginx
+FROM nginx/nginx-unprivileged:1.31.9-alpine AS hyku-nginx
 # Copy assets & other public files into nginx so it can serve them as static files
 COPY --from=hyku-web /app/samvera/hyrax-webapp/public/assets /app/samvera/hyrax-webapp/public/assets
 COPY --from=hyku-web /app/samvera/hyrax-webapp/public/pdf.js /app/samvera/hyrax-webapp/public/pdf.js
