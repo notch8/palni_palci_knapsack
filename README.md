@@ -271,6 +271,33 @@ Promotion is GitLab Flow: merge-commit PRs `main` -> `staging` -> `production`. 
 
 The generic procedure lives in the deploy skills in [notch8/playbook](https://github.com/notch8/playbook); install them with its `bin/install-skills`. The weekly checklist is in its [knapsack release onboarding](https://github.com/notch8/playbook/blob/main/devops/deployments/knapsack-release-onboarding.md#7-your-week).
 
+#### Staging and production access
+
+- Staging tenants (`*.palni-palci-knapsack-staging.notch8.cloud`) sit behind HTTP basic auth; ask the team for the credentials. A 401 there is the basic auth, not a permissions problem.
+- Deploying any branch other than `staging` to staging (a hotfix or security branch cut from `production`, a QA branch) replaces everything on staging, including staging-only config such as the `sword.pittir-staging` host. Before dispatching, check that the branch contains `staging` (`git merge-base --is-ancestor origin/staging <branch>`), or merge `staging` into it first.
+- `kubectl logs` only reaches back to the pod's last restart. Older logs are in Loki: Grafana at `grafana-tools.notch8.cloud`, Explore, Loki, for example `{namespace="palni-palci-knapsack-production", pod=~"palni-palci-knapsack-production-nginx.*"} |= "/sword/v2"`. Keep the range to a day or two, or the query times out.
+- Production nginx logs record the real client address (`ip=`), so they are where to find a SWORD client's sending IP.
+- `hykucommons.org` is in the **Pals** Cloudflare account, not Notch8 Main. It's on the free plan, whose analytics can't filter by host or path.
+
+#### Testing SWORD deposits
+
+SWORD authenticates with an `Api-key` header matched against `users.api_key`, and only accepts users who hold a role in the tenant. There's no UI for the key; read or set it in a Rails console on the tenant (`AccountElevator.switch!(cname)`, then `user.api_key`).
+
+A deposit is a zip with the content files plus `metadata/metadata.xml` in Dublin Core. The work needs `title`, `creator`, `created`, `type` and `rights` (a rightsstatements.org URI). Don't send `Packaging: BagIt` with a plain zip; it is rejected for having no manifest.
+
+```bash
+curl -T package.zip -X POST -H 'Expect:' \
+  -H "Api-key: $API_KEY" \
+  -H 'Content-Type: application/zip' \
+  -H 'Content-Disposition: attachment; filename=package.zip' \
+  -H 'In-Progress: false' \
+  "https://sword.pittir-staging.hykucommons.org/sword/v2/collections/<admin set id>/works"
+```
+
+Use `-T`, not `--data-binary`, for large files: `--data-binary` loads the whole file into memory and fails at 2GB. Make sure no Deploy is running on the target first; a rollout mid-upload ends in a 502. A 2GB package took about three minutes on 2026-11-20 (#944).
+
+SSO on pittir staging can't be tested end to end: Pitt Passport rejects sign-ins from the staging host, so OmniAuth callback changes are covered by specs and checked in production logs.
+
 ### Theme files
 
 Theme files (views, css, etc) can be added to the knapsack. We recommend adding an [override comment](https://github.com/samvera-labs/hyku_knapsack/wiki/Decorators-and-Overrides#best-practices-for-view-overrides)
