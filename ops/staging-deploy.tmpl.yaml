@@ -96,6 +96,8 @@ ingress:
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
     value: "true"
+  - name: SWORD_ALLOWED_HOSTS
+    value: sword.pittir-staging.hykucommons.org
   - name: BUNDLE_LOCAL__HYKU_KNAPSACK
     value: /app/samvera
   - name: CLIENT_ADMIN_USER_EMAIL
@@ -482,6 +484,8 @@ extraDeploy:
                       value: {{ .tenantHost }}
                     - name: X-Forwarded-Host
                       value: {{ .tenantHost }}
+                    - name: X-Sword-Host
+                      value: {{ .host }}
       {{- end }}
 
 swordHosts:

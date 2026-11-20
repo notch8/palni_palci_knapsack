@@ -1,4 +1,4 @@
-ARG HYRAX_IMAGE_VERSION=hyrax-v5.2.0
+ARG HYRAX_IMAGE_VERSION=hyrax-v5.2.1
 FROM ghcr.io/samvera/hyrax/hyrax-base:$HYRAX_IMAGE_VERSION AS hyku-web
 
 USER root
@@ -23,10 +23,10 @@ RUN bundle install --jobs "$(nproc)"
 ############## END KNAPSACK SPECIFIC CODE ################
 
 RUN RAILS_ENV=production SECRET_KEY_BASE=$(bin/rails secret) DB_ADAPTER=nulldb DB_URL='postgresql://fake' bundle exec rails assets:precompile && yarn install
-CMD ./bin/web
+CMD ["./bin/web"]
 
 FROM hyku-web AS hyku-worker
-CMD ./bin/worker
+CMD ["./bin/worker"]
 
 FROM nginx/nginx-unprivileged:1.31.9-alpine AS hyku-nginx
 # Copy assets & other public files into nginx so it can serve them as static files

@@ -93,6 +93,8 @@ ingress:
 extraEnvVars: &envVars
   - name: BUNDLE_DISABLE_LOCAL_BRANCH_CHECK
     value: "true"
+  - name: SWORD_ALLOWED_HOSTS
+    value: sword.pittir.hykucommons.org
   - name: BUNDLE_LOCAL__HYKU_KNAPSACK
     value: /app/samvera
   - name: CLIENT_ADMIN_USER_EMAIL
@@ -502,6 +504,8 @@ extraDeploy:
                       value: {{ .tenantHost }}
                     - name: X-Forwarded-Host
                       value: {{ .tenantHost }}
+                    - name: X-Sword-Host
+                      value: {{ .host }}
       {{- end }}
 
 swordHosts:
@@ -539,7 +543,6 @@ fcrepo:
       postgresql: 5432
   s3:
     enabled: true
-    bucket: besties-fcrepo-clone
     access_key: $AWS_ACCESS_KEY_ID
     secret_key: $AWS_SECRET_ACCESS_KEY
 global:
