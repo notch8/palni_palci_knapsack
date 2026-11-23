@@ -84,6 +84,16 @@ module ApplicationControllerDecorator
     Sentry.set_user(id: session[:current_user_id]) # Set user context
     Sentry.set_extras(params: params.to_unsafe_h, url: request.url) # Set extra context
   end
+
+  # HYRAX-BACKPORT: samvera/hyrax#7746; delete once the Hyku pin includes it.
+  # OVERRIDE Hyrax::Controller#default_url_options to leave the default locale out of URLs. With
+  # ?locale=en on every link, robots.txt's `Disallow: /*locale=` blocked crawlers from the sitemap
+  # and collections (#948).
+  def default_url_options
+    return super.except(:locale) if I18n.locale == I18n.default_locale
+
+    super
+  end
 end
 
 ApplicationController.before_action :set_sentry_context
