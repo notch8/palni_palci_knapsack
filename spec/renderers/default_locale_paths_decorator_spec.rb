@@ -11,16 +11,29 @@ RSpec.describe Hyrax::DefaultLocalePathsDecorator do
 
   let(:non_default) { (I18n.available_locales - [I18n.default_locale]).first }
 
-  describe '.url_locale' do
-    it 'is nil in the default locale' do
-      I18n.locale = I18n.default_locale
-      expect(described_class.url_locale).to be_nil
+  describe '.without_default_locale' do
+    before { I18n.locale = I18n.default_locale }
+
+    it 'drops a trailing locale' do
+      expect(described_class.without_default_locale('/catalog?q=x&locale=en')).to eq('/catalog?q=x')
     end
 
-    it 'is the current locale otherwise' do
+    it 'drops a leading locale and keeps the rest of the query' do
+      expect(described_class.without_default_locale('/catalog?locale=en&q=x')).to eq('/catalog?q=x')
+    end
+
+    it 'drops the whole query when locale is the only parameter' do
+      expect(described_class.without_default_locale('/stats/work/1?locale=en')).to eq('/stats/work/1')
+    end
+
+    it 'leaves other locales alone' do
+      expect(described_class.without_default_locale('/catalog?locale=de')).to eq('/catalog?locale=de')
+    end
+
+    it 'leaves paths alone outside the default locale' do
       skip 'no non-default locale available' if non_default.nil?
       I18n.locale = non_default
-      expect(described_class.url_locale).to eq(non_default)
+      expect(described_class.without_default_locale('/catalog?locale=en')).to eq('/catalog?locale=en')
     end
   end
 
