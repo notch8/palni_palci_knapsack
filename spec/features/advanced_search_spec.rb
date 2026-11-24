@@ -6,6 +6,9 @@ require 'rails_helper'
 RSpec.describe 'Advanced Search', type: :feature, clean: true do
   include Warden::Test::Helpers
 
+  # The knapsack's rails_helper does not act on clean: true, so works indexed by earlier specs in the run show up here
+  before { Hyrax::SolrService.wipe! }
+
   context 'with unauthenticated user' do
     it 'can perform advanced search' do
       visit '/advanced'

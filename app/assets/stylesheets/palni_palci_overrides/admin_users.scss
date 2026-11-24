@@ -1,0 +1,8 @@
+// Manage Users: keep Activate beside Delete instead of wrapping under it
+.datatable td:has(> a.action-delete) {
+  white-space: nowrap;
+}
+
+.datatable a.action-delete + a.btn {
+  margin-left: 0.25rem;
+}
